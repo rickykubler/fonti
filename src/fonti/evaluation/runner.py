@@ -25,6 +25,7 @@ from fonti.evaluation.metrics import (
     reciprocal_rank,
 )
 from fonti.generation.citations import parse_claims
+from fonti.index.text import KEYWORDS_VERSION
 from fonti.ingest.chunking import CHUNKER_VERSION
 from fonti.ingest.parsers import PARSER_VERSION
 from fonti.service import Fonti, IngestStatus
@@ -149,7 +150,7 @@ def run(
 def index_fingerprint(settings: Settings) -> str:
     """Short hash of the settings that define the index."""
     defining = {
-        "versions": [PARSER_VERSION, CHUNKER_VERSION],
+        "versions": [PARSER_VERSION, CHUNKER_VERSION, KEYWORDS_VERSION],
         "parser": settings.parser.model_dump(),
         "chunking": settings.chunking.model_dump(),
         "embedding": settings.embedding.model_dump(exclude={"device", "batch_size"}),

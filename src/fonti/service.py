@@ -20,7 +20,7 @@ from fonti.generation.citations import abstain, build_answer
 from fonti.generation.llm import ChatClient, create_chat_client
 from fonti.generation.prompts import build_messages
 from fonti.index.store import NewDocument, Store
-from fonti.index.text import index_terms
+from fonti.index.text import KEYWORDS_VERSION, index_terms
 from fonti.ingest.chunking import CHUNKER_VERSION, chunk_document
 from fonti.ingest.parsers import PARSER_VERSION, SUPPORTED_SUFFIXES, ParseError, parse_file
 from fonti.ml.embedder import Embedder, create_embedder
@@ -199,10 +199,7 @@ class Fonti:
 
     def search(self, question: str, limit: int | None = None) -> list[Hit]:
         self.store.check_settings(
-            {
-                "embedder": self.embedder.model_id,
-                "keywords": self.settings.retrieval.keyword_terms,
-            }
+            {"embedder": self.embedder.model_id, "keywords": self._keywords_setting()}
         )
         if self._retriever is None:
             self._retriever = HybridRetriever(self.store, self.embedder, self.settings.retrieval)
@@ -268,8 +265,11 @@ class Fonti:
             "embedder": self.embedder.model_id,
             "chunker": f"{CHUNKER_VERSION}:{chunking.max_chars}:{chunking.overlap_chars}",
             "parser": f"{self.settings.parser.mode}:{PARSER_VERSION}",
-            "keywords": self.settings.retrieval.keyword_terms,
+            "keywords": self._keywords_setting(),
         }
+
+    def _keywords_setting(self) -> str:
+        return f"{self.settings.retrieval.keyword_terms}:{KEYWORDS_VERSION}"
 
     def _ingest_file(self, path: Path) -> IngestResult:
         try:
