@@ -6,6 +6,8 @@ from functools import lru_cache
 
 import snowballstemmer
 
+from fonti.config import KeywordMode
+
 _WORD_RE = re.compile(r"\w+")
 
 # Italian function words: they carry no meaning for matching.
@@ -27,17 +29,24 @@ def tokenize(text: str) -> list[str]:
     return [token.lower() for token in _WORD_RE.findall(text)]
 
 
-def index_terms(text: str) -> str:
-    """Terms stored in the FTS5 index; queries must be normalized the same way."""
-    return " ".join(tokenize(text))
+def keyword_terms(text: str, mode: KeywordMode) -> list[str]:
+    """Lowercase words (mode "plain") or Italian stems without stopwords (mode "stemmed")."""
+    if mode == "stemmed":
+        return [_stem(token) for token in tokenize(text) if fold_accents(token) not in STOPWORDS]
+    return tokenize(text)
 
 
-def match_query(question: str) -> str | None:
+def index_terms(text: str, mode: KeywordMode = "plain") -> str:
+    """Terms stored in the FTS5 index; queries must use the same mode."""
+    return " ".join(keyword_terms(text, mode))
+
+
+def match_query(question: str, mode: KeywordMode = "plain") -> str | None:
     """Build an FTS5 MATCH expression that ORs the question terms, or None if there are none.
 
     Every term is quoted, so FTS5 operators and punctuation typed by the user are inert.
     """
-    terms = [term for term in tokenize(question) if len(term) > 1 or term.isdigit()]
+    terms = [term for term in keyword_terms(question, mode) if len(term) > 1 or term.isdigit()]
     if not terms:
         return None
     return " OR ".join(f'"{term}"' for term in dict.fromkeys(terms))

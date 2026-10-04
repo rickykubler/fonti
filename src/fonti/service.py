@@ -13,7 +13,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from fonti.config import Settings
-from fonti.domain import Answer, Chunk, DocumentInfo, Hit
+from fonti.domain import Answer, Chunk, DocumentInfo, Hit, Retrieval
 from fonti.errors import FontiError
 from fonti.generation.citations import abstain, build_answer
 from fonti.generation.llm import ChatClient, create_chat_client
@@ -173,24 +173,36 @@ class Fonti:
     # --- retrieval ------------------------------------------------------------------------
 
     def search(self, question: str, limit: int | None = None) -> list[Hit]:
-        self.store.check_settings({"embedder": self.embedder.model_id})
+        self.store.check_settings(
+            {
+                "embedder": self.embedder.model_id,
+                "keywords": self.settings.retrieval.keyword_terms,
+            }
+        )
         if self._retriever is None:
             self._retriever = HybridRetriever(self.store, self.embedder, self.settings.retrieval)
         return self._retriever.search(question, limit)
 
-    def ask(self, question: str) -> Answer:
-        """Answer from the indexed documents with verified citations, or abstain."""
-        sources = self.search(question)[: self.settings.retrieval.final_k]
-        if not sources:
-            return abstain(question, sources)
-        output = self.chat.complete(build_messages(question, sources))
+    def retrieve(self, question: str) -> Retrieval:
+        candidates = tuple(self.search(question))
+        sources = candidates[: self.settings.retrieval.final_k]
+        return Retrieval(question, candidates, candidates, sources, relevant=bool(sources))
+
+    def answer(self, retrieval: Retrieval) -> Answer:
+        """Answer from the retrieved sources with verified citations, or abstain."""
+        if not retrieval.relevant:
+            return abstain(retrieval.question, retrieval.sources)
+        output = self.chat.complete(build_messages(retrieval.question, retrieval.sources))
         return build_answer(
-            question,
+            retrieval.question,
             output,
-            sources,
+            retrieval.sources,
             self.store.page_spans,
             self.settings.citations.min_support,
         )
+
+    def ask(self, question: str) -> Answer:
+        return self.answer(self.retrieve(question))
 
     # --- internals ------------------------------------------------------------------------
 
@@ -199,6 +211,8 @@ class Fonti:
         return {
             "embedder": self.embedder.model_id,
             "chunker": f"{CHUNKER_VERSION}:{chunking.max_chars}:{chunking.overlap_chars}",
+            "parser": self.settings.parser.mode,
+            "keywords": self.settings.retrieval.keyword_terms,
         }
 
     def _ingest_file(self, path: Path) -> IngestResult:
@@ -242,7 +256,9 @@ class Fonti:
             text=chunked.text,
             pages=chunked.pages,
         )
-        return _Prepared(document, chunked.chunks, [index_terms(t) for t in indexed_texts], vectors)
+        mode = self.settings.retrieval.keyword_terms
+        terms = [index_terms(text, mode) for text in indexed_texts]
+        return _Prepared(document, chunked.chunks, terms, vectors)
 
 
 def _indexed_text(chunk: Chunk) -> str:

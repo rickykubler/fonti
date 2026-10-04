@@ -96,6 +96,16 @@ class Citation:
     start: int  # document-level offsets of the passage
     end: int
     support: float  # alignment score between the claim and the passage, in [0, 1]
+    claim: str = ""  # the answer sentence this passage supports
+
+
+@dataclass(frozen=True, slots=True)
+class Retrieval:
+    question: str
+    candidates: tuple[Hit, ...]  # fused keyword + dense ranking, before reranking
+    ranked: tuple[Hit, ...]  # the same candidates in final order (after reranking, if any)
+    sources: tuple[Hit, ...]  # what the model will read: the top of `ranked`
+    relevant: bool  # False when the best source is not relevant enough to answer
 
 
 @dataclass(frozen=True, slots=True)

@@ -70,6 +70,7 @@ def build_answer(
                 start=start,
                 end=end,
                 support=alignment.support,
+                claim=claim.text,
             )
     if not citations:
         return abstain(question, sources)

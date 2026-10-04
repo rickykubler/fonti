@@ -41,7 +41,7 @@ class HybridRetriever:
         ]
 
     def _keyword_ranking(self, question: str) -> list[int]:
-        query = match_query(question)
+        query = match_query(question, self._settings.keyword_terms)
         if query is None:
             return []
         return [chunk_id for chunk_id, _ in self._store.search_terms(query, self._settings.bm25_k)]
