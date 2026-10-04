@@ -1,0 +1,14 @@
+# Default pipeline with Qwen3-Embedding-0.6B (Apache-2.0); queries get the model's "query"
+# prompt from sentence-transformers.
+[retrieval]
+keyword_terms = "stemmed"
+
+[rerank]
+enabled = true
+min_score = 0.1
+
+[embedding]
+model = "Qwen/Qwen3-Embedding-0.6B"
+
+[llm]
+model = "qwen2.5:14b"
