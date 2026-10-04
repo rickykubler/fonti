@@ -72,6 +72,45 @@ def test_bare_headings_absorb_their_title_line() -> None:
     assert all(block.page == 3 for block in blocks)
 
 
+def test_inline_article_heading_with_footnote_mark_is_split() -> None:
+    line = "ART. 56.9 La Camera dei deputati è eletta a suffragio universale e diretto."
+
+    blocks = lines_to_blocks([line], page=17)
+
+    assert [(b.kind, b.text) for b in blocks] == [
+        (BlockKind.HEADING, "ART. 56."),
+        (BlockKind.TEXT, "La Camera dei deputati è eletta a suffragio universale e diretto."),
+    ]
+
+
+def test_footnote_mark_after_a_bare_article_heading_is_dropped() -> None:
+    lines = ["ART. 56.9", "La Camera dei deputati è eletta a suffragio universale e diretto."]
+
+    blocks = lines_to_blocks(lines, page=17)
+
+    assert [(b.kind, b.text) for b in blocks] == [
+        (BlockKind.HEADING, "ART. 56."),
+        (BlockKind.TEXT, lines[1]),
+    ]
+
+
+@pytest.mark.parametrize(
+    "first_line",
+    [
+        "Tutti hanno diritto di manifestare liberamente il proprio pensiero con la",
+        "La Repubblica tutela la salute come fondamentale diritto dell’individuo",
+    ],
+)
+def test_wrapped_first_line_of_an_article_is_not_its_title(first_line: str) -> None:
+    lines = ["ART. 21.", first_line, "parola, lo scritto e ogni altro mezzo di diffusione."]
+
+    blocks = lines_to_blocks(lines, page=9)
+
+    assert [b.kind for b in blocks] == [BlockKind.HEADING, BlockKind.TEXT]
+    assert blocks[0].text == "ART. 21."
+    assert blocks[1].text.startswith(first_line)
+
+
 def test_sentence_lines_are_not_titles() -> None:
     blocks = lines_to_blocks(["Art. 1.", "L'Italia è una Repubblica democratica."], page=1)
 

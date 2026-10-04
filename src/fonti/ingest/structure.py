@@ -5,6 +5,7 @@ from collections.abc import Sequence
 
 from fonti.domain import Block, BlockKind
 from fonti.ingest.text import join_lines
+from fonti.italian import is_stopword
 
 _ROMAN = r"[IVXLCDM]+"
 _ORDINAL = (
@@ -24,6 +25,14 @@ _STRUCTURAL = [
     (re.compile(rf"(?:ARTICOLO|Articolo|ART\.?|Art\.?)\s*\d+(?:\s*[-–]?\s*{_LATIN}\b)?"), 5),
 ]
 _NUMBERED_TITLE = re.compile(r"(\d+(?:\.\d+)*)\.?\s+(\S.*)")
+# "ART. 56.9": the 9 is a footnote mark glued to the heading.
+_ARTICLE_FOOTNOTE = re.compile(
+    rf"^((?:ARTICOLO|Articolo|ART\.?|Art\.?)\s*\d+(?:\s*{_LATIN})?\.)\d{{1,3}}$"
+)
+_INLINE_ARTICLE = re.compile(
+    rf"((?:ARTICOLO|Articolo|ART\.?|Art\.?)\s*\d+(?:\s*[-–]?\s*{_LATIN}\b)?\.)\d{{0,3}}\s+"
+    r"(?=[A-ZÀ-Ý«\"(])"
+)
 _LETTER_SPACED = re.compile(r"(?:\S ){3,}\S")
 _SPACED_KEYWORD = re.compile(r"(PARTE|LIBRO|TITOLO|CAPO|SEZIONE|ALLEGATO)([IVXLCDM]+|\d+)")
 _LIST_ITEM = re.compile(r"(?:[-–•·▪]|\(?[a-z]\)|\(?\d+\)|\d+\.)\s")
@@ -80,14 +89,24 @@ def lines_to_blocks(lines: Sequence[str], page: int) -> list[Block]:
             blocks.append(Block(BlockKind.TEXT, join_lines(paragraph), page))
             paragraph.clear()
 
-    for line in lines:
-        if not line:
+    for index, raw in enumerate(lines):
+        if not raw:
             flush()
             continue
-        line = collapse_letter_spacing(line)
+        line = _ARTICLE_FOOTNOTE.sub(r"\1", collapse_letter_spacing(raw))
+        inline = _INLINE_ARTICLE.match(line)
+        if inline and not heading_level(line):
+            # "ART. 56.9 La Camera..." -> heading "ART. 56." (9 is a footnote mark) + text.
+            flush()
+            blocks.append(Block(BlockKind.HEADING, inline.group(1), page, 5))
+            line = line[inline.end() :]
         previous = blocks[-1] if blocks and not paragraph else None
+        following = next((text for text in lines[index + 1 :] if text), "")
         is_title = _is_caps_title(line) or (
-            _is_short_title(line) and len(line) < 0.85 * typical_length
+            _is_short_title(line)
+            and len(line) < 0.85 * typical_length
+            and not following[:1].islower()  # a wrapped sentence continues in lowercase
+            and not is_stopword(line.split()[-1].strip("’'"))  # "... con la" is wrapped
         )
         if (
             previous is not None
