@@ -1,0 +1,4 @@
+description = "Scansioni sintetiche degli stessi documenti: misura l'effetto dell'OCR"
+documents = ["costituzione-scan", "contratto-scan", "manuale-scan"]
+questions = "questions.jsonl"
+aliases = { costituzione = "costituzione-scan", contratto = "contratto-scan", manuale = "manuale-scan" }
