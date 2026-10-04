@@ -9,7 +9,8 @@ It bundles:
 
 It downloads at run time, from their publishers, models that are not part of this
 repository and keep their own licenses:
-- BAAI/bge-m3 (MIT) - embeddings
+- ibm-granite/granite-embedding-311m-multilingual-r2 (Apache-2.0) - embeddings
+  (BAAI/bge-m3, MIT, is a tested alternative)
 - BAAI/bge-reranker-v2-m3 (Apache-2.0) - reranking
 - Docling layout and table structure models (docling-project, see their model cards)
 - EasyOCR detection and recognition models (Apache-2.0)

@@ -23,7 +23,9 @@ class _Section(BaseModel):
 
 
 class EmbeddingSettings(_Section):
-    model: str = "BAAI/bge-m3"  # or "hashing" for a lexical, download-free embedder
+    # Same retrieval quality as BAAI/bge-m3 on our Italian golden set (with the reranker),
+    # 38% faster to index and a smaller download. "hashing" = lexical, download-free, tests only.
+    model: str = "ibm-granite/granite-embedding-311m-multilingual-r2"
     revision: str | None = None
     device: str = "auto"
     batch_size: int = Field(default=16, ge=1)

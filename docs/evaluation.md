@@ -104,7 +104,11 @@ Retrieval ablations (retrieval only):
 | Qwen3-Embedding-0.6B, no reranker | 0.830 | 0.957 | 0.890 | 30 |
 | bge-m3 + reranker | 0.947 | 0.979 | 0.966 | |
 | granite R2 + reranker | 0.947 | 0.979 | 0.966 | |
+| Qwen3-Embedding-0.6B + reranker | 0.947 | 0.979 | 0.966 | |
 | Docling instead of the text layer (digital PDFs) | 0.925 | 0.957 | 0.947 | 63 |
+
+With the reranker the three embedders are equivalent on this set, so the default is the
+fastest and smallest one, granite R2 (it is also slightly better without the reranker).
 
 OCR (synthetic scans, Docling + EasyOCR, confidence threshold 0.2): character error rate 1-4%
 on the contract and the manual; on the Constitution EasyOCR interleaves words of adjacent

@@ -38,7 +38,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     commands = parser.add_subparsers(dest="command", metavar="COMANDO")
 
-    ingest = commands.add_parser("ingest", help="indicizza file o cartelle (PDF, TXT, MD)")
+    ingest = commands.add_parser("ingest", help="indicizza file o cartelle (PDF, DOCX, TXT, MD)")
     ingest.add_argument("paths", nargs="+", type=Path, metavar="PERCORSO")
 
     ask = commands.add_parser("ask", help="fai una domanda sui documenti indicizzati")
