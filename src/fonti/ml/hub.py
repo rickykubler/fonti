@@ -34,6 +34,11 @@ def load_model[T](
     """Call `load(local_files_only)`: from the cache with the Hub disabled when the model is
     cached, otherwise downloading it (unless `offline`)."""
     cached = is_cached(name, revision)
+    if not cached and os.environ.get("HF_HUB_OFFLINE") == "1" and not offline:
+        # Another model already switched this process offline: no download possible now.
+        raise ModelUnavailableError(
+            f"Il modello {name} non è nella cache locale: esegui `fonti models pull`."
+        )
     if not cached and offline:
         raise ModelUnavailableError(
             f"Il modello {name} non è nella cache locale e la modalità offline è attiva: "
