@@ -1,6 +1,8 @@
 """File parsers: PDF (text layer, via pypdfium2) and plain text / Markdown."""
 
 import re
+from collections import Counter
+from collections.abc import Sequence
 from pathlib import Path
 
 import pypdfium2 as pdfium
@@ -11,6 +13,12 @@ from fonti.ingest.structure import heading_level, lines_to_blocks
 from fonti.ingest.text import normalize
 
 SUPPORTED_SUFFIXES = frozenset({".pdf", ".txt", ".md"})
+# Bump when parsing output changes, so that indexes built by older versions are not reused.
+PARSER_VERSION = "2"
+
+_DIGITS = re.compile(r"\d+")
+_EDGE_LINES = 3
+_MAX_COUNTER_LETTERS = 12  # "Pagina 3 di 40" is a counter, a sentence is not
 
 _MARKDOWN_HEADING = re.compile(r"(#{1,6})\s+(.+?)\s*#*")
 # Lines that are only a page number or a footnote reference ("12", "- 12 -", "pag. 12").
@@ -40,7 +48,7 @@ def parse_pdf(path: Path) -> ParsedDocument:
         raise ParseError(f"Impossibile aprire il PDF {path.name}: {exc}") from exc
     try:
         title = (pdf.get_metadata_dict().get("Title") or "").strip() or None
-        blocks: list[Block] = []
+        pages: list[list[str]] = []
         for index in range(len(pdf)):
             page = pdf[index]
             try:
@@ -51,13 +59,53 @@ def parse_pdf(path: Path) -> ParsedDocument:
                     textpage.close()
             finally:
                 page.close()
-            lines = [
-                line for line in normalize(raw).split("\n") if not _PAGE_NUMBER.fullmatch(line)
-            ]
-            blocks.extend(lines_to_blocks(lines, page=index + 1))
+            pages.append(
+                [line for line in normalize(raw).split("\n") if not _PAGE_NUMBER.fullmatch(line)]
+            )
+        blocks: list[Block] = []
+        for number, lines in enumerate(drop_running_headers(pages), start=1):
+            blocks.extend(lines_to_blocks(lines, page=number))
         return ParsedDocument(tuple(blocks), page_count=len(pdf), title=title, parser="fast")
     finally:
         pdf.close()
+
+
+def drop_running_headers(pages: Sequence[Sequence[str]]) -> list[list[str]]:
+    """Remove running headers and footers: lines among the first or last three of a page
+    that recur on at least half of the pages. Identical lines always go; lines that differ
+    only in their digits ("5 - 40", "| 3") go when they have few letters and are not a
+    heading ("ART. 25.")."""
+    if len(pages) < 3:
+        return [list(lines) for lines in pages]
+    exact: Counter[str] = Counter()
+    numbered: Counter[str] = Counter()
+    for lines in pages:
+        edges = [lines[i] for i in _edge_indices(lines)]
+        exact.update(set(edges))
+        numbered.update({_DIGITS.sub("#", line) for line in edges})
+    threshold = max(3, len(pages) // 2)
+
+    def is_running(line: str) -> bool:
+        if exact[line] >= threshold:
+            return True
+        return (
+            numbered[_DIGITS.sub("#", line)] >= threshold
+            and sum(c.isalpha() for c in line) <= _MAX_COUNTER_LETTERS
+            and not heading_level(line)
+        )
+
+    cleaned = []
+    for lines in pages:
+        positions = set(_edge_indices(lines))
+        cleaned.append(
+            [line for i, line in enumerate(lines) if i not in positions or not is_running(line)]
+        )
+    return cleaned
+
+
+def _edge_indices(lines: Sequence[str]) -> list[int]:
+    filled = [i for i, line in enumerate(lines) if line]
+    return filled[:_EDGE_LINES] + filled[-_EDGE_LINES:]
 
 
 def parse_text(path: Path) -> ParsedDocument:
