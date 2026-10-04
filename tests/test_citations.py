@@ -99,6 +99,7 @@ def test_answers_without_valid_or_supported_citations_abstain() -> None:
         "Le fonti fornite non specificano il numero di disoccupati [1].",
         "Il documento non fornisce il nome dell'amministratore. [1][2]",
         "Nei passaggi non è indicato il costo della caldaia [2].",
+        "La Costituzione non specifica una durata precisa per il mandato. [1][4]",
     ],
 )
 def test_soft_refusals_become_abstentions(output: str) -> None:

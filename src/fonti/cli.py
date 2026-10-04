@@ -13,6 +13,7 @@ from fonti import __version__
 from fonti.config import Settings, load_settings
 from fonti.domain import Answer, Citation
 from fonti.errors import FontiError
+from fonti.generation.llm import is_loopback
 from fonti.service import Fonti, IngestResult, IngestStatus
 
 _STATUS_MARKS = {
@@ -56,6 +57,10 @@ def build_parser() -> argparse.ArgumentParser:
         "action", choices=["pull"], help="pull: scarica i modelli configurati (serve la rete)"
     )
 
+    serve = commands.add_parser("serve", help="avvia l'interfaccia web su questo computer")
+    serve.add_argument("--port", type=int, help="porta (predefinita: web.port, 8000)")
+    serve.add_argument("--open", action="store_true", help="apre il browser")
+
     evaluation = commands.add_parser("eval", help="valutazione su dataset di prova (sviluppo)")
     evaluation.add_argument("--eval-dir", type=Path, default=Path("eval"), help="cartella eval")
     actions = evaluation.add_subparsers(dest="eval_action", metavar="AZIONE", required=True)
@@ -87,6 +92,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         settings = load_settings(args.config)
         if args.command == "eval":
             return _evaluate(settings, args)
+        if args.command == "serve":
+            return _serve(settings, args)
         with Fonti(settings) as fonti:
             return _COMMANDS[args.command](fonti, args)
     except FontiError as exc:
@@ -135,6 +142,30 @@ def _docs(fonti: Fonti, args: argparse.Namespace) -> int:
 def _remove(fonti: Fonti, args: argparse.Namespace) -> int:
     info = fonti.remove(args.doc_id)
     print(f"Rimosso {info.filename} ({info.id[:12]})")
+    return 0
+
+
+def _serve(settings: Settings, args: argparse.Namespace) -> int:
+    import threading
+    import webbrowser
+
+    import uvicorn
+
+    from fonti.web.app import create_app
+
+    host, port = settings.web.host, args.port or settings.web.port
+    if not is_loopback(host):
+        print(
+            f"Errore: web.host = {host} esporrebbe documenti e domande sulla rete. "
+            "L'interfaccia ascolta solo su questo computer (127.0.0.1).",
+            file=sys.stderr,
+        )
+        return 1
+    url = f"http://{host}:{port}/"
+    print(f"fonti è in ascolto su {url} (Ctrl+C per fermarlo)", flush=True)
+    if args.open:
+        threading.Timer(1.5, webbrowser.open, args=(url,)).start()
+    uvicorn.run(create_app(settings), host=host, port=port, log_level="warning")
     return 0
 
 

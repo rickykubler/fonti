@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Documenti · fonti{% endblock %}
+{% block content %}
+<h1>Documenti</h1>
+<form class="upload" hx-post="/documents" hx-encoding="multipart/form-data" hx-target="#jobs"
+      hx-swap="outerHTML" hx-on::after-request="this.reset()">
+  <label for="files">Aggiungi file ({{ suffixes }}, massimo {{ max_upload_mb }} MB ciascuno)</label>
+  <input id="files" type="file" name="files" multiple required accept=".pdf,.txt,.md,.docx">
+  <button type="submit">Carica e indicizza</button>
+</form>
+{% include "_jobs.html" %}
+<div id="documents">
+  {% include "_documents.html" %}
+</div>
+{% endblock %}

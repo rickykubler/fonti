@@ -27,13 +27,21 @@ vinto i Mondiali di calcio del 2006?" returns "Non lo so" with the nearest passa
 
 ## M2 — Quality and evaluation
 
-- [ ] Italian BM25: stemming, stopwords, FTS5 query sanitization, legal abbreviation expansion
-- [ ] Reranker (`BAAI/bge-reranker-v2-m3`) and relevance gate
-- [ ] Docling parser (OCR, tables, DOCX), `auto` routing, header/footer removal, de-hyphenation
-- [ ] Evaluation framework: dataset format, metrics, runner, reports
-- [ ] Public corpus manifest and download script; synthetic documents and synthetic scans
-- [ ] Golden set (~60 questions) with automatic evidence verification
-- [ ] Baseline and comparisons: embedders, reranker on/off, LLMs, OCR engines; calibrated thresholds
+- [x] Italian BM25: Snowball stemming, stopwords, FTS5 query sanitization
+- [ ] Legal abbreviation expansion ("d.lgs." ↔ "decreto legislativo")
+- [x] Reranker (`BAAI/bge-reranker-v2-m3`) and relevance gate (min_score 0.1)
+- [x] Docling parser (OCR, tables, DOCX), `auto` routing, running header/footer removal
+- [x] Evaluation framework: dataset format, metrics, LLM judge, runner, Markdown/JSON reports
+- [x] Public corpus manifest, downloader, synthetic documents and synthetic scans
+- [x] Golden set: 59 questions (47 answerable, 12 not) with automatic evidence verification
+- [x] Baseline and ablations: stemming, reranker, gate, Docling on digital PDFs, OCR on scans
+- [ ] GDPR and AI Act in the corpus: EUR-Lex blocks automated downloads (HTTP 202); download
+      the PDFs by hand into `eval/corpus/files/`, record their SHA-256, add questions
+- [ ] Embedder comparison: `ibm-granite/granite-embedding-311m-multilingual-r2`,
+      `Qwen/Qwen3-Embedding-0.6B` vs `BAAI/bge-m3` (retrieval-only runs)
+- [ ] LLM comparison: `gemma4:12b`, `qwen3.5:9b` vs `qwen2.5:14b` (full runs, `llm.think = false`)
+- [ ] OCR reading order on justified multi-line text: EasyOCR interleaves adjacent lines (CER
+      ~25% on the Constitution scan, 1-4% on simpler pages); try RapidOCR `latin` (torch backend)
 
 **Done when:** a committed report compares against the baseline. Initial targets, to be revised after
 the baseline:
@@ -47,11 +55,23 @@ the baseline:
 | Cited page correct | ≥ 90% |
 | CER on clean synthetic scans | ≤ 3% |
 
+**Results** (`eval/reports/`, main dataset, qwen2.5:14b):
+
+| Run | Recall@1 | Recall@5 | MRR@10 | Correct refusals | False refusals | Cited pages | Groundedness |
+|---|---|---|---|---|---|---|---|
+| baseline (M1) | 0.808 | 0.957 | 0.873 | 0.83 | 0.00 | 0.90 | 0.88 |
+| + stemming, reranker, gate, generation fixes | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.96 | 0.92 |
+
+Scans (Docling + EasyOCR): correctness 0.94, cited pages 1.0, recall@5 0.80 (OCR noise lowers
+quote matching), ingest 1.5 s/page. Known failure: cost-08 answers with the historical text of
+Art. 56 quoted in the notes instead of the current one.
+
 ## M3 — Web UI and demo
 
-- [ ] Ask page: streamed answer, citation cards, open PDF at page, page preview with highlighted passage
-- [ ] Documents page: upload, background ingestion with status, delete; JSON API
-- [ ] Security: loopback bind, Host/Origin checks, upload limits, files served by id only
+- [x] Ask page: streamed answer, citation cards, open PDF at page, page preview with highlighted passage
+- [x] Documents page: upload, background ingestion with status, delete; JSON API (`/api/ask`, `/api/ask/stream`)
+- [x] Security: loopback only, Host/Origin checks, upload limits, files served by id only
+- [ ] Manual check in a browser (`uv run fonti serve --open`)
 - [ ] `fonti doctor` (checks Ollama, models, GPU)
 - [ ] Demo screenshots
 

@@ -1,0 +1,23 @@
+<div id="jobs" {% if busy %}hx-get="/documents/jobs" hx-trigger="every 2s" hx-swap="outerHTML"{% endif %}>
+  {% for error in errors or [] %}
+  <p class="error">{{ error }}</p>
+  {% endfor %}
+  {% if jobs %}
+  <table class="jobs">
+    <caption>Indicizzazioni recenti</caption>
+    <thead><tr><th>File</th><th>Stato</th><th>Dettagli</th></tr></thead>
+    <tbody>
+      {% for job in jobs %}
+      <tr class="state-{{ job.state.name.lower() }}">
+        <td>{{ job.filename }}</td>
+        <td>{{ job.state.value }}</td>
+        <td>{{ job.message }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% if not busy %}
+  <div hx-get="/documents/list" hx-trigger="load" hx-target="#documents"></div>
+  {% endif %}
+</div>

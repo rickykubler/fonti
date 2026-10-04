@@ -229,6 +229,21 @@ class Fonti:
         if not retrieval.relevant:
             return abstain(retrieval.question, retrieval.sources)
         output = self.chat.complete(build_messages(retrieval.question, retrieval.sources))
+        return self._finish(retrieval, output)
+
+    def stream_answer(self, retrieval: Retrieval) -> Iterator[str | Answer]:
+        """Like `answer`, but yields the model's text as it is generated (provisional: the
+        citations are checked only at the end) and finally the verified Answer."""
+        if not retrieval.relevant:
+            yield abstain(retrieval.question, retrieval.sources)
+            return
+        parts = []
+        for token in self.chat.stream(build_messages(retrieval.question, retrieval.sources)):
+            parts.append(token)
+            yield token
+        yield self._finish(retrieval, "".join(parts))
+
+    def _finish(self, retrieval: Retrieval, output: str) -> Answer:
         return build_answer(
             retrieval.question,
             output,
