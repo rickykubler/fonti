@@ -1,0 +1,12 @@
+# Docling for every PDF (layout, tables, OCR on scanned regions with EasyOCR it/en).
+[parser]
+mode = "docling"
+
+[retrieval]
+keyword_terms = "plain"
+
+[embedding]
+model = "BAAI/bge-m3"
+
+[llm]
+model = "qwen2.5:14b"

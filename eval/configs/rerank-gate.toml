@@ -1,0 +1,14 @@
+# Stemmed BM25 + reranker + relevance gate (tau calibrated on the main dataset).
+[retrieval]
+keyword_terms = "stemmed"
+
+[rerank]
+enabled = true
+model = "BAAI/bge-reranker-v2-m3"
+min_score = 0.1
+
+[embedding]
+model = "BAAI/bge-m3"
+
+[llm]
+model = "qwen2.5:14b"

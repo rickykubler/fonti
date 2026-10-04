@@ -3,17 +3,18 @@
 import hashlib
 import logging
 import shutil
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterable, Iterator, Sequence
 from dataclasses import dataclass, replace
 from enum import StrEnum
 from pathlib import Path
 from types import TracebackType
+from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
 
 from fonti.config import Settings
-from fonti.domain import Answer, Chunk, DocumentInfo, Hit, Retrieval
+from fonti.domain import Answer, Chunk, DocumentInfo, Hit, ParsedDocument, Retrieval
 from fonti.errors import FontiError
 from fonti.generation.citations import abstain, build_answer
 from fonti.generation.llm import ChatClient, create_chat_client
@@ -26,6 +27,9 @@ from fonti.ml.embedder import Embedder, create_embedder
 from fonti.ml.hub import pull
 from fonti.ml.reranker import CrossEncoderReranker, Reranker
 from fonti.retrieval.hybrid import HybridRetriever
+
+if TYPE_CHECKING:
+    from fonti.ingest.docling_parser import DoclingParser
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +62,7 @@ class _Prepared:
     chunks: tuple[Chunk, ...]
     terms: list[str]
     vectors: NDArray[np.float32]
+    note: str = ""
 
 
 class Fonti:
@@ -75,6 +80,7 @@ class Fonti:
         self._chat = chat
         self._reranker = reranker
         self._retriever: HybridRetriever | None = None
+        self._docling_parser: DoclingParser | None = None
 
     def close(self) -> None:
         self.store.close()
@@ -128,7 +134,12 @@ class Fonti:
 
     def pull_models(self) -> list[Path]:
         """Download the models in use, so later runs never need the network."""
-        return pull(self.model_names())
+        paths = pull(self.model_names())
+        if self.settings.parser.mode != "fast":
+            from fonti.ingest.docling_parser import download_models
+
+            paths.append(download_models(self.settings.parser))
+        return paths
 
     def stored_file(self, doc_id: str) -> Path | None:
         suffix = self.store.document_suffix(doc_id)
@@ -224,7 +235,12 @@ class Fonti:
             retrieval.sources,
             self.store.page_spans,
             self.settings.citations.min_support,
+            similarity=self._similarity,
         )
+
+    def _similarity(self, claim: str, sentences: Sequence[str]) -> list[float]:
+        vectors = self.embedder.embed_documents([claim, *sentences])
+        return [float(score) for score in vectors[1:] @ vectors[0]]
 
     def ask(self, question: str) -> Answer:
         return self.answer(self.retrieve(question))
@@ -261,10 +277,39 @@ class Fonti:
         except (ParseError, OSError) as exc:
             return IngestResult(path, IngestStatus.FAILED, message=str(exc))
         logger.info("Indexed %s: %d chunks", path.name, len(prepared.chunks))
-        return IngestResult(path, IngestStatus.ADDED, doc_id, len(prepared.chunks))
+        return IngestResult(path, IngestStatus.ADDED, doc_id, len(prepared.chunks), prepared.note)
+
+    def _parse(self, path: Path) -> tuple[ParsedDocument, str]:
+        """Pick the parser for `path` and return the parsed document with a note for the user."""
+        mode = self.settings.parser.mode
+        suffix = path.suffix.lower()
+        if suffix not in (".pdf", ".docx") or (mode == "fast" and suffix == ".pdf"):
+            return parse_file(path), ""
+        from fonti.ingest.docling_parser import DoclingUnavailableError, scanned_pages
+
+        scanned = scanned_pages(path) if suffix == ".pdf" else []
+        if mode == "auto" and suffix == ".pdf" and not scanned:
+            return parse_file(path), ""
+        try:
+            parsed = self._docling().parse(path)
+        except DoclingUnavailableError:
+            if suffix != ".pdf":
+                raise
+            note = f"{len(scanned)} pagine senza testo ignorate: per l'OCR serve l'extra docling"
+            return parse_file(path), note
+        return parsed, (
+            f"OCR su {len(scanned)} pagine" if scanned and self.settings.parser.ocr else ""
+        )
+
+    def _docling(self) -> "DoclingParser":
+        if self._docling_parser is None:
+            from fonti.ingest.docling_parser import DoclingParser
+
+            self._docling_parser = DoclingParser(self.settings.parser)
+        return self._docling_parser
 
     def _prepare(self, path: Path, doc_id: str, filename: str) -> _Prepared:
-        parsed = parse_file(path)
+        parsed, note = self._parse(path)
         chunked = chunk_document(parsed, self.settings.chunking)
         indexed_texts = [_indexed_text(chunk) for chunk in chunked.chunks]
         vectors = self.embedder.embed_documents(indexed_texts)
@@ -283,7 +328,7 @@ class Fonti:
         )
         mode = self.settings.retrieval.keyword_terms
         terms = [index_terms(text, mode) for text in indexed_texts]
-        return _Prepared(document, chunked.chunks, terms, vectors)
+        return _Prepared(document, chunked.chunks, terms, vectors, note)
 
 
 def _indexed_text(chunk: Chunk) -> str:

@@ -12,7 +12,7 @@ from fonti.errors import FontiError
 from fonti.ingest.structure import heading_level, lines_to_blocks
 from fonti.ingest.text import normalize
 
-SUPPORTED_SUFFIXES = frozenset({".pdf", ".txt", ".md"})
+SUPPORTED_SUFFIXES = frozenset({".pdf", ".txt", ".md", ".docx"})
 # Bump when parsing output changes, so that indexes built by older versions are not reused.
 PARSER_VERSION = "2"
 
@@ -37,6 +37,8 @@ def parse_file(path: Path) -> ParsedDocument:
         return parse_pdf(path)
     if suffix in (".txt", ".md"):
         return parse_text(path)
+    if suffix == ".docx":
+        raise ParseError(f"{path.name}: i file .docx si leggono con il parser docling")
     raise ParseError(f"Formato non supportato: {path.name}")
 
 

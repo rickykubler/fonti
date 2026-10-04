@@ -25,10 +25,12 @@ dependencies = [
     "snowballstemmer>=3.1.1",
 ]
 
-# Local models need torch: pick exactly one of these extras (`uv sync --extra cpu` or `--extra gpu`).
+# Local models need torch: pick exactly one of `cpu` and `gpu`; add `docling` for scanned PDFs,
+# tables and .docx (e.g. `uv sync --extra gpu --extra docling`).
 [project.optional-dependencies]
-cpu = ["sentence-transformers>=5.0", "torch>=2.14"]
-gpu = ["sentence-transformers>=5.0", "torch>=2.14"]
+cpu = ["sentence-transformers>=5.0", "torch>=2.14", "torchvision>=0.29"]
+gpu = ["sentence-transformers>=5.0", "torch>=2.14", "torchvision>=0.29"]
+docling = ["docling[easyocr]>=2.133"]
 
 [project.scripts]
 fonti = "fonti.cli:main"
@@ -42,6 +44,10 @@ conflicts = [[{ extra = "cpu" }, { extra = "gpu" }]]
 
 [tool.uv.sources]
 torch = [
+    { index = "pytorch-cpu", extra = "cpu" },
+    { index = "pytorch-cu130", extra = "gpu" },
+]
+torchvision = [
     { index = "pytorch-cpu", extra = "cpu" },
     { index = "pytorch-cu130", extra = "gpu" },
 ]
