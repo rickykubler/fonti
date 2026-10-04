@@ -111,6 +111,14 @@ def test_wrapped_first_line_of_an_article_is_not_its_title(first_line: str) -> N
     assert blocks[1].text.startswith(first_line)
 
 
+def test_a_line_starting_with_a_year_continues_the_paragraph() -> None:
+    lines = [LONG + "a riduzione delle rate del", "2026. L'assemblea approva."]
+
+    [block] = lines_to_blocks(lines, page=2)
+
+    assert block.text.endswith("rate del 2026. L'assemblea approva.")
+
+
 def test_sentence_lines_are_not_titles() -> None:
     blocks = lines_to_blocks(["Art. 1.", "L'Italia è una Repubblica democratica."], page=1)
 

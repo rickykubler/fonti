@@ -35,7 +35,7 @@ _INLINE_ARTICLE = re.compile(
 )
 _LETTER_SPACED = re.compile(r"(?:\S ){3,}\S")
 _SPACED_KEYWORD = re.compile(r"(PARTE|LIBRO|TITOLO|CAPO|SEZIONE|ALLEGATO)([IVXLCDM]+|\d+)")
-_LIST_ITEM = re.compile(r"(?:[-–•·▪]|\(?[a-z]\)|\(?\d+\)|\d+\.)\s")
+_LIST_ITEM = re.compile(r"(?:[-–•·▪]|\(?[a-z]\)|\(?\d{1,2}\)|\d{1,2}\.)\s")  # not "2026. "
 _TITLE_SEPARATORS = "-–—:(."
 _MAX_HEADING_CHARS = 120
 _MAX_TITLE_CHARS = 100
