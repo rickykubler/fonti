@@ -27,15 +27,19 @@ def quote_score(quote: str, text: str) -> float:
 def evidence_ranks(
     evidence: Sequence[Evidence], hits: Sequence[Hit], doc_of: Callable[[str], str | None]
 ) -> list[int | None]:
-    """For every evidence item, the 1-based rank of the first hit that contains it."""
+    """For every evidence item, the 1-based rank of the first hit that contains any of its
+    locations."""
     ranks: list[int | None] = []
     for item in evidence:
         rank = next(
             (
                 position
                 for position, hit in enumerate(hits, start=1)
-                if doc_of(hit.doc_id) == item.doc
-                and quote_score(item.quote, hit.text) >= QUOTE_MATCH
+                if any(
+                    doc_of(hit.doc_id) == location.doc
+                    and quote_score(location.quote, hit.text) >= QUOTE_MATCH
+                    for location in item.locations
+                )
             ),
             None,
         )
@@ -62,7 +66,7 @@ def citation_page_precision(
     """Share of citations that point to a page holding gold evidence (None if no citations)."""
     if not answer.citations:
         return None
-    gold = {(item.doc, item.page) for item in evidence}
+    gold = {(location.doc, location.page) for item in evidence for location in item.locations}
     hits = sum(1 for c in answer.citations if (doc_of(c.doc_id), c.page) in gold)
     return hits / len(answer.citations)
 
@@ -72,13 +76,14 @@ def cites_evidence(
 ) -> bool:
     """At least one cited passage overlaps a gold quote."""
     return any(
-        doc_of(citation.doc_id) == item.doc
+        doc_of(citation.doc_id) == location.doc
         and (
-            quote_score(citation.passage, item.quote) >= QUOTE_MATCH
-            or quote_score(item.quote, citation.passage) >= QUOTE_MATCH
+            quote_score(citation.passage, location.quote) >= QUOTE_MATCH
+            or quote_score(location.quote, citation.passage) >= QUOTE_MATCH
         )
         for citation in answer.citations
         for item in evidence
+        for location in item.locations
     )
 
 
