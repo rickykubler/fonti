@@ -72,7 +72,10 @@ class DoclingParser:
 
 def scanned_pages(path: Path) -> list[int]:
     """1-based numbers of the pages without a usable text layer."""
-    pdf = pdfium.PdfDocument(path)
+    try:
+        pdf = pdfium.PdfDocument(path)
+    except pdfium.PdfiumError as exc:
+        raise ParseError(f"Impossibile aprire il PDF {path.name}: {exc}") from exc
     try:
         pages = []
         for index in range(len(pdf)):
