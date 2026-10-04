@@ -28,7 +28,7 @@ vinto i Mondiali di calcio del 2006?" returns "Non lo so" with the nearest passa
 ## M2 — Quality and evaluation
 
 - [x] Italian BM25: Snowball stemming, stopwords, FTS5 query sanitization
-- [ ] Legal abbreviation expansion ("d.lgs." ↔ "decreto legislativo")
+- [x] Legal abbreviation expansion ("d.lgs." ↔ "decreto legislativo")
 - [x] Reranker (`BAAI/bge-reranker-v2-m3`) and relevance gate (min_score 0.1)
 - [x] Docling parser (OCR, tables, DOCX), `auto` routing, running header/footer removal
 - [x] Evaluation framework: dataset format, metrics, LLM judge, runner, Markdown/JSON reports
@@ -37,11 +37,13 @@ vinto i Mondiali di calcio del 2006?" returns "Non lo so" with the nearest passa
 - [x] Baseline and ablations: stemming, reranker, gate, Docling on digital PDFs, OCR on scans
 - [ ] GDPR and AI Act in the corpus: EUR-Lex blocks automated downloads (HTTP 202); download
       the PDFs by hand into `eval/corpus/files/`, record their SHA-256, add questions
-- [ ] Embedder comparison: `ibm-granite/granite-embedding-311m-multilingual-r2`,
-      `Qwen/Qwen3-Embedding-0.6B` vs `BAAI/bge-m3` (retrieval-only runs)
+- [x] Embedder comparison: granite R2, Qwen3-Embedding-0.6B and bge-m3 are equivalent with the
+      reranker; granite R2 is the default (faster, smaller)
 - [ ] LLM comparison: `gemma4:12b`, `qwen3.5:9b` vs `qwen2.5:14b` (full runs, `llm.think = false`)
+- [x] OCR engines on scans: EasyOCR (default) vs RapidOCR latin; see docs/evaluation.md
 - [ ] OCR reading order on justified multi-line text: EasyOCR interleaves adjacent lines (CER
-      ~25% on the Constitution scan, 1-4% on simpler pages); try RapidOCR `latin` (torch backend)
+      ~25% on the Constitution scan); RapidOCR keeps the order but drops accents: an
+      accent-aware Latin recognition model or a post-OCR line re-ordering is still to try
 
 **Done when:** a committed report compares against the baseline. Initial targets, to be revised after
 the baseline:

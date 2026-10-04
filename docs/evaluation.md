@@ -116,6 +116,12 @@ justified lines and the CER is about 25%, although answers stay correct (correct
 cited pages 1.0 on the `scans` dataset). With EasyOCR's default threshold (0.5) a third of
 the text of noisy 150-dpi pages was lost.
 
+RapidOCR with its Latin model (torch backend) keeps the word order on the same pages (median
+page CER 0.07 against 0.20 for EasyOCR on six Constitution pages) but drops Italian accents
+("liberta", "é" for "è"), and its models are not fetched by `fonti models pull`; Docling's
+region order also varies on some pages, which the order-sensitive CER punishes. EasyOCR stays
+the default; `parser.ocr_engine = "rapidocr"` is available for experiments.
+
 The reranker gate was calibrated on the main dataset: every answerable question had a best
 reranker score of at least 0.28, while 8 of the 12 unanswerable ones scored below 0.17; the
 LLM has to reject the other four, which are topically close to the corpus.

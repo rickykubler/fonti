@@ -129,7 +129,10 @@ def _ocr_options(settings: ParserSettings) -> Any:
             lang=settings.ocr_languages or ["ita", "eng"], mode=mode
         )
     if settings.ocr_engine == "rapidocr":
-        return options.RapidOcrOptions(mode=mode, backend="torch")
+        # The Latin recognition model: RapidOCR's default is Chinese.
+        return options.RapidOcrOptions(
+            lang=settings.ocr_languages or ["latin"], mode=mode, backend="torch"
+        )
     return options.EasyOcrOptions(
         lang=settings.ocr_languages or ["it", "en"],
         mode=mode,
