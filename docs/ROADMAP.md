@@ -74,14 +74,14 @@ Art. 56 quoted in the notes instead of the current one.
 - [x] Documents page: upload, background ingestion with status, delete; JSON API (`/api/ask`, `/api/ask/stream`)
 - [x] Security: loopback only, Host/Origin checks, upload limits, files served by id only
 - [ ] Manual check in a browser (`uv run fonti serve --open`)
-- [ ] `fonti doctor` (checks Ollama, models, GPU)
+- [x] `fonti doctor` (checks Ollama, models, GPU)
 - [ ] Demo screenshots
 
 ## M4 — Documentation and release preparation
 
-- [ ] Full README, `docs/architecture.md`, `docs/evaluation.md`
-- [ ] CONTRIBUTING, issue templates, CHANGELOG, NOTICE (model and data licenses)
-- [ ] Clean install test from a fresh clone
+- [x] Full README, `docs/architecture.md`, `docs/evaluation.md`
+- [x] CONTRIBUTING, issue templates, CHANGELOG, NOTICE (model and data licenses)
+- [x] Clean install test from a fresh clone (`uv sync --extra cpu`, 164 tests passing)
 
 ## Needs the maintainer
 
