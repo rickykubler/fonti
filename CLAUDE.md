@@ -15,7 +15,13 @@ PowerShell 5.1 has no `&&`: run commands one per line.
 - Format check: `uv run ruff format --check .`
 - Types: `uv run mypy`
 - All hooks: `uv run pre-commit run --all-files`
-- CLI: `uv run fonti --help` (`ingest`, `ask`, `docs`, `remove`, `reindex`)
+- CLI: `uv run fonti --help` (`ingest`, `ask`, `docs`, `remove`, `reindex`, `models pull`, `serve`)
+- Web UI: `uv run fonti serve --open` (127.0.0.1:8000 only)
+- Evaluation: `uv run fonti eval corpus`, `uv run fonti eval check`, then
+  `uv run fonti --config eval/configs/<name>.toml eval run --dataset main --label <name>`
+  (`--retrieval-only` for fast runs); reports go to `eval/reports/`
+- Docling extra: `uv sync --extra gpu --extra docling`
+- Hugging Face downloads may hang with Xet on this network: retry or set `HF_HUB_DISABLE_XET=1`
 
 Plain `uv sync` drops the torch extra: always pass `--extra cpu` or `--extra gpu`.
 Tests run with `HF_HUB_OFFLINE=1`, so download models once before running slow tests.

@@ -42,7 +42,7 @@ def ensure_local(settings: LLMSettings) -> None:
     if settings.allow_remote:
         return
     host = urlsplit(settings.base_url).hostname or ""
-    if not _is_loopback(host):
+    if not is_loopback(host):
         raise RemoteEndpointError(
             f"L'endpoint {settings.base_url} non è locale: le domande e i documenti uscirebbero "
             "dal computer. Per usarlo imposta llm.allow_remote = true."
@@ -210,7 +210,7 @@ def _check(response: httpx.Response, settings: LLMSettings) -> None:
     raise LLMError(f"Errore {response.status_code} dal server LLM: {detail}")
 
 
-def _is_loopback(host: str) -> bool:
+def is_loopback(host: str) -> bool:
     if host == "localhost":
         return True
     try:

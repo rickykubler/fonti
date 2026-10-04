@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Domande · fonti{% endblock %}
+{% block content %}
+<h1>Fai una domanda ai tuoi documenti</h1>
+{% if documents == 0 %}
+<p class="notice">Non hai ancora indicizzato documenti: aggiungili nella pagina
+  <a href="/documents">Documenti</a>.</p>
+{% endif %}
+<form id="ask-form" class="ask">
+  <label for="question" class="visually-hidden">Domanda</label>
+  <textarea id="question" name="question" rows="2" maxlength="2000" required
+            placeholder="Es. Quanto dura il contratto di locazione?"></textarea>
+  <button type="submit">Chiedi</button>
+</form>
+<section id="result" aria-live="polite">
+  <p id="status" class="status"></p>
+  <p id="draft" class="draft"></p>
+  <div id="answer" class="answer"></div>
+  <ol id="citations" class="citations"></ol>
+</section>
+<script src="{{ url_for('static', path='ask.js') }}" defer></script>
+{% endblock %}

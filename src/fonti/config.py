@@ -87,6 +87,12 @@ class LLMSettings(_Section):
     timeout_s: float = Field(default=300.0, gt=0)
 
 
+class WebSettings(_Section):
+    host: str = "127.0.0.1"
+    port: int = Field(default=8000, ge=1, le=65535)
+    max_upload_mb: int = Field(default=100, ge=1)
+
+
 class CitationSettings(_Section):
     min_support: float = Field(default=0.3, ge=0.0, le=1.0)
 
@@ -108,6 +114,7 @@ class Settings(BaseSettings):
     rerank: RerankSettings = RerankSettings()
     llm: LLMSettings = LLMSettings()
     citations: CitationSettings = CitationSettings()
+    web: WebSettings = WebSettings()
 
     @classmethod
     def settings_customise_sources(

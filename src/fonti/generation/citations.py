@@ -25,7 +25,10 @@ _MARKER_RE = re.compile(r"\s*\[(\d+(?:\s*[,;]\s*\d+)*)\]")
 _THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL)
 _MIN_EXTENSION_GAIN = 0.2
 # Answers that say the sources do not contain the information, instead of NON_TROVATO.
-_REFUSAL_SUBJECT = re.compile(r"\b(fonti?|document[oi]|test[oi]|passagg[io]+|informazioni)\b")
+_REFUSAL_SUBJECT = re.compile(
+    r"\b(fonti?|document[oi]|test[oi]|passagg[io]+|informazioni|costituzione|contratt[oi]|"
+    r"verbal[ei]|manual[ei]|regolament[oi]|legge|norm[ae]|linee guida|comunicat[oi])\b"
+)
 _REFUSAL_VERB = re.compile(
     r"\bnon (?:(?:e|sono|viene|vengono) (?:specificat|indicat|riportat|menzionat|present|"
     r"disponibil|fornit|chiarit)|specifica|indica|riporta|menziona|fornisc|contien|precisa|"
