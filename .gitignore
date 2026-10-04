@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+build/
+dist/
+*.egg-info/
+
+# Tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local config and secrets
+.env
+fonti.toml
+
+# Local data, indexes and downloaded corpora
+data/
+*.sqlite3
+*.sqlite3-*
+eval/corpus/files/
+eval/.work/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
