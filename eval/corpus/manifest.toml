@@ -35,6 +35,7 @@ title = "AgID - Linee guida sul documento informatico"
 kind = "manuale"
 url = "https://www.agid.gov.it/sites/agid/files/2024-05/linee_guida_sul_documento_informatico.pdf"
 file = "agid_documento_informatico.pdf"
+sha256 = "aaede17dfa70c9f2a8b933c4c6527068178a18bcc5c8f6d3049b03da2b51ac37"
 license = "Atto di una pubblica amministrazione (art. 5 L. 633/1941); da riverificare sulle note legali del sito AgID."
 
 [[document]]
@@ -43,6 +44,7 @@ title = "ISTAT - Occupati e disoccupati, luglio 2026 (comunicato stampa)"
 kind = "tabelle"
 url = "https://www.istat.it/wp-content/uploads/2026/09/CS_Occupati-e-disoccupati_LUGLIO_2026.pdf"
 file = "istat_occupati_luglio_2026.pdf"
+sha256 = "8f4c2a0647a2da6b5ee987a4213648a3fc414572ebfbec7dcd2a4aa80f5ad16f"
 license = "ISTAT, licenza Creative Commons Attribuzione 4.0 (CC BY 4.0)."
 
 [[document]]

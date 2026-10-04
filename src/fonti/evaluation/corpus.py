@@ -9,6 +9,8 @@ import hashlib
 import io
 import logging
 import random
+import shutil
+import subprocess
 import tomllib
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
@@ -24,6 +26,10 @@ from fonti.evaluation.synthetic import render_pdf
 logger = logging.getLogger(__name__)
 
 USER_AGENT = "Mozilla/5.0 (compatible; fonti-eval/0.1; +https://github.com/)"
+BROWSER_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/130.0 Safari/537.36"
+)
 SCAN_DPI = 150
 
 
@@ -88,12 +94,21 @@ class Corpus:
     def _download(self, document: CorpusDocument, target: Path) -> None:
         assert document.url is not None
         logger.info("Downloading %s", document.url)
+        partial = target.with_suffix(target.suffix + ".part")
         response = httpx.get(
             document.url, headers={"User-Agent": USER_AGENT}, follow_redirects=True, timeout=120
         )
-        response.raise_for_status()
-        partial = target.with_suffix(target.suffix + ".part")
-        partial.write_bytes(response.content)
+        partial.write_bytes(response.content if response.status_code == 200 else b"")
+        if not _looks_like(target.suffix, partial):
+            # Some sites (EUR-Lex) answer 202 with an empty body to non-browser TLS clients
+            # but accept curl.
+            _curl(document.url, partial)
+        if not _looks_like(target.suffix, partial):
+            partial.unlink(missing_ok=True)
+            raise EvaluationError(
+                f"{document.id}: download non riuscito da {document.url} "
+                f"(HTTP {response.status_code}). Scaricalo a mano in {target}."
+            )
         self._verify(document, partial)
         partial.replace(target)
 
@@ -107,6 +122,26 @@ class Corpus:
                 f"{document.id}: SHA-256 inatteso ({digest}). Il documento è cambiato alla fonte: "
                 "controllalo e aggiorna il manifest (e le domande che lo riguardano)."
             )
+
+
+def _looks_like(suffix: str, path: Path) -> bool:
+    if not path.is_file() or path.stat().st_size == 0:
+        return False
+    if suffix.lower() == ".pdf":
+        with path.open("rb") as f:
+            return f.read(5) == b"%PDF-"
+    return True
+
+
+def _curl(url: str, target: Path) -> None:
+    curl = shutil.which("curl")
+    if curl is None:
+        return
+    subprocess.run(
+        [curl, "--silent", "--location", "--fail", "--max-time", "300", "--user-agent",
+         BROWSER_USER_AGENT, "--output", str(target), url],
+        check=False,
+    )  # fmt: skip
 
 
 def make_scan(source: Path, target: Path, *, seed: str, dpi: int = SCAN_DPI) -> Path:
