@@ -113,6 +113,12 @@ def test_evidence_ranks_recall_and_mrr() -> None:
     assert reciprocal_rank(ranks) == 0.5
 
 
+def test_quotes_match_flat_text_and_markdown_tables() -> None:
+    table = "| Voce | Valore |\n|---|---|\n| Disoccupati | 761 | -33 | -4,2 |"
+
+    assert quote_score("Disoccupati 761 -33 -4,2", table) == 100.0
+
+
 def test_any_location_of_an_evidence_counts() -> None:
     evidence = [
         Evidence(

@@ -10,6 +10,12 @@ from tests.fakes import FakeChat
 from tests.samples import CONTRACT_MD
 
 
+@pytest.fixture(autouse=True)
+def _rerank_settings_from_code(monkeypatch: pytest.MonkeyPatch) -> None:
+    # conftest disables reranking through the environment, which would override these tests.
+    monkeypatch.delenv("FONTI_RERANK__ENABLED")
+
+
 class KeywordReranker:
     """Scores 0.9 when the passage contains the keyword, 0.1 otherwise."""
 

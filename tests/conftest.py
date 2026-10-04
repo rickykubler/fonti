@@ -38,4 +38,6 @@ def _isolated_settings(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     for name in list(os.environ):
         if name.startswith("FONTI_"):
             monkeypatch.delenv(name)
+    # Never load the real reranker in fast tests; tests that rerank inject a fake one.
+    monkeypatch.setenv("FONTI_RERANK__ENABLED", "false")
     monkeypatch.chdir(tmp_path)

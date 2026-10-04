@@ -1,0 +1,17 @@
+# Candidate default: fast parser for digital PDFs, Docling for scanned ones + stemmed BM25 +
+# reranker + gate.
+[parser]
+mode = "auto"
+
+[retrieval]
+keyword_terms = "stemmed"
+
+[rerank]
+enabled = true
+min_score = 0.1
+
+[embedding]
+model = "BAAI/bge-m3"
+
+[llm]
+model = "qwen2.5:14b"

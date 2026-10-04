@@ -34,7 +34,7 @@ class EmbeddingSettings(_Section):
 class ParserSettings(_Section):
     # "fast": PDF text layer only; "docling": layout, tables and OCR for every PDF;
     # "auto": docling only for PDFs with scanned pages (and for .docx).
-    mode: Literal["fast", "docling", "auto"] = "fast"
+    mode: Literal["fast", "docling", "auto"] = "auto"
     ocr: bool = True
     ocr_engine: Literal["easyocr", "rapidocr", "tesseract"] = "easyocr"
     ocr_languages: list[str] = Field(default_factory=list)  # engine codes; empty = Italian+English
@@ -57,19 +57,20 @@ class RetrievalSettings(_Section):
     final_k: int = Field(default=6, ge=1)
     rrf_k: int = Field(default=60, ge=1)
     # "stemmed": Italian Snowball stems without stopwords; "plain": lowercase words.
-    keyword_terms: KeywordMode = "plain"
+    keyword_terms: KeywordMode = "stemmed"
 
 
 class RerankSettings(_Section):
-    enabled: bool = False
+    enabled: bool = True
     model: str = "BAAI/bge-reranker-v2-m3"
     revision: str | None = None
     device: str = "auto"
     batch_size: int = Field(default=16, ge=1)
     max_length: int = Field(default=512, ge=64)
     # Relevance gate: when the best reranked passage scores below this, the system abstains
-    # without calling the LLM. 0 disables the gate.
-    min_score: float = Field(default=0.0, ge=0.0, le=1.0)
+    # without calling the LLM. 0 disables it. Calibrated on the golden set: every answerable
+    # question scored at least 0.28, half of the unanswerable ones below 0.1.
+    min_score: float = Field(default=0.1, ge=0.0, le=1.0)
 
 
 class LLMSettings(_Section):
