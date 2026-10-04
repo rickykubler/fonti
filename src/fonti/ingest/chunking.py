@@ -28,6 +28,7 @@ def chunk_document(parsed: ParsedDocument, settings: ChunkingSettings) -> Chunke
     chunks: list[Chunk] = []
     for section, indices in _section_groups(blocks):
         for start, end, kind in _pack(blocks, spans, indices, text, settings):
+            header = _table_header(blocks, spans, indices, start) if kind is BlockKind.TABLE else ""
             chunks.append(
                 Chunk(
                     ordinal=len(chunks),
@@ -38,10 +39,24 @@ def chunk_document(parsed: ParsedDocument, settings: ChunkingSettings) -> Chunke
                     page_end=page_for_offset(pages, end - 1),
                     section=section,
                     kind=kind,
-                    context=section,
+                    context=f"{section}\n{header}".strip() if header else section,
                 )
             )
     return ChunkedDocument(text, pages, tuple(chunks))
+
+
+def _table_header(
+    blocks: Sequence[Block], spans: Sequence[tuple[int, int]], indices: Sequence[int], start: int
+) -> str:
+    """The header rows of the table a chunk continues, so that a slice of rows stays readable
+    ("Disoccupati 761 ..." needs its column names)."""
+    for index in indices:
+        block_start, block_end = spans[index]
+        if blocks[index].kind is BlockKind.TABLE and block_start < start < block_end:
+            lines = blocks[index].text.split("\n")
+            separator = len(lines) > 1 and set(lines[1].replace("|", "").strip()) <= set("-: ")
+            return "\n".join(lines[: 2 if separator else 1])
+    return ""
 
 
 def heading_label(text: str) -> str:

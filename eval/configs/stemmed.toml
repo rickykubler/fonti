@@ -1,0 +1,9 @@
+# Baseline + Italian stemming and stopwords in BM25.
+[retrieval]
+keyword_terms = "stemmed"
+
+[embedding]
+model = "BAAI/bge-m3"
+
+[llm]
+model = "qwen2.5:14b"

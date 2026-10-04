@@ -43,6 +43,7 @@ class QuestionResult:
     ranks: list[int | None]  # evidence ranks in the final ranking
     candidate_ranks: list[int | None]  # evidence ranks before reranking
     retrieval_s: float
+    top_score: float | None = None  # best final retrieval score (reranker, if enabled)
     answer: str | None = None
     abstained: bool | None = None
     citations: list[dict[str, Any]] = field(default_factory=list)
@@ -194,6 +195,7 @@ def _evaluate(
         ranks=evidence_ranks(question.evidence, retrieval.ranked, doc_of),
         candidate_ranks=evidence_ranks(question.evidence, retrieval.candidates, doc_of),
         retrieval_s=round(time.perf_counter() - started, 3),
+        top_score=round(retrieval.ranked[0].score, 4) if retrieval.ranked else None,
     )
     if not generate:
         return result

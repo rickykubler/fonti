@@ -32,7 +32,17 @@ class EmbeddingSettings(_Section):
 
 
 class ParserSettings(_Section):
-    mode: Literal["fast"] = "fast"
+    # "fast": PDF text layer only; "docling": layout, tables and OCR for every PDF;
+    # "auto": docling only for PDFs with scanned pages (and for .docx).
+    mode: Literal["fast", "docling", "auto"] = "fast"
+    ocr: bool = True
+    ocr_engine: Literal["easyocr", "rapidocr", "tesseract"] = "easyocr"
+    ocr_languages: list[str] = Field(default_factory=list)  # engine codes; empty = Italian+English
+    force_ocr: bool = False  # OCR every page, for PDFs with a broken text layer
+    # EasyOCR drops lines below this confidence; its default (0.5) lost ~40% of the text of
+    # noisy Italian scans in our evaluation, 0.2 keeps the CER around 3-5%.
+    ocr_confidence: float = Field(default=0.2, ge=0.0, le=1.0)
+    tables: bool = True
 
 
 class ChunkingSettings(_Section):

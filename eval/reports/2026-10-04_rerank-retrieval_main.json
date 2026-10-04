@@ -1,0 +1,1463 @@
+{
+  "summary": {
+    "recall@1": 0.9468,
+    "recall@3": 0.9574,
+    "recall@5": 0.9787,
+    "recall@10": 1.0,
+    "recall@candidates": 1.0,
+    "mrr@10": 0.9663,
+    "retrieval_p50_s": 0.212,
+    "retrieval_p95_s": 0.251
+  },
+  "dataset": "main",
+  "label": "rerank-retrieval",
+  "created_at": "2026-10-04T15:56:16+00:00",
+  "settings": {
+    "offline": false,
+    "parser": {
+      "mode": "fast",
+      "ocr": true,
+      "ocr_engine": "easyocr",
+      "ocr_languages": [],
+      "force_ocr": false,
+      "tables": true
+    },
+    "embedding": {
+      "model": "BAAI/bge-m3",
+      "revision": null,
+      "device": "auto",
+      "batch_size": 16,
+      "query_prefix": "",
+      "document_prefix": ""
+    },
+    "chunking": {
+      "max_chars": 1500,
+      "overlap_chars": 200
+    },
+    "retrieval": {
+      "bm25_k": 50,
+      "dense_k": 50,
+      "fused_k": 30,
+      "final_k": 6,
+      "rrf_k": 60,
+      "keyword_terms": "stemmed"
+    },
+    "rerank": {
+      "enabled": true,
+      "model": "BAAI/bge-reranker-v2-m3",
+      "revision": null,
+      "device": "auto",
+      "batch_size": 16,
+      "max_length": 512,
+      "min_score": 0.0
+    },
+    "llm": {
+      "provider": "ollama",
+      "base_url": "http://127.0.0.1:11434",
+      "model": "qwen2.5:14b",
+      "allow_remote": false,
+      "think": null,
+      "context_window": 8192,
+      "max_answer_tokens": 800,
+      "temperature": 0.0,
+      "seed": 42,
+      "timeout_s": 300.0
+    },
+    "citations": {
+      "min_support": 0.3
+    }
+  },
+  "judge_model": null,
+  "ingest": {
+    "documents": 6,
+    "pages": 130,
+    "chunks": 372,
+    "seconds": null,
+    "seconds_per_page": null
+  },
+  "questions": [
+    {
+      "id": "cost-01",
+      "question": "Su che cosa è fondata la Repubblica italiana?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 11.502,
+      "top_score": 0.9647,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-02",
+      "question": "A chi appartiene la sovranità secondo la Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.204,
+      "top_score": 0.9757,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-03",
+      "question": "Quando è ammessa la restrizione della libertà personale?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.173,
+      "top_score": 0.9255,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-04",
+      "question": "Qual è la posizione dell'Italia nei confronti della guerra?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.179,
+      "top_score": 0.9644,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-05",
+      "question": "Com'è fatta la bandiera della Repubblica?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.146,
+      "top_score": 0.9697,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-06",
+      "question": "Un lavoratore può rinunciare alle ferie annuali?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.22,
+      "top_score": 0.9771,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-07",
+      "question": "Votare è un obbligo secondo la Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.201,
+      "top_score": 0.6594,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-08",
+      "question": "Quanti sono i deputati e quanti di loro sono eletti all'estero?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.196,
+      "top_score": 0.9915,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-09",
+      "question": "Quanti anni bisogna avere per essere eletti Presidente della Repubblica e quanto dura il mandato?",
+      "answerable": true,
+      "tags": [
+        "normativa",
+        "multi-passaggio"
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "candidate_ranks": [
+        3,
+        2
+      ],
+      "retrieval_s": 0.186,
+      "top_score": 0.9903,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-10",
+      "question": "Chi nomina il Presidente del Consiglio dei ministri?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.155,
+      "top_score": 0.9957,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-11",
+      "question": "Da quanti giudici è composta la Corte costituzionale e chi li nomina?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.21,
+      "top_score": 0.9998,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-12",
+      "question": "Si può cambiare la forma repubblicana con una revisione della Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.214,
+      "top_score": 0.9891,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-13",
+      "question": "Come vengono approvate le leggi di revisione della Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.217,
+      "top_score": 0.9993,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "cost-14",
+      "question": "Chi diventa senatore di diritto e a vita?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.187,
+      "top_score": 0.9933,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "istat-01",
+      "question": "Qual è il tasso di disoccupazione in Italia a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        4
+      ],
+      "retrieval_s": 0.227,
+      "top_score": 0.9999,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "istat-02",
+      "question": "Qual è il tasso di disoccupazione giovanile a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.222,
+      "top_score": 0.9999,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "istat-03",
+      "question": "Quanti sono gli occupati in Italia a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.227,
+      "top_score": 1.0,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "istat-04",
+      "question": "Di quanto sono cresciuti gli occupati rispetto a luglio 2025?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.254,
+      "top_score": 0.9999,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "istat-05",
+      "question": "Quanti erano i disoccupati maschi a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        6
+      ],
+      "candidate_ranks": [
+        18
+      ],
+      "retrieval_s": 0.21,
+      "top_score": 0.9997,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "istat-06",
+      "question": "Qual è il tasso di occupazione 15-64 anni delle donne a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.211,
+      "top_score": 0.9999,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "istat-07",
+      "question": "Quanti sono gli occupati con 50 anni e più a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        4
+      ],
+      "candidate_ranks": [
+        5
+      ],
+      "retrieval_s": 0.21,
+      "top_score": 0.9996,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "agid-01",
+      "question": "Quali sono le fasi principali della gestione documentale?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.22,
+      "top_score": 0.9995,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "agid-02",
+      "question": "Le linee guida dell'AgID sono vincolanti?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.22,
+      "top_score": 0.9979,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "agid-03",
+      "question": "Che differenza c'è tra un duplicato informatico e una copia di un documento informatico?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "multi-passaggio"
+      ],
+      "ranks": [
+        1,
+        1
+      ],
+      "candidate_ranks": [
+        1,
+        1
+      ],
+      "retrieval_s": 0.213,
+      "top_score": 0.9973,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "agid-04",
+      "question": "Quando un documento informatico è immodificabile?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.208,
+      "top_score": 0.9973,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "agid-05",
+      "question": "Chi devono nominare le pubbliche amministrazioni in ciascuna area organizzativa omogenea?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.217,
+      "top_score": 0.9654,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "agid-06",
+      "question": "Come deve essere identificato un documento informatico?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.218,
+      "top_score": 0.9974,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "contratto-01",
+      "question": "A quanto ammonta la rata mensile del canone di locazione?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.251,
+      "top_score": 0.9372,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "contratto-02",
+      "question": "Quanto dura il contratto di locazione e da quando decorre?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.191,
+      "top_score": 0.992,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "contratto-03",
+      "question": "A quanto ammonta il deposito cauzionale?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.24,
+      "top_score": 0.7912,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "contratto-04",
+      "question": "Quanto paga il conduttore ogni mese in acconto per la pulizia delle scale e l'ascensore?",
+      "answerable": true,
+      "tags": [
+        "contratto",
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.211,
+      "top_score": 0.991,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "contratto-05",
+      "question": "Chi paga la sostituzione della caldaia nell'appartamento in affitto?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.191,
+      "top_score": 0.9188,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "contratto-06",
+      "question": "Si possono tenere animali domestici nell'appartamento?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.165,
+      "top_score": 0.9424,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "contratto-07",
+      "question": "Come viene aggiornato il canone ogni anno?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.23,
+      "top_score": 0.9649,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "verbale-01",
+      "question": "Chi ha presieduto l'assemblea condominiale del 14 marzo 2026?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.244,
+      "top_score": 0.9925,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "verbale-02",
+      "question": "Quale preventivo è stato approvato per il rifacimento della facciata e per quale importo?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.188,
+      "top_score": 0.9973,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "verbale-03",
+      "question": "Quanti millesimi hanno votato a favore del preventivo di Costruzioni Delta?",
+      "answerable": true,
+      "tags": [
+        "verbale",
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.202,
+      "top_score": 0.9676,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "verbale-04",
+      "question": "A quanto ammonta il bilancio preventivo 2026 del condominio?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.216,
+      "top_score": 0.9885,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "verbale-05",
+      "question": "Quale problema è stato segnalato tra le varie ed eventuali?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.247,
+      "top_score": 0.2828,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "verbale-06",
+      "question": "Quanti condomini erano presenti all'assemblea?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.22,
+      "top_score": 0.9219,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "manuale-01",
+      "question": "Cosa significa il codice di errore E04 della caldaia e cosa bisogna fare?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.227,
+      "top_score": 0.5598,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "manuale-02",
+      "question": "Ogni quanto va fatta la manutenzione ordinaria della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.17,
+      "top_score": 0.9826,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "manuale-03",
+      "question": "Ogni quanto va eseguita l'analisi dei fumi della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.205,
+      "top_score": 0.9823,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "manuale-04",
+      "question": "Qual è la potenza termica nominale della caldaia Aurora T24?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.208,
+      "top_score": 0.9987,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "manuale-05",
+      "question": "Quale deve essere la pressione dell'impianto a caldaia fredda?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.188,
+      "top_score": 0.9947,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "manuale-06",
+      "question": "Quanto dura la garanzia della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.159,
+      "top_score": 0.989,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "manuale-07",
+      "question": "Cosa bisogna fare se un codice di errore si ripresenta più volte?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.242,
+      "top_score": 0.6318,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-01",
+      "question": "Quanto dura il mandato del Presidente del Consiglio dei ministri?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.156,
+      "top_score": 0.1641,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-02",
+      "question": "Qual è l'importo annuale del canone RAI?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.257,
+      "top_score": 0.1196,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-03",
+      "question": "Il contratto di locazione include un posto auto o un garage?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.223,
+      "top_score": 0.0152,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-04",
+      "question": "Qual era il tasso di disoccupazione in Germania a luglio 2026?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.224,
+      "top_score": 0.9603,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-05",
+      "question": "Come si chiama l'amministratore del condominio di via dei Tigli 12?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.226,
+      "top_score": 0.991,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-06",
+      "question": "Quale codice di errore indica il surriscaldamento dei fumi nella caldaia Aurora T24?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.249,
+      "top_score": 0.9433,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-07",
+      "question": "Qual è la sanzione per chi non va a votare?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.222,
+      "top_score": 0.032,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-08",
+      "question": "Quali requisiti servono per diventare giudice di pace?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.183,
+      "top_score": 0.0142,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-09",
+      "question": "Quanto costa la caldaia Aurora T24?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.212,
+      "top_score": 0.1074,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-10",
+      "question": "Entro quando il conduttore deve pagare le spese condominiali straordinarie?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.172,
+      "top_score": 0.0986,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-11",
+      "question": "Chi ha vinto il campionato di calcio di Serie A nel 2025?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.25,
+      "top_score": 0.001,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    },
+    {
+      "id": "nr-12",
+      "question": "Quanti sono i dipendenti pubblici in Italia?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.208,
+      "top_score": 0.487,
+      "answer": null,
+      "abstained": null,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": null
+    }
+  ]
+}

@@ -67,6 +67,18 @@ def test_tables_are_separate_chunks() -> None:
     assert [c.kind for c in chunks] == [BlockKind.TEXT, BlockKind.TABLE]
 
 
+def test_split_tables_repeat_their_header_in_the_context() -> None:
+    rows = "\n".join(f"| Riga {n} | {n * 100} |" for n in range(40))
+    table = Block(BlockKind.TABLE, f"| Voce | Importo |\n|---|---|\n{rows}", 1)
+
+    chunks = chunk([heading("Art. 3", 1, 5), table], max_chars=300, overlap=0)
+
+    assert len(chunks) > 2
+    assert chunks[0].context == "Art. 3"
+    assert chunks[1].context == "Art. 3\n| Voce | Importo |\n|---|---|"
+    assert chunks[1].text.startswith("| Riga")
+
+
 def test_document_without_headings_has_empty_section() -> None:
     chunks = chunk([text("Solo testo.", 1)])
 

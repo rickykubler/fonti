@@ -1,0 +1,13 @@
+# Stemmed BM25 + cross-encoder reranking (no relevance gate yet).
+[retrieval]
+keyword_terms = "stemmed"
+
+[rerank]
+enabled = true
+model = "BAAI/bge-reranker-v2-m3"
+
+[embedding]
+model = "BAAI/bge-m3"
+
+[llm]
+model = "qwen2.5:14b"
