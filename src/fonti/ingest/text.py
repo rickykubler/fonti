@@ -15,6 +15,7 @@ _ZERO_WIDTH_RE = re.compile(
 )
 _SENTENCE_END_RE = re.compile(r"[.!?…]+[»”\"')\]]*(?=\s)")
 _ROMAN_RE = re.compile(r"[ivxlcdm]+")
+_DOTTED_ABBREVIATION_RE = re.compile(r"(?:[^\W\d_]+\.)+[^\W\d_]+")  # d.lgs, s.p.a, c.c
 _SENTENCE_STARTS = "«\"“'‘(-–•"
 
 # Common Italian abbreviations (lowercase, without the final period) that do not end a sentence.
@@ -99,7 +100,11 @@ def _is_sentence_end(line: str, start: int, match: re.Match[str]) -> bool:
         return False
     # The last word, without elided articles: "dell'art." -> "art".
     word = re.split(r"['’]", tokens[-1].lstrip('(«"“‘['))[-1].lower()
-    if word in _ABBREVIATIONS or "." in word or (len(word) == 1 and word.isalpha()):
+    if (
+        word in _ABBREVIATIONS
+        or _DOTTED_ABBREVIATION_RE.fullmatch(word)
+        or (len(word) == 1 and word.isalpha())
+    ):
         return False
     is_enumeration = len(tokens) == 1 and (word.isdigit() or _ROMAN_RE.fullmatch(word))
     return not is_enumeration

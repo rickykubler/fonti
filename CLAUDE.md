@@ -7,13 +7,18 @@ never use employer code, data, prompts or tools here; test data must be public o
 
 PowerShell 5.1 has no `&&`: run commands one per line.
 
-- Setup: `uv sync`
+- Setup (NVIDIA GPU, this machine): `uv sync --extra gpu`
+- Setup (CPU only, also CI): `uv sync --extra cpu`
 - Fast tests (what CI runs): `uv run pytest`
+- Slow tests (real models from the HF cache, Docling, Ollama): `uv run pytest -m slow`
 - Lint: `uv run ruff check .`
 - Format check: `uv run ruff format --check .`
 - Types: `uv run mypy`
 - All hooks: `uv run pre-commit run --all-files`
-- CLI: `uv run fonti --help`
+- CLI: `uv run fonti --help` (`ingest`, `ask`, `docs`, `remove`, `reindex`)
+
+Plain `uv sync` drops the torch extra: always pass `--extra cpu` or `--extra gpu`.
+Tests run with `HF_HUB_OFFLINE=1`, so download models once before running slow tests.
 
 ## Architecture
 
@@ -36,7 +41,11 @@ Status of each part is in `docs/ROADMAP.md`.
   Tests block non-loopback sockets.
 - Eval evidence is identified by quote text, not by chunk id, so chunking can change freely.
 - Windows first: `pathlib` everywhere, tooling scripts in Python, no bash-only scripts.
-- Tests that need real models, Docling or Ollama are marked `slow` and excluded by default.
+- Tests that need real models, Docling or Ollama are marked `slow` and excluded by default;
+  fast tests use `HashingEmbedder` (`embedding.model = "hashing"`) and `tests/fakes.FakeChat`.
+- User-facing errors subclass `fonti.errors.FontiError`; the CLI prints them without traceback.
+- Never write `\uXXXX` escapes through the editor tools (they get decoded into raw characters);
+  use `\N{NAME}` or `chr()` instead.
 
 ## Do not
 
