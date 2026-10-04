@@ -23,7 +23,7 @@
   the passage highlighted. Without enough evidence the answer is «Non lo so».
 - **Measured.** A golden set of 59 Italian questions drives every default (see
   [docs/evaluation.md](docs/evaluation.md)): recall@1 0.95, correct refusals 100%, cited pages
-  correct 97%, groundedness 0.91, correctness 0.98 with a 12B local model.
+  correct 97%, groundedness 0.90, correctness 0.98 with a 12B local model.
 
 ## How it works
 
