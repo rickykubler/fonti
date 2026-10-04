@@ -1,0 +1,21 @@
+name: Proposta
+description: Un'idea o una funzione che ti servirebbe
+labels: ["proposta"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Di cosa hai bisogno
+      description: Il problema che vuoi risolvere, prima della soluzione.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea di soluzione
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: La proposta funziona interamente in locale, oppure è un'opzione disattivata di default.

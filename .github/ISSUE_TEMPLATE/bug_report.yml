@@ -1,0 +1,30 @@
+name: Bug
+description: Un errore, un crash o un comportamento inatteso
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Cosa è successo
+      description: Cosa hai fatto, cosa ti aspettavi e cosa è successo invece.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Come riprodurlo
+      description: Comandi esatti o passi nell'interfaccia web.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Messaggi di errore
+      description: Output del comando, se possibile con `-vv`. Togli dati personali o contenuti di documenti privati.
+      render: text
+  - type: textarea
+    id: environment
+    attributes:
+      label: Ambiente
+      description: Output di `fonti doctor` e sistema operativo.
+      render: text

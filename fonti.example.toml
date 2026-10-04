@@ -1,0 +1,70 @@
+# Example configuration. Copy it to fonti.toml (ignored by git) and change only what you need:
+# every value below is the default. Environment variables override this file, e.g.
+# FONTI_LLM__MODEL=gemma4:12b. Point to another file with --config or FONTI_CONFIG.
+
+# Index, copies of the indexed files and models' metadata. Default: %LOCALAPPDATA%\fonti on
+# Windows, ~/.local/share/fonti on Linux, ~/Library/Application Support/fonti on macOS.
+# data_dir = "D:/fonti"
+
+# Never contact the Hugging Face Hub, even for missing models (download them first with
+# `fonti models pull`).
+offline = false
+
+[parser]
+# "auto": PDF text layer, Docling only for scanned pages (and .docx);
+# "fast": text layer only; "docling": Docling for every PDF (slower, no gain on digital PDFs).
+mode = "auto"
+ocr = true
+ocr_engine = "easyocr"       # "easyocr", "rapidocr" or "tesseract" (needs a system install)
+ocr_languages = []           # engine codes; empty = Italian and English
+force_ocr = false            # OCR every page, for PDFs with a broken text layer
+ocr_confidence = 0.2         # EasyOCR's own default (0.5) drops many lines of noisy scans
+tables = true
+
+[embedding]
+model = "BAAI/bge-m3"
+# revision = "main"          # pin a commit for reproducible indexes
+device = "auto"              # "auto", "cuda", "cpu" or "mps"
+batch_size = 16
+query_prefix = ""            # e.g. "query: " for multilingual-e5 models
+document_prefix = ""
+
+[chunking]
+max_chars = 1500
+overlap_chars = 200
+
+[retrieval]
+keyword_terms = "stemmed"    # Italian stems + expanded legal abbreviations; "plain" = words
+bm25_k = 50
+dense_k = 50
+fused_k = 30                 # candidates passed to the reranker
+final_k = 6                  # passages given to the LLM
+rrf_k = 60
+
+[rerank]
+enabled = true
+model = "BAAI/bge-reranker-v2-m3"
+max_length = 512
+min_score = 0.1              # below this the system answers "non lo so" without the LLM
+
+[llm]
+provider = "ollama"          # "ollama" or "openai" (any OpenAI-compatible server)
+base_url = "http://127.0.0.1:11434"
+model = "qwen2.5:14b"
+# think = false              # for thinking models (gemma4, qwen3.5): answer directly
+context_window = 8192
+max_answer_tokens = 800
+temperature = 0.0
+seed = 42
+timeout_s = 300
+# Non-local endpoints and Ollama cloud models are refused unless you set this: questions and
+# document passages would leave your computer. The API key goes in FONTI_LLM__API_KEY (.env).
+allow_remote = false
+
+[citations]
+min_support = 0.3            # share of an answer sentence's words that its passage must contain
+
+[web]
+host = "127.0.0.1"           # the web UI refuses to listen on other addresses
+port = 8000
+max_upload_mb = 100
