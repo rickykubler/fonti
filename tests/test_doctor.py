@@ -23,7 +23,7 @@ def settings(tmp_path: Path) -> Settings:
 
 
 def test_reports_available_ollama_model(settings: Settings) -> None:
-    result = statuses(settings, tags("qwen2.5:14b"))
+    result = statuses(settings, tags(settings.llm.model))
 
     assert result["Ollama"] is Status.OK
     assert result["Privacy"] is Status.OK

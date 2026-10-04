@@ -23,7 +23,7 @@
   the passage highlighted. Without enough evidence the answer is «Non lo so».
 - **Measured.** A golden set of 59 Italian questions drives every default (see
   [docs/evaluation.md](docs/evaluation.md)): recall@1 0.95, correct refusals 100%, cited pages
-  correct 96%, groundedness 0.92 with a 14B local model.
+  correct 97%, groundedness 0.91, correctness 0.98 with a 12B local model.
 
 ## How it works
 
@@ -41,14 +41,15 @@ Details in [docs/architecture.md](docs/architecture.md).
 ## Getting started
 
 Requirements: Windows, Linux or macOS; [uv](https://docs.astral.sh/uv/);
-[Ollama](https://ollama.com); about 15 GB of disk for models. An NVIDIA GPU with 8+ GB of
-VRAM makes it fast; a CPU works too, slowly.
+[Ollama](https://ollama.com); about 15 GB of disk for models. An NVIDIA GPU makes it fast
+(developed on 16 GB of VRAM; the default LLM is an 8 GB download, and with less VRAM Ollama
+runs part of it on the CPU); a CPU works too, slowly.
 
 ```
 git clone <repository-url> fonti
 cd fonti
 uv sync --extra gpu --extra docling      # without an NVIDIA GPU: --extra cpu --extra docling
-ollama pull qwen2.5:14b
+ollama pull gemma4:12b
 uv run fonti models pull                 # embedding, reranker and OCR models (once, needs network)
 uv run fonti doctor                      # checks that everything is in place
 ```
@@ -77,11 +78,11 @@ models or settings), `fonti --help`.
 ## Configuration
 
 Copy [`fonti.example.toml`](fonti.example.toml) to `fonti.toml` and change what you need, or
-use environment variables such as `FONTI_LLM__MODEL=gemma4:12b`. Useful settings:
+use environment variables such as `FONTI_LLM__MODEL=qwen2.5:14b`. Useful settings:
 
 | Setting | Default | |
 |---|---|---|
-| `llm.model` | `qwen2.5:14b` | any Ollama model; set `llm.think = false` for thinking models |
+| `llm.model` | `gemma4:12b` | any Ollama model, e.g. `qwen2.5:14b` (see the evaluation) |
 | `parser.mode` | `auto` | `fast` (text layer only), `docling` (always) |
 | `embedding.model` | `ibm-granite/granite-embedding-311m-multilingual-r2` | any sentence-transformers model, e.g. `BAAI/bge-m3` |
 | `rerank.min_score` | `0.1` | higher = more «Non lo so» |

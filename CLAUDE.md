@@ -34,7 +34,7 @@ Status of each part is in `docs/ROADMAP.md`.
 - `index/store.py` SQLite: documents, pages, chunks, FTS5 index, vectors. The only module with SQL.
 - `ml/` embedder and reranker (sentence-transformers), loaded lazily.
 - `retrieval/` BM25 + dense search → RRF fusion → rerank → relevance gate.
-- `generation/` OpenAI-compatible LLM client (Ollama by default, local-only guard), Italian prompts,
+- `generation/` LLM clients (Ollama native API by default, OpenAI-compatible; local-only guard), Italian prompts,
   citation alignment and abstention.
 - `service.py` `ingest()` / `ask()`: the only API used by `cli.py`, `web/` and `evaluation/`.
 
