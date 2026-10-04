@@ -1,8 +1,9 @@
 {% if documents %}
+<div class="table-scroll">
 <table class="documents">
   <caption>{{ documents | length }} documenti indicizzati</caption>
   <thead>
-    <tr><th>Documento</th><th>Pagine</th><th>Chunk</th><th>Lettura</th><th>Aggiunto</th><th></th></tr>
+    <tr><th>Documento</th><th>Pagine</th><th class="optional">Chunk</th><th class="optional">Lettura</th><th class="optional">Aggiunto</th><th></th></tr>
   </thead>
   <tbody>
     {% for doc in documents %}
@@ -12,9 +13,9 @@
         {% if doc.title %}<div class="muted">{{ doc.filename }}</div>{% endif %}
       </td>
       <td>{{ doc.page_count }}</td>
-      <td>{{ doc.chunk_count }}</td>
-      <td>{{ doc.parser }}</td>
-      <td>{{ doc.created_at[:10] }}</td>
+      <td class="optional">{{ doc.chunk_count }}</td>
+      <td class="optional">{{ doc.parser }}</td>
+      <td class="optional nowrap">{{ doc.created_at[:10] }}</td>
       <td>
         <button class="danger" hx-delete="/documents/{{ doc.id }}" hx-target="#documents"
                 hx-confirm="Rimuovere {{ doc.filename }} dall'indice?">Rimuovi</button>
@@ -23,6 +24,7 @@
     {% endfor %}
   </tbody>
 </table>
+</div>
 {% else %}
 <p class="muted">Nessun documento indicizzato.</p>
 {% endif %}

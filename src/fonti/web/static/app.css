@@ -127,11 +127,14 @@ button.danger { background: none; color: var(--danger); border: 1px solid var(--
 .upload { display: grid; gap: 0.5rem; margin-bottom: 1.5rem; }
 .upload label { color: var(--muted); }
 
+.table-scroll { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
 caption { text-align: left; color: var(--muted); padding-bottom: 0.4rem; }
 th, td { text-align: left; padding: 0.5rem 0.4rem; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { font-weight: 600; font-size: 0.9rem; }
 .state-failed td { color: var(--danger); }
+.nowrap { white-space: nowrap; }
+.documents .muted { overflow-wrap: anywhere; }
 
 .visually-hidden {
   position: absolute;
@@ -145,4 +148,5 @@ th { font-weight: 600; font-size: 0.9rem; }
 @media (max-width: 600px) {
   .ask { flex-direction: column; }
   .topbar { gap: 1rem; }
+  .optional { display: none; }
 }
