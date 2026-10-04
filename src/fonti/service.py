@@ -4,7 +4,7 @@ import hashlib
 import logging
 import shutil
 from collections.abc import Iterable, Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 from pathlib import Path
 from types import TracebackType
@@ -24,6 +24,7 @@ from fonti.ingest.chunking import CHUNKER_VERSION, chunk_document
 from fonti.ingest.parsers import SUPPORTED_SUFFIXES, ParseError, parse_file
 from fonti.ml.embedder import Embedder, create_embedder
 from fonti.ml.hub import pull
+from fonti.ml.reranker import CrossEncoderReranker, Reranker
 from fonti.retrieval.hybrid import HybridRetriever
 
 logger = logging.getLogger(__name__)
@@ -66,11 +67,13 @@ class Fonti:
         *,
         embedder: Embedder | None = None,
         chat: ChatClient | None = None,
+        reranker: Reranker | None = None,
     ) -> None:
         self.settings = settings
         self.store = Store(settings.data_dir / "index.sqlite3")
         self._embedder = embedder
         self._chat = chat
+        self._reranker = reranker
         self._retriever: HybridRetriever | None = None
 
     def close(self) -> None:
@@ -100,6 +103,14 @@ class Fonti:
         return self._chat
 
     @property
+    def reranker(self) -> Reranker | None:
+        if self._reranker is None and self.settings.rerank.enabled:
+            self._reranker = CrossEncoderReranker(
+                self.settings.rerank, offline=self.settings.offline
+            )
+        return self._reranker
+
+    @property
     def files_dir(self) -> Path:
         """Copies of the indexed files, named by content hash: citations always point to the
         exact version that was indexed."""
@@ -107,10 +118,13 @@ class Fonti:
 
     def model_names(self) -> list[tuple[str, str | None]]:
         """Hugging Face models (name, revision) used by the current settings."""
-        embedding = self.settings.embedding
-        if embedding.model.startswith("hashing"):
-            return []
-        return [(embedding.model, embedding.revision)]
+        embedding, rerank = self.settings.embedding, self.settings.rerank
+        names = (
+            [] if embedding.model.startswith("hashing") else [(embedding.model, embedding.revision)]
+        )
+        if rerank.enabled:
+            names.append((rerank.model, rerank.revision))
+        return names
 
     def pull_models(self) -> list[Path]:
         """Download the models in use, so later runs never need the network."""
@@ -184,9 +198,20 @@ class Fonti:
         return self._retriever.search(question, limit)
 
     def retrieve(self, question: str) -> Retrieval:
+        """Hybrid search, then (optionally) cross-encoder reranking and the relevance gate."""
         candidates = tuple(self.search(question))
-        sources = candidates[: self.settings.retrieval.final_k]
-        return Retrieval(question, candidates, candidates, sources, relevant=bool(sources))
+        ranked = candidates
+        relevant = bool(candidates)
+        reranker = self.reranker
+        if reranker is not None and candidates:
+            scores = reranker.score(question, [_hit_text(hit) for hit in candidates])
+            rescored = [
+                replace(hit, score=score) for hit, score in zip(candidates, scores, strict=True)
+            ]
+            ranked = tuple(sorted(rescored, key=lambda hit: -hit.score))
+            relevant = ranked[0].score >= self.settings.rerank.min_score
+        sources = ranked[: self.settings.retrieval.final_k]
+        return Retrieval(question, candidates, ranked, sources, relevant)
 
     def answer(self, retrieval: Retrieval) -> Answer:
         """Answer from the retrieved sources with verified citations, or abstain."""
@@ -264,6 +289,10 @@ class Fonti:
 def _indexed_text(chunk: Chunk) -> str:
     """Text used for embeddings and keyword search: the section path adds context."""
     return f"{chunk.context}\n\n{chunk.text}" if chunk.context else chunk.text
+
+
+def _hit_text(hit: Hit) -> str:
+    return f"{hit.section}\n\n{hit.text}" if hit.section else hit.text
 
 
 def _expand(paths: Iterable[Path]) -> Iterator[Path]:

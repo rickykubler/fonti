@@ -33,7 +33,10 @@ def test_cached_models_load_from_disk_only(hub_cache: Path) -> None:
     assert calls == [True]
 
 
-def test_missing_models_are_downloaded_unless_offline(hub_cache: Path) -> None:
+def test_missing_models_are_downloaded_unless_offline(
+    hub_cache: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("HF_HUB_OFFLINE")  # a fresh process
     calls: list[bool] = []
 
     load_model(calls.append, "org/missing", None, offline=False)
@@ -41,6 +44,12 @@ def test_missing_models_are_downloaded_unless_offline(hub_cache: Path) -> None:
     assert calls == [False]
     with pytest.raises(ModelUnavailableError, match="models pull"):
         load_model(calls.append, "org/missing", None, offline=True)
+
+
+def test_missing_model_after_the_process_went_offline_asks_to_pull(hub_cache: Path) -> None:
+    # conftest sets HF_HUB_OFFLINE=1, as a cached model loaded earlier would.
+    with pytest.raises(ModelUnavailableError, match="models pull"):
+        load_model(lambda local_only: None, "org/missing", None, offline=False)
 
 
 def test_loading_errors_suggest_pulling_the_model(hub_cache: Path) -> None:

@@ -50,6 +50,18 @@ class RetrievalSettings(_Section):
     keyword_terms: KeywordMode = "plain"
 
 
+class RerankSettings(_Section):
+    enabled: bool = False
+    model: str = "BAAI/bge-reranker-v2-m3"
+    revision: str | None = None
+    device: str = "auto"
+    batch_size: int = Field(default=16, ge=1)
+    max_length: int = Field(default=512, ge=64)
+    # Relevance gate: when the best reranked passage scores below this, the system abstains
+    # without calling the LLM. 0 disables the gate.
+    min_score: float = Field(default=0.0, ge=0.0, le=1.0)
+
+
 class LLMSettings(_Section):
     provider: Literal["ollama", "openai"] = "ollama"
     base_url: str = "http://127.0.0.1:11434"
@@ -82,6 +94,7 @@ class Settings(BaseSettings):
     embedding: EmbeddingSettings = EmbeddingSettings()
     chunking: ChunkingSettings = ChunkingSettings()
     retrieval: RetrievalSettings = RetrievalSettings()
+    rerank: RerankSettings = RerankSettings()
     llm: LLMSettings = LLMSettings()
     citations: CitationSettings = CitationSettings()
 
