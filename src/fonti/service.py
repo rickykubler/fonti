@@ -21,7 +21,7 @@ from fonti.generation.prompts import build_messages
 from fonti.index.store import NewDocument, Store
 from fonti.index.text import index_terms
 from fonti.ingest.chunking import CHUNKER_VERSION, chunk_document
-from fonti.ingest.parsers import SUPPORTED_SUFFIXES, ParseError, parse_file
+from fonti.ingest.parsers import PARSER_VERSION, SUPPORTED_SUFFIXES, ParseError, parse_file
 from fonti.ml.embedder import Embedder, create_embedder
 from fonti.ml.hub import pull
 from fonti.ml.reranker import CrossEncoderReranker, Reranker
@@ -236,7 +236,7 @@ class Fonti:
         return {
             "embedder": self.embedder.model_id,
             "chunker": f"{CHUNKER_VERSION}:{chunking.max_chars}:{chunking.overlap_chars}",
-            "parser": self.settings.parser.mode,
+            "parser": f"{self.settings.parser.mode}:{PARSER_VERSION}",
             "keywords": self.settings.retrieval.keyword_terms,
         }
 

@@ -4,7 +4,7 @@ import pytest
 
 from fonti.domain import BlockKind
 from fonti.evaluation.synthetic import render_pdf
-from fonti.ingest.parsers import ParseError, parse_file
+from fonti.ingest.parsers import ParseError, drop_running_headers, parse_file
 from tests.samples import CONTRACT_MD
 
 
@@ -28,6 +28,25 @@ def test_page_number_lines_are_dropped(tmp_path: Path) -> None:
     pdf = render_pdf("12\n\nIl testo del documento.\n\n- 3 -", tmp_path / "numeri.pdf")
 
     assert [b.text for b in parse_file(pdf).blocks] == ["Il testo del documento."]
+
+
+def test_running_headers_and_page_counters_are_dropped() -> None:
+    title = "Linee Guida sulla formazione dei documenti informatici"
+    pages = [
+        [title, f"{n} - 40", f"ART. {n}.", f"Testo della pagina {n}.", "OCCUPATI"]
+        for n in range(1, 5)
+    ]
+
+    cleaned = drop_running_headers(pages)
+
+    assert cleaned[0] == ["ART. 1.", "Testo della pagina 1."]
+    assert cleaned[3] == ["ART. 4.", "Testo della pagina 4."]
+
+
+def test_short_documents_keep_their_edges() -> None:
+    pages = [["Intestazione", "Testo uno."], ["Intestazione", "Testo due."]]
+
+    assert drop_running_headers(pages) == pages
 
 
 def test_markdown_headings_and_paragraphs(tmp_path: Path) -> None:
