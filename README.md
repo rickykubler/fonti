@@ -75,6 +75,17 @@ Fonti:
 Other commands: `fonti docs` (list), `fonti remove ID`, `fonti reindex` (after changing
 models or settings), `fonti --help`.
 
+## Web UI
+
+`uv run fonti serve --open` does the same in the browser. The answer streams in; each
+citation shows its page and the verbatim passage, opens the PDF at that page or shows the page
+with the passage highlighted. The Documenti page uploads files and indexes them in the
+background.
+
+<img src="docs/images/ask.png" width="720" alt="An answer about the Constitution with two citations; the second shows page 24 with the cited sentence of Art. 85 highlighted">
+
+<img src="docs/images/documents.png" width="720" alt="The Documenti page: upload form, a completed indexing job and the indexed documents">
+
 ## Configuration
 
 Copy [`fonti.example.toml`](fonti.example.toml) to `fonti.toml` and change what you need, or
@@ -105,6 +116,8 @@ Supported files: PDF (digital or scanned), DOCX, TXT, Markdown.
   partially; arithmetic over tables is not guaranteed.
 - OCR of dense justified text can scramble word order (see the evaluation); answers usually
   stay correct but quoted passages are noisier.
+- Pages are numbered as in a PDF viewer (the 24th page is «pagina 24»), which can differ from
+  the numbers printed on the pages.
 - Each question is independent (no conversation memory). One user, one collection.
 - Answers about contracts and laws are not legal advice: always read the cited passages.
 

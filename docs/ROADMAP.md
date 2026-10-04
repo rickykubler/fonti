@@ -75,9 +75,10 @@ Art. 56 quoted in the notes instead of the current one; gemma4:12b answers it co
 - [x] Ask page: streamed answer, citation cards, open PDF at page, page preview with highlighted passage
 - [x] Documents page: upload, background ingestion with status, delete; JSON API (`/api/ask`, `/api/ask/stream`)
 - [x] Security: loopback only, Host/Origin checks, upload limits, files served by id only
-- [ ] Manual check in a browser (`uv run fonti serve --open`)
+- [x] Check in a browser: ask (streaming, citations, PDF link, page preview), «Non lo so» with
+      nearest passages, upload with background indexing, removal with confirmation, phone width
 - [x] `fonti doctor` (checks Ollama, models, GPU)
-- [ ] Demo screenshots
+- [x] Demo screenshots (`docs/images/`, in the README)
 
 ## M4 — Documentation and release preparation
 
