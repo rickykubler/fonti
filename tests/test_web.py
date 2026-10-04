@@ -3,6 +3,7 @@ import time
 from collections.abc import Iterator
 from pathlib import Path
 
+import pypdfium2 as pdfium
 import pytest
 from fastapi.testclient import TestClient
 
@@ -10,6 +11,7 @@ from fonti.config import EmbeddingSettings, Settings
 from fonti.evaluation.synthetic import render_pdf
 from fonti.service import Fonti
 from fonti.web.app import create_app
+from fonti.web.preview import merge_lines, passage_boxes
 from tests.fakes import FakeChat
 from tests.samples import CONTRACT_MD
 
@@ -114,6 +116,29 @@ def test_files_and_page_previews_are_served_by_id(
     assert client.get(f"/documents/{doc_id}/pages/9.png").status_code == 404
     assert client.get("/documents/not-an-id/file").status_code == 404
     assert client.get("/documents/..%2F..%2Fpyproject.toml/file").status_code == 404
+
+
+def test_highlight_of_one_line_is_one_box(contract: Path) -> None:
+    pdf = pdfium.PdfDocument(contract)
+    page = pdf[0]
+    try:
+        boxes = passage_boxes(page, "La locazione ha durata di quattro anni, con decorrenza")
+    finally:
+        page.close()
+        pdf.close()
+
+    assert len(boxes) == 1
+
+
+def test_merge_lines_keeps_other_lines_and_columns_apart() -> None:
+    first = (10.0, 100.0, 50.0, 110.0)
+    same_line = (53.0, 100.5, 90.0, 110.0)
+    next_line = (10.0, 88.0, 60.0, 98.0)
+    other_column = (300.0, 100.0, 340.0, 110.0)
+
+    assert merge_lines([first, same_line]) == [(10.0, 100.0, 90.0, 110.0)]
+    assert merge_lines([first, next_line]) == [first, next_line]
+    assert merge_lines([first, other_column]) == [first, other_column]
 
 
 def test_delete_document(client: TestClient, service: Fonti, contract: Path) -> None:

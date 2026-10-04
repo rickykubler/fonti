@@ -8,6 +8,8 @@ import pypdfium2 as pdfium
 _WINDOW = 4  # words searched at a time: short enough to stay on one line
 _HIGHLIGHT = (255, 214, 0, 96)
 
+Box = tuple[float, float, float, float]  # left, bottom, right, top in PDF points
+
 
 def render_page(path: Path, page_number: int, passage: str = "", scale: float = 1.6) -> bytes:
     from PIL import ImageDraw
@@ -39,12 +41,12 @@ def render_page(path: Path, page_number: int, passage: str = "", scale: float = 
     return buffer.getvalue()
 
 
-def passage_boxes(page: pdfium.PdfPage, passage: str) -> list[tuple[float, float, float, float]]:
+def passage_boxes(page: pdfium.PdfPage, passage: str) -> list[Box]:
     """Rectangles (PDF points) covering the passage, found a few words at a time so that line
     breaks and hyphenation in the PDF do not prevent the match."""
     words = passage.split()
     textpage = page.get_textpage()
-    boxes: list[tuple[float, float, float, float]] = []
+    boxes: list[Box] = []
     try:
         start_index = 0
         for first in range(0, len(words), _WINDOW):
@@ -60,4 +62,25 @@ def passage_boxes(page: pdfium.PdfPage, passage: str) -> list[tuple[float, float
                 boxes.append(textpage.get_rect(i))
     finally:
         textpage.close()
-    return boxes
+    return merge_lines(boxes)
+
+
+def merge_lines(boxes: list[Box]) -> list[Box]:
+    """Join consecutive rectangles on the same line, so that the spaces between the searched
+    windows are highlighted too."""
+    merged: list[Box] = []
+    for left, bottom, right, top in boxes:
+        if merged:
+            last_left, last_bottom, last_right, last_top = merged[-1]
+            height = min(top - bottom, last_top - last_bottom)
+            overlap = min(top, last_top) - max(bottom, last_bottom)
+            if overlap >= height / 2 and 0 <= left - last_right <= height:
+                merged[-1] = (
+                    last_left,
+                    min(bottom, last_bottom),
+                    max(right, last_right),
+                    max(top, last_top),
+                )
+                continue
+        merged.append((left, bottom, right, top))
+    return merged
