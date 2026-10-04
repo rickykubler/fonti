@@ -22,6 +22,7 @@ dependencies = [
     "platformdirs>=4.12.3",
     "pydantic-settings>=2.15.0",
     "pypdfium2>=5.13.0",
+    "snowballstemmer>=3.1.1",
 ]
 
 # Local models need torch: pick exactly one of these extras (`uv sync --extra cpu` or `--extra gpu`).
@@ -69,7 +70,7 @@ strict = true
 files = ["src", "tests"]
 
 [[tool.mypy.overrides]]
-module = ["pypdfium2.*", "reportlab.*"]
+module = ["pypdfium2.*", "reportlab.*", "snowballstemmer.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

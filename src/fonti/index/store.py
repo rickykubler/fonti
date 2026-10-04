@@ -15,6 +15,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from fonti.domain import BlockKind, Chunk, DocumentInfo, Hit, PageSpan
+from fonti.errors import FontiError
 
 SCHEMA_VERSION = "1"
 
@@ -63,13 +64,18 @@ CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(
 );
 """
 
+_UPSERT_META = (
+    "INSERT INTO meta (key, value) VALUES (?, ?) "
+    "ON CONFLICT(key) DO UPDATE SET value = excluded.value"
+)
+
 _HIT_COLUMNS = """
     c.id, c.doc_id, d.filename, d.title, c.text, c.char_start, c.char_end,
     c.page_start, c.page_end, c.section, c.kind
 """
 
 
-class IndexMismatchError(RuntimeError):
+class IndexMismatchError(FontiError):
     """The index was built with different settings, e.g. another embedding model."""
 
 
@@ -139,11 +145,12 @@ class Store:
                         f"attuale usa {value!r}. Esegui `fonti reindex` oppure ripristina la "
                         "configurazione."
                     )
-                conn.execute(
-                    "INSERT INTO meta (key, value) VALUES (?, ?) "
-                    "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
-                    (key, value),
-                )
+                conn.execute(_UPSERT_META, (key, value))
+
+    def force_settings(self, expected: Mapping[str, str]) -> None:
+        """Overwrite the recorded index settings, once every document was re-indexed."""
+        with self._transaction() as conn:
+            conn.executemany(_UPSERT_META, list(expected.items()))
 
     def check_settings(self, expected: Mapping[str, str]) -> None:
         """Raise if the stored index settings differ from `expected` (missing keys are ok)."""
@@ -190,66 +197,91 @@ class Store:
         terms: Sequence[str],
         vectors: NDArray[np.float32],
     ) -> None:
-        if not len(chunks) == len(terms) == len(vectors):
-            raise ValueError("chunks, terms and vectors must have the same length")
-        created_at = datetime.now(UTC).isoformat(timespec="seconds")
         with self._transaction() as conn:
-            conn.execute(
-                "INSERT INTO documents (id, filename, title, suffix, page_count, parser, text, "
-                "created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                (
-                    document.id,
-                    document.filename,
-                    document.title,
-                    document.suffix,
-                    document.page_count,
-                    document.parser,
-                    document.text,
-                    created_at,
-                ),
-            )
-            conn.executemany(
-                "INSERT INTO pages (doc_id, page, char_start, char_end) VALUES (?, ?, ?, ?)",
-                [(document.id, page.page, page.start, page.end) for page in document.pages],
-            )
-            for chunk, chunk_terms, vector in zip(chunks, terms, vectors, strict=True):
-                cursor = conn.execute(
-                    "INSERT INTO chunks (doc_id, ordinal, char_start, char_end, page_start, "
-                    "page_end, section, kind, text, context) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (
-                        document.id,
-                        chunk.ordinal,
-                        chunk.start,
-                        chunk.end,
-                        chunk.page_start,
-                        chunk.page_end,
-                        chunk.section,
-                        chunk.kind.value,
-                        chunk.text,
-                        chunk.context,
-                    ),
-                )
-                chunk_id = cursor.lastrowid
-                conn.execute(
-                    "INSERT INTO chunks_fts (rowid, terms) VALUES (?, ?)", (chunk_id, chunk_terms)
-                )
-                conn.execute(
-                    "INSERT INTO embeddings (chunk_id, vector) VALUES (?, ?)",
-                    (chunk_id, np.asarray(vector, dtype="<f4").tobytes()),
-                )
+            self._insert(conn, document, chunks, terms, vectors)
+            self._bump_revision(conn)
+
+    def replace_document(
+        self,
+        document: NewDocument,
+        chunks: Sequence[Chunk],
+        terms: Sequence[str],
+        vectors: NDArray[np.float32],
+    ) -> None:
+        """Atomically re-index an existing document (used when settings change)."""
+        with self._transaction() as conn:
+            self._delete(conn, document.id)
+            self._insert(conn, document, chunks, terms, vectors)
             self._bump_revision(conn)
 
     def remove_document(self, doc_id: str) -> bool:
         with self._transaction() as conn:
-            conn.execute(
-                "DELETE FROM chunks_fts WHERE rowid IN (SELECT id FROM chunks WHERE doc_id = ?)",
-                (doc_id,),
-            )
-            # Pages, chunks and embeddings follow through ON DELETE CASCADE.
-            deleted = conn.execute("DELETE FROM documents WHERE id = ?", (doc_id,)).rowcount
+            deleted = self._delete(conn, doc_id)
             self._bump_revision(conn)
-        return deleted > 0
+        return deleted
+
+    @staticmethod
+    def _delete(conn: sqlite3.Connection, doc_id: str) -> bool:
+        conn.execute(
+            "DELETE FROM chunks_fts WHERE rowid IN (SELECT id FROM chunks WHERE doc_id = ?)",
+            (doc_id,),
+        )
+        # Pages, chunks and embeddings follow through ON DELETE CASCADE.
+        return conn.execute("DELETE FROM documents WHERE id = ?", (doc_id,)).rowcount > 0
+
+    @staticmethod
+    def _insert(
+        conn: sqlite3.Connection,
+        document: NewDocument,
+        chunks: Sequence[Chunk],
+        terms: Sequence[str],
+        vectors: NDArray[np.float32],
+    ) -> None:
+        if not len(chunks) == len(terms) == len(vectors):
+            raise ValueError("chunks, terms and vectors must have the same length")
+        conn.execute(
+            "INSERT INTO documents (id, filename, title, suffix, page_count, parser, text, "
+            "created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                document.id,
+                document.filename,
+                document.title,
+                document.suffix,
+                document.page_count,
+                document.parser,
+                document.text,
+                datetime.now(UTC).isoformat(timespec="seconds"),
+            ),
+        )
+        conn.executemany(
+            "INSERT INTO pages (doc_id, page, char_start, char_end) VALUES (?, ?, ?, ?)",
+            [(document.id, page.page, page.start, page.end) for page in document.pages],
+        )
+        for chunk, chunk_terms, vector in zip(chunks, terms, vectors, strict=True):
+            cursor = conn.execute(
+                "INSERT INTO chunks (doc_id, ordinal, char_start, char_end, page_start, "
+                "page_end, section, kind, text, context) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    document.id,
+                    chunk.ordinal,
+                    chunk.start,
+                    chunk.end,
+                    chunk.page_start,
+                    chunk.page_end,
+                    chunk.section,
+                    chunk.kind.value,
+                    chunk.text,
+                    chunk.context,
+                ),
+            )
+            chunk_id = cursor.lastrowid
+            conn.execute(
+                "INSERT INTO chunks_fts (rowid, terms) VALUES (?, ?)", (chunk_id, chunk_terms)
+            )
+            conn.execute(
+                "INSERT INTO embeddings (chunk_id, vector) VALUES (?, ?)",
+                (chunk_id, np.asarray(vector, dtype="<f4").tobytes()),
+            )
 
     def list_documents(self) -> list[DocumentInfo]:
         return self._query_documents("", ())

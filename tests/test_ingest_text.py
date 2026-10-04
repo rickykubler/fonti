@@ -38,6 +38,13 @@ def test_abbreviations_do_not_end_sentences() -> None:
     ]
 
 
+def test_numbers_with_dots_can_end_a_sentence() -> None:
+    assert sentences("Il canone è di euro 9.600,00. È pagato in rate.") == [
+        "Il canone è di euro 9.600,00.",
+        "È pagato in rate.",
+    ]
+
+
 def test_leading_enumeration_is_not_a_sentence() -> None:
     text = "1. La libertà personale è inviolabile. 2. Non è ammessa la detenzione."
 

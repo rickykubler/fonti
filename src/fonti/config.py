@@ -6,8 +6,10 @@ from pathlib import Path
 from typing import Any, Literal
 
 from platformdirs import user_data_path
-from pydantic import BaseModel, ConfigDict, Field, SecretStr
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, ValidationError
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
+
+from fonti.errors import FontiError
 
 CONFIG_ENV_VAR = "FONTI_CONFIG"
 DEFAULT_CONFIG_FILE = Path("fonti.toml")
@@ -87,6 +89,10 @@ class Settings(BaseSettings):
         return env_settings, dotenv_settings, init_settings
 
 
+class ConfigError(FontiError):
+    pass
+
+
 def load_settings(config_file: Path | None = None) -> Settings:
     """Load settings from `config_file`, `$FONTI_CONFIG` or `./fonti.toml` when present."""
     if config_file is None:
@@ -97,8 +103,14 @@ def load_settings(config_file: Path | None = None) -> Settings:
 
     values: dict[str, Any] = {}
     if config_file.is_file():
-        with config_file.open("rb") as f:
-            values = tomllib.load(f)
+        try:
+            with config_file.open("rb") as f:
+                values = tomllib.load(f)
+        except tomllib.TOMLDecodeError as exc:
+            raise ConfigError(f"{config_file} non è un file TOML valido: {exc}") from exc
     elif required:
-        raise FileNotFoundError(f"File di configurazione non trovato: {config_file}")
-    return Settings(**values)
+        raise ConfigError(f"File di configurazione non trovato: {config_file}")
+    try:
+        return Settings(**values)
+    except ValidationError as exc:
+        raise ConfigError(f"Configurazione non valida:\n{exc}") from exc

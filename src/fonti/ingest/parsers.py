@@ -6,6 +6,7 @@ from pathlib import Path
 import pypdfium2 as pdfium
 
 from fonti.domain import Block, BlockKind, ParsedDocument
+from fonti.errors import FontiError
 from fonti.ingest.structure import heading_level, lines_to_blocks
 from fonti.ingest.text import normalize
 
@@ -18,7 +19,7 @@ _PAGE_NUMBER = re.compile(
 )
 
 
-class ParseError(RuntimeError):
+class ParseError(FontiError):
     """The file could not be read; the message is meant for the user."""
 
 

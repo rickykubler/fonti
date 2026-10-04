@@ -1,9 +1,8 @@
 from pathlib import Path
 
 import pytest
-from pydantic import ValidationError
 
-from fonti.config import load_settings
+from fonti.config import ConfigError, load_settings
 
 
 def test_defaults_are_local_only() -> None:
@@ -44,12 +43,12 @@ def test_config_file_from_environment_variable(
 def test_unknown_keys_are_rejected(tmp_path: Path) -> None:
     (tmp_path / "fonti.toml").write_text('[llm]\nmodle = "typo"\n', encoding="utf-8")
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(ConfigError, match="modle"):
         load_settings()
 
 
 def test_explicit_missing_config_file_raises(tmp_path: Path) -> None:
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(ConfigError, match="non trovato"):
         load_settings(tmp_path / "missing.toml")
 
 
