@@ -1,5 +1,15 @@
+from collections.abc import Sequence
+
+import pytest
+
 from fonti.domain import BlockKind, Hit, PageSpan
-from fonti.generation.citations import ABSTAIN_MESSAGE, align, build_answer, parse_claims
+from fonti.generation.citations import (
+    ABSTAIN_MESSAGE,
+    align,
+    build_answer,
+    is_refusal,
+    parse_claims,
+)
 
 RENT = (
     "Art. 3 - Canone\n\nIl canone annuo è convenuto in euro 9.600,00. È pagato in dodici rate "
@@ -81,6 +91,41 @@ def test_answers_without_valid_or_supported_citations_abstain() -> None:
     assert no_markers.abstained
     assert wrong_number.abstained
     assert unsupported.abstained
+
+
+@pytest.mark.parametrize(
+    "output",
+    [
+        "Le fonti fornite non specificano il numero di disoccupati [1].",
+        "Il documento non fornisce il nome dell'amministratore. [1][2]",
+        "Nei passaggi non è indicato il costo della caldaia [2].",
+    ],
+)
+def test_soft_refusals_become_abstentions(output: str) -> None:
+    assert build_answer("q", output, hits(), pages, 0.3).abstained
+
+
+def test_answers_with_negations_are_not_refusals() -> None:
+    assert not is_refusal("La disposizione non trova applicazione ai documenti informatici [1].")
+    assert not is_refusal("Il conduttore non può sublocare l'immobile [1].")
+
+
+def test_semantic_similarity_breaks_lexical_ties() -> None:
+    source = (
+        "Il giorno 14 marzo si riunisce l'assemblea. Sono presenti 14 condomini su 20. "
+        "L'assemblea nomina presidente Laura Ferri."
+    )
+
+    def prefer_last(claim: str, sentences: Sequence[str]) -> list[float]:
+        return [0.1, 0.1, 0.9]
+
+    claim = "Laura Ferri presiede l'assemblea del 14 marzo"
+    lexical = align(claim, source)
+    semantic = align(claim, source, prefer_last)
+
+    assert lexical is not None and semantic is not None
+    assert source[lexical.start : lexical.end] == "Il giorno 14 marzo si riunisce l'assemblea."
+    assert source[semantic.start : semantic.end] == "L'assemblea nomina presidente Laura Ferri."
 
 
 def test_thinking_and_invalid_markers_are_removed_from_the_text() -> None:

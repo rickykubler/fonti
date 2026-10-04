@@ -7,7 +7,13 @@ import pytest
 from fonti.config import EmbeddingSettings, Settings
 from fonti.domain import BlockKind, Hit
 from fonti.evaluation.corpus import Corpus, EvaluationError
-from fonti.evaluation.dataset import Evidence, check_dataset, load_dataset, load_questions
+from fonti.evaluation.dataset import (
+    Evidence,
+    Location,
+    check_dataset,
+    load_dataset,
+    load_questions,
+)
 from fonti.evaluation.judge import Judge
 from fonti.evaluation.metrics import (
     character_error_rate,
@@ -105,6 +111,20 @@ def test_evidence_ranks_recall_and_mrr() -> None:
     assert recall_at(ranks, 1) == 0.0
     assert recall_at(ranks, 5) == 0.5
     assert reciprocal_rank(ranks) == 0.5
+
+
+def test_any_location_of_an_evidence_counts() -> None:
+    evidence = [
+        Evidence(
+            "istat",
+            1,
+            "il tasso scende al 5,8%",
+            (Location("istat", 3, "Tasso di disoccupazione 5,8"),),
+        )
+    ]
+    hits = [hit("sha", "altro"), hit("sha", "Tasso di disoccupazione 5,8 -0,1")]
+
+    assert evidence_ranks(evidence, hits, {"sha": "istat"}.get) == [2]
 
 
 def test_character_error_rate() -> None:
