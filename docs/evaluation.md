@@ -87,13 +87,14 @@ Reports (Markdown and JSON) go to [`eval/reports/`](../eval/reports/) and are co
 
 ## Results
 
-Main dataset, answering model qwen2.5:14b, judge qwen2.5:14b.
+Main dataset, judge qwen2.5:14b; answering model qwen2.5:14b except in the last row.
 
 | Run | Recall@1 | Recall@5 | MRR@10 | Correct refusals | False refusals | Cited pages | Groundedness | Correctness |
 |---|---|---|---|---|---|---|---|---|
 | Baseline: plain BM25 + bge-m3, no reranker | 0.808 | 0.957 | 0.873 | 0.83 | 0.00 | 0.90 | 0.88 | 0.94 |
 | + Italian stemming (retrieval only) | 0.851 | 0.979 | 0.903 | | | | | |
 | + reranker, gate 0.1, refusal and citation fixes | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.96 | 0.92 | 0.96 |
+| **Defaults**: granite R2, gemma4:12b (thinking off), parser `auto` | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.97 | 0.90 | 0.98 |
 
 Answering models, with the same retrieval (bge-m3, reranker, gate), thinking off and the same
 judge (qwen2.5:14b):

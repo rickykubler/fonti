@@ -64,7 +64,7 @@ the baseline:
 |---|---|---|---|---|---|---|---|
 | baseline (M1) | 0.808 | 0.957 | 0.873 | 0.83 | 0.00 | 0.90 | 0.88 |
 | + stemming, reranker, gate, generation fixes | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.96 | 0.92 |
-| + gemma4:12b as the answering model | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.97 | 0.91 |
+| defaults: granite R2 embedder, gemma4:12b answering model | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.97 | 0.90 |
 
 Scans (Docling + EasyOCR): correctness 0.94, cited pages 1.0, recall@5 0.80 (OCR noise lowers
 quote matching), ingest 1.5 s/page. qwen2.5:14b answers cost-08 with the historical text of
