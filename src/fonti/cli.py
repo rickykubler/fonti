@@ -11,7 +11,7 @@ from pathlib import Path
 
 from fonti import __version__
 from fonti.config import load_settings
-from fonti.domain import Answer
+from fonti.domain import Answer, Citation
 from fonti.errors import FontiError
 from fonti.service import Fonti, IngestResult, IngestStatus
 
@@ -50,6 +50,11 @@ def build_parser() -> argparse.ArgumentParser:
     remove.add_argument("doc_id", metavar="ID", help="id del documento (bastano i primi caratteri)")
 
     commands.add_parser("reindex", help="ricostruisce l'indice con la configurazione attuale")
+
+    models = commands.add_parser("models", help="gestisce i modelli locali")
+    models.add_argument(
+        "action", choices=["pull"], help="pull: scarica i modelli configurati (serve la rete)"
+    )
     return parser
 
 
@@ -117,12 +122,19 @@ def _remove(fonti: Fonti, args: argparse.Namespace) -> int:
     return 0
 
 
+def _models(fonti: Fonti, args: argparse.Namespace) -> int:
+    for path in fonti.pull_models():
+        print(f"Modello pronto: {path}")
+    return 0
+
+
 _COMMANDS: dict[str, Callable[[Fonti, argparse.Namespace], int]] = {
     "ingest": _ingest,
     "ask": _ask,
     "docs": _docs,
     "remove": _remove,
     "reindex": _reindex,
+    "models": _models,
 }
 
 
@@ -130,12 +142,15 @@ def _print_answer(answer: Answer) -> None:
     print(answer.text)
     if answer.citations:
         print("\nFonti:")
+        by_source: dict[int, list[Citation]] = {}
         for citation in answer.citations:
-            where = f"pag. {citation.page}"
-            if citation.section:
-                where += f", {citation.section}"
-            print(f"[{citation.number}] {citation.title or citation.filename} ({where})")
-            print(f"    «{_shorten(citation.passage)}»")
+            by_source.setdefault(citation.number, []).append(citation)
+        for number, citations in by_source.items():
+            first = citations[0]
+            section = f" — {first.section}" if first.section else ""
+            print(f"[{number}] {first.title or first.filename}{section}")
+            for citation in citations:
+                print(f"    pag. {citation.page}: «{_shorten(citation.passage)}»")
     elif answer.sources:
         print("\nPassaggi più vicini trovati (non bastano per rispondere):")
         for hit in answer.sources:

@@ -23,6 +23,7 @@ from fonti.index.text import index_terms
 from fonti.ingest.chunking import CHUNKER_VERSION, chunk_document
 from fonti.ingest.parsers import SUPPORTED_SUFFIXES, ParseError, parse_file
 from fonti.ml.embedder import Embedder, create_embedder
+from fonti.ml.hub import pull
 from fonti.retrieval.hybrid import HybridRetriever
 
 logger = logging.getLogger(__name__)
@@ -103,6 +104,17 @@ class Fonti:
         """Copies of the indexed files, named by content hash: citations always point to the
         exact version that was indexed."""
         return self.settings.data_dir / "files"
+
+    def model_names(self) -> list[tuple[str, str | None]]:
+        """Hugging Face models (name, revision) used by the current settings."""
+        embedding = self.settings.embedding
+        if embedding.model.startswith("hashing"):
+            return []
+        return [(embedding.model, embedding.revision)]
+
+    def pull_models(self) -> list[Path]:
+        """Download the models in use, so later runs never need the network."""
+        return pull(self.model_names())
 
     def stored_file(self, doc_id: str) -> Path | None:
         suffix = self.store.document_suffix(doc_id)

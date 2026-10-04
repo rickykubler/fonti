@@ -54,7 +54,8 @@ def test_ask_prints_answer_and_sources(
 
     output = capsys.readouterr().out
     assert output.startswith("Il canone si paga in dodici rate")
-    assert "[1] Contratto di locazione (pag. 2, " in output
+    assert "[1] Contratto di locazione — " in output
+    assert "pag. 2: «" in output
     assert "euro 800,00" in output
 
 

@@ -2,7 +2,6 @@
 
 import hashlib
 import math
-import os
 import re
 import unicodedata
 from collections import Counter
@@ -13,18 +12,15 @@ import numpy as np
 from numpy.typing import NDArray
 
 from fonti.config import EmbeddingSettings
-from fonti.errors import FontiError
-
-MISSING_MODELS_MESSAGE = (
-    "I modelli locali non sono installati: esegui `uv sync --extra cpu` "
-    "(oppure `uv sync --extra gpu` con una GPU NVIDIA)."
+from fonti.ml.hub import (
+    MISSING_MODELS_MESSAGE,
+    ModelUnavailableError,
+    load_model,
+    model_kwargs,
+    resolve_device,
 )
 
 _WORD_RE = re.compile(r"\w+")
-
-
-class ModelUnavailableError(FontiError):
-    """Local models cannot be loaded (missing extras or files)."""
 
 
 class Embedder(Protocol):
@@ -102,18 +98,23 @@ class SentenceTransformerEmbedder:
 
     def _load(self) -> Any:
         if self._model is None:
-            if self._offline:
-                os.environ["HF_HUB_OFFLINE"] = "1"
-            try:
-                from sentence_transformers import SentenceTransformer
-            except ImportError as exc:
-                raise ModelUnavailableError(MISSING_MODELS_MESSAGE) from exc
-            self._model = SentenceTransformer(
-                self._settings.model,
-                device=resolve_device(self._settings.device),
-                revision=self._settings.revision,
-                local_files_only=self._offline,
-            )
+            settings = self._settings
+
+            def load(local_files_only: bool) -> Any:
+                try:
+                    from sentence_transformers import SentenceTransformer
+                except ImportError as exc:
+                    raise ModelUnavailableError(MISSING_MODELS_MESSAGE) from exc
+                device = resolve_device(settings.device)
+                return SentenceTransformer(
+                    settings.model,
+                    device=device,
+                    revision=settings.revision,
+                    local_files_only=local_files_only,
+                    model_kwargs=model_kwargs(device),
+                )
+
+            self._model = load_model(load, settings.model, settings.revision, offline=self._offline)
         return self._model
 
 
@@ -124,20 +125,6 @@ def create_embedder(settings: EmbeddingSettings, *, offline: bool = False) -> Em
         _, _, dim = name.partition(":")
         return HashingEmbedder(int(dim) if dim else 512)
     return SentenceTransformerEmbedder(settings, offline=offline)
-
-
-def resolve_device(device: str) -> str:
-    if device != "auto":
-        return device
-    try:
-        import torch
-    except ImportError as exc:
-        raise ModelUnavailableError(MISSING_MODELS_MESSAGE) from exc
-    if torch.cuda.is_available():
-        return "cuda"
-    if torch.backends.mps.is_available():
-        return "mps"
-    return "cpu"
 
 
 def _fold(text: str) -> list[str]:
