@@ -57,6 +57,8 @@ def build_parser() -> argparse.ArgumentParser:
         "action", choices=["pull"], help="pull: scarica i modelli configurati (serve la rete)"
     )
 
+    commands.add_parser("doctor", help="controlla installazione, modelli e Ollama")
+
     serve = commands.add_parser("serve", help="avvia l'interfaccia web su questo computer")
     serve.add_argument("--port", type=int, help="porta (predefinita: web.port, 8000)")
     serve.add_argument("--open", action="store_true", help="apre il browser")
@@ -94,6 +96,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             return _evaluate(settings, args)
         if args.command == "serve":
             return _serve(settings, args)
+        if args.command == "doctor":
+            return _doctor(settings)
         with Fonti(settings) as fonti:
             return _COMMANDS[args.command](fonti, args)
     except FontiError as exc:
@@ -143,6 +147,16 @@ def _remove(fonti: Fonti, args: argparse.Namespace) -> int:
     info = fonti.remove(args.doc_id)
     print(f"Rimosso {info.filename} ({info.id[:12]})")
     return 0
+
+
+def _doctor(settings: Settings) -> int:
+    from fonti.doctor import Status, run_checks
+
+    checks = run_checks(settings)
+    width = max(len(check.name) for check in checks)
+    for check in checks:
+        print(f"[{check.status.value}] {check.name:<{width}}  {check.detail}")
+    return 1 if any(check.status is Status.FAILED for check in checks) else 0
 
 
 def _serve(settings: Settings, args: argparse.Namespace) -> int:

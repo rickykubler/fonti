@@ -120,10 +120,21 @@ def run(
     run_settings = settings.model_copy(update={"data_dir": data_dir})
     with fonti_factory(run_settings) as fonti:
         corpus_of, ingest = _ingest(fonti, corpus, dataset.documents, progress)
-        results = []
+        evaluated = []
         for number, question in enumerate(dataset.questions, start=1):
             progress(f"[{number}/{len(dataset.questions)}] {question.id}")
-            results.append(_evaluate(fonti, question, corpus_of.get, generate, judge))
+            evaluated.append(_evaluate(fonti, question, corpus_of.get, generate))
+    # Judge only after all answers exist: the judge may be another model, and alternating two
+    # large models on one GPU would reload them at every question.
+    if judge is not None:
+        for number, (question, result, answer) in enumerate(evaluated, start=1):
+            if answer is not None and not answer.abstained:
+                progress(f"[giudice {number}/{len(evaluated)}] {question.id}")
+                result.grounded = _groundedness(judge, answer)
+                if question.answerable:
+                    verdict = judge.correct(question.question, question.answer, answer.text)
+                    result.correct = verdict.score
+    results = [result for _, result, _ in evaluated]
     return RunResult(
         dataset=dataset.name,
         label=label,
@@ -179,12 +190,8 @@ def _ingest(
 
 
 def _evaluate(
-    fonti: Fonti,
-    question: Question,
-    doc_of: Callable[[str], str | None],
-    generate: bool,
-    judge: Judge | None,
-) -> QuestionResult:
+    fonti: Fonti, question: Question, doc_of: Callable[[str], str | None], generate: bool
+) -> tuple[Question, QuestionResult, Answer | None]:
     started = time.perf_counter()
     retrieval = fonti.retrieve(question.question)
     result = QuestionResult(
@@ -198,7 +205,7 @@ def _evaluate(
         top_score=round(retrieval.ranked[0].score, 4) if retrieval.ranked else None,
     )
     if not generate:
-        return result
+        return question, result, None
     started = time.perf_counter()
     answer = fonti.answer(retrieval)
     result.generation_s = round(time.perf_counter() - started, 3)
@@ -211,11 +218,7 @@ def _evaluate(
     if question.answerable and not answer.abstained:
         result.page_precision = citation_page_precision(answer, question.evidence, doc_of)
         result.cites_evidence = cites_evidence(answer, question.evidence, doc_of)
-    if judge is not None and not answer.abstained:
-        result.grounded = _groundedness(judge, answer)
-        if question.answerable:
-            result.correct = judge.correct(question.question, question.answer, answer.text).score
-    return result
+    return question, result, answer
 
 
 def _groundedness(judge: Judge, answer: Answer) -> float:

@@ -1,0 +1,14 @@
+# Default pipeline with Qwen 3.5 9B (Apache-2.0) as the answering model, thinking off.
+[retrieval]
+keyword_terms = "stemmed"
+
+[rerank]
+enabled = true
+min_score = 0.1
+
+[embedding]
+model = "BAAI/bge-m3"
+
+[llm]
+model = "qwen3.5:9b"
+think = false

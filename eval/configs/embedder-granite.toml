@@ -1,0 +1,13 @@
+# Default pipeline with IBM Granite Embedding Multilingual R2 (311M, Apache-2.0).
+[retrieval]
+keyword_terms = "stemmed"
+
+[rerank]
+enabled = true
+min_score = 0.1
+
+[embedding]
+model = "ibm-granite/granite-embedding-311m-multilingual-r2"
+
+[llm]
+model = "qwen2.5:14b"

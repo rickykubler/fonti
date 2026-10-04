@@ -1,0 +1,14 @@
+# Default pipeline with Gemma 4 12B (Apache-2.0) as the answering model, thinking off.
+[retrieval]
+keyword_terms = "stemmed"
+
+[rerank]
+enabled = true
+min_score = 0.1
+
+[embedding]
+model = "BAAI/bge-m3"
+
+[llm]
+model = "gemma4:12b"
+think = false
