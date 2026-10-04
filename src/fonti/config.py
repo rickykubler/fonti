@@ -14,6 +14,8 @@ from fonti.errors import FontiError
 CONFIG_ENV_VAR = "FONTI_CONFIG"
 DEFAULT_CONFIG_FILE = Path("fonti.toml")
 
+KeywordMode = Literal["plain", "stemmed"]
+
 
 class _Section(BaseModel):
     # Reject typos in the configuration instead of silently ignoring them.
@@ -29,6 +31,10 @@ class EmbeddingSettings(_Section):
     document_prefix: str = ""
 
 
+class ParserSettings(_Section):
+    mode: Literal["fast"] = "fast"
+
+
 class ChunkingSettings(_Section):
     max_chars: int = Field(default=1500, ge=200)
     overlap_chars: int = Field(default=200, ge=0)
@@ -40,6 +46,8 @@ class RetrievalSettings(_Section):
     fused_k: int = Field(default=30, ge=1)
     final_k: int = Field(default=6, ge=1)
     rrf_k: int = Field(default=60, ge=1)
+    # "stemmed": Italian Snowball stems without stopwords; "plain": lowercase words.
+    keyword_terms: KeywordMode = "plain"
 
 
 class LLMSettings(_Section):
@@ -70,6 +78,7 @@ class Settings(BaseSettings):
 
     data_dir: Path = Field(default_factory=lambda: user_data_path("fonti", appauthor=False))
     offline: bool = False
+    parser: ParserSettings = ParserSettings()
     embedding: EmbeddingSettings = EmbeddingSettings()
     chunking: ChunkingSettings = ChunkingSettings()
     retrieval: RetrievalSettings = RetrievalSettings()

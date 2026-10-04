@@ -8,6 +8,7 @@ from typing import Any
 from xml.sax.saxutils import escape
 
 PAGE_BREAK = "---"
+_TEXT_WIDTH = 451  # points: A4 width minus the default 1-inch margins
 
 
 def render_pdf(markdown: str, path: Path, title: str | None = None) -> Path:
@@ -27,7 +28,13 @@ def render_pdf(markdown: str, path: Path, title: str | None = None) -> Path:
             story.append(Paragraph(escape(" ".join(paragraph)), styles["BodyText"]))
             paragraph.clear()
         if rows:
-            table = Table([list(row) for row in rows], hAlign="LEFT")
+            # Column widths proportional to the longest cell, so long cells wrap inside the page.
+            longest = [
+                max(len(row[i]) for row in rows if i < len(row)) for i in range(len(rows[0]))
+            ]
+            widths = [_TEXT_WIDTH * max(n, 8) / sum(max(m, 8) for m in longest) for n in longest]
+            cells = [[Paragraph(escape(cell), styles["BodyText"]) for cell in row] for row in rows]
+            table = Table(cells, colWidths=widths, hAlign="LEFT")
             table.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.5, colors.black)]))
             story.append(table)
             rows.clear()

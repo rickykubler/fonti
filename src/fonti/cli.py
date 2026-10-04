@@ -10,7 +10,7 @@ from dataclasses import asdict
 from pathlib import Path
 
 from fonti import __version__
-from fonti.config import load_settings
+from fonti.config import Settings, load_settings
 from fonti.domain import Answer, Citation
 from fonti.errors import FontiError
 from fonti.service import Fonti, IngestResult, IngestStatus
@@ -55,6 +55,20 @@ def build_parser() -> argparse.ArgumentParser:
     models.add_argument(
         "action", choices=["pull"], help="pull: scarica i modelli configurati (serve la rete)"
     )
+
+    evaluation = commands.add_parser("eval", help="valutazione su dataset di prova (sviluppo)")
+    evaluation.add_argument("--eval-dir", type=Path, default=Path("eval"), help="cartella eval")
+    actions = evaluation.add_subparsers(dest="eval_action", metavar="AZIONE", required=True)
+    corpus = actions.add_parser("corpus", help="scarica e genera i documenti del corpus")
+    corpus.add_argument("ids", nargs="*", metavar="ID", help="solo questi documenti")
+    check = actions.add_parser("check", help="verifica le evidenze del dataset nei documenti")
+    check.add_argument("--dataset", default="main")
+    run = actions.add_parser("run", help="valuta la configurazione corrente su un dataset")
+    run.add_argument("--dataset", default="main")
+    run.add_argument("--label", default="run", help="nome del run, usato nel nome del report")
+    run.add_argument("--retrieval-only", action="store_true", help="niente LLM: solo retrieval")
+    run.add_argument("--no-judge", action="store_true", help="niente giudice LLM")
+    run.add_argument("--judge-model", help="modello del giudice (predefinito: llm.model)")
     return parser
 
 
@@ -71,6 +85,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     _tolerate_unencodable_output()
     try:
         settings = load_settings(args.config)
+        if args.command == "eval":
+            return _evaluate(settings, args)
         with Fonti(settings) as fonti:
             return _COMMANDS[args.command](fonti, args)
     except FontiError as exc:
@@ -119,6 +135,50 @@ def _docs(fonti: Fonti, args: argparse.Namespace) -> int:
 def _remove(fonti: Fonti, args: argparse.Namespace) -> int:
     info = fonti.remove(args.doc_id)
     print(f"Rimosso {info.filename} ({info.id[:12]})")
+    return 0
+
+
+def _evaluate(settings: Settings, args: argparse.Namespace) -> int:
+    # Imported here: evaluation needs the development dependencies.
+    from fonti.evaluation.corpus import Corpus
+    from fonti.evaluation.dataset import check_dataset, load_dataset
+    from fonti.evaluation.judge import Judge
+    from fonti.evaluation.report import write_report
+    from fonti.evaluation.runner import run
+    from fonti.generation.llm import create_chat_client
+
+    corpus = Corpus(args.eval_dir / "corpus")
+    if args.eval_action == "corpus":
+        for doc_id, action in corpus.prepare(args.ids or None):
+            print(f"{doc_id}: {action}", flush=True)
+        return 0
+    dataset = load_dataset(args.eval_dir / "datasets", args.dataset)
+    if args.eval_action == "check":
+        problems = check_dataset(dataset, corpus)
+        for problem in problems:
+            print(problem)
+        print(f"{len(dataset.questions)} domande, {len(problems)} problemi")
+        return 1 if problems else 0
+    judge = None
+    if not args.retrieval_only and not args.no_judge:
+        judge_llm = settings.llm
+        if args.judge_model:
+            judge_llm = judge_llm.model_copy(update={"model": args.judge_model})
+        judge = Judge(create_chat_client(judge_llm))
+    result = run(
+        dataset,
+        corpus,
+        settings,
+        work_dir=args.eval_dir / ".work",
+        label=args.label,
+        generate=not args.retrieval_only,
+        judge=judge,
+        progress=lambda message: print(message, file=sys.stderr, flush=True),
+    )
+    markdown, _ = write_report(result, args.eval_dir / "reports")
+    for key, value in result.summary().items():
+        print(f"{key:>20}: {'—' if value is None else round(value, 3)}")
+    print(f"Report: {markdown}")
     return 0
 
 

@@ -1,0 +1,94 @@
+# Documents of the evaluation corpus. Files are built into eval/corpus/files/ (not committed)
+# with `uv run fonti eval corpus`: public documents are downloaded and checked against their
+# SHA-256, synthetic ones are rendered from Markdown, scans are generated from a PDF.
+#
+# Licenses must be re-checked before adding a document. Public files are never redistributed.
+
+[[document]]
+id = "costituzione"
+title = "Costituzione della Repubblica Italiana (edizione con note)"
+kind = "normativa"
+url = "https://www.quirinale.it/allegati_statici/costituzione/costituzione.pdf"
+file = "costituzione.pdf"
+sha256 = "e215dba3831c5f860444b9dbae71cf1f9acdf720266ceabe9577958ef192661f"
+license = "Atto ufficiale dello Stato, escluso dal diritto d'autore (art. 5 L. 633/1941). Fonte: Presidenza della Repubblica."
+
+[[document]]
+id = "gdpr"
+title = "Regolamento (UE) 2016/679 - Regolamento generale sulla protezione dei dati"
+kind = "normativa"
+url = "https://eur-lex.europa.eu/legal-content/IT/TXT/PDF/?uri=CELEX:32016R0679"
+file = "gdpr.pdf"
+license = "© Unione europea, https://eur-lex.europa.eu - riutilizzo autorizzato con citazione della fonte (Decisione 2011/833/UE)."
+
+[[document]]
+id = "ai-act"
+title = "Regolamento (UE) 2024/1689 - Regolamento sull'intelligenza artificiale"
+kind = "normativa"
+url = "https://eur-lex.europa.eu/legal-content/IT/TXT/PDF/?uri=CELEX:32024R1689"
+file = "ai_act.pdf"
+license = "© Unione europea, https://eur-lex.europa.eu - riutilizzo autorizzato con citazione della fonte (Decisione 2011/833/UE)."
+
+[[document]]
+id = "agid"
+title = "AgID - Linee guida sul documento informatico"
+kind = "manuale"
+url = "https://www.agid.gov.it/sites/agid/files/2024-05/linee_guida_sul_documento_informatico.pdf"
+file = "agid_documento_informatico.pdf"
+license = "Atto di una pubblica amministrazione (art. 5 L. 633/1941); da riverificare sulle note legali del sito AgID."
+
+[[document]]
+id = "istat"
+title = "ISTAT - Occupati e disoccupati, luglio 2026 (comunicato stampa)"
+kind = "tabelle"
+url = "https://www.istat.it/wp-content/uploads/2026/09/CS_Occupati-e-disoccupati_LUGLIO_2026.pdf"
+file = "istat_occupati_luglio_2026.pdf"
+license = "ISTAT, licenza Creative Commons Attribuzione 4.0 (CC BY 4.0)."
+
+[[document]]
+id = "contratto"
+title = "Contratto di locazione ad uso abitativo (sintetico)"
+kind = "contratto"
+source = "synthetic/contratto_locazione.md"
+file = "contratto_locazione.pdf"
+license = "Documento sintetico del progetto (CC0), nomi e dati di fantasia."
+
+[[document]]
+id = "verbale"
+title = "Verbale di assemblea condominiale (sintetico)"
+kind = "verbale"
+source = "synthetic/verbale_assemblea.md"
+file = "verbale_assemblea.pdf"
+license = "Documento sintetico del progetto (CC0), nomi e dati di fantasia."
+
+[[document]]
+id = "manuale"
+title = "Manuale della caldaia Aurora T24 (sintetico)"
+kind = "manuale"
+source = "synthetic/manuale_caldaia.md"
+file = "manuale_caldaia.pdf"
+license = "Documento sintetico del progetto (CC0), prodotto di fantasia."
+
+[[document]]
+id = "costituzione-scan"
+title = "Costituzione della Repubblica Italiana (scansione sintetica)"
+kind = "scansione"
+scan_of = "costituzione"
+file = "costituzione_scan.pdf"
+license = "Derivato da: costituzione."
+
+[[document]]
+id = "contratto-scan"
+title = "Contratto di locazione ad uso abitativo (scansione sintetica)"
+kind = "scansione"
+scan_of = "contratto"
+file = "contratto_locazione_scan.pdf"
+license = "Derivato da: contratto."
+
+[[document]]
+id = "manuale-scan"
+title = "Manuale della caldaia Aurora T24 (scansione sintetica)"
+kind = "scansione"
+scan_of = "manuale"
+file = "manuale_caldaia_scan.pdf"
+license = "Derivato da: manuale."
