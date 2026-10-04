@@ -101,6 +101,8 @@ Art. 56 quoted in the notes instead of the current one.
 | Web | FastAPI + Jinja2 + HTMX | Few dependencies, custom citation UI, no telemetry |
 | License | Apache-2.0 | Permissive, with an explicit patent grant |
 | Citations | LLM cites `[n]`; passages are aligned verbatim from the source by term overlap | Small local models paraphrase quotes; extracted passages always exist in the document |
+| Embedder | `ibm-granite/granite-embedding-311m-multilingual-r2` | Same recall as bge-m3 with the reranker, 38% faster ingest, smaller download |
+| Parser | `auto`: text layer, Docling only for scanned pages | Docling gave no gain on digital PDFs at 0.5 s/page |
 | Model loading | Offline when cached (`HF_HUB_OFFLINE` set before import), explicit `models pull` | `local_files_only` alone still contacted the Hub on every run |
 
 ## Backlog (after v0.1)

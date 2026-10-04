@@ -83,7 +83,7 @@ use environment variables such as `FONTI_LLM__MODEL=gemma4:12b`. Useful settings
 |---|---|---|
 | `llm.model` | `qwen2.5:14b` | any Ollama model; set `llm.think = false` for thinking models |
 | `parser.mode` | `auto` | `fast` (text layer only), `docling` (always) |
-| `embedding.model` | see `fonti.example.toml` | any sentence-transformers model |
+| `embedding.model` | `ibm-granite/granite-embedding-311m-multilingual-r2` | any sentence-transformers model, e.g. `BAAI/bge-m3` |
 | `rerank.min_score` | `0.1` | higher = more «Non lo so» |
 | `data_dir` | per-user app data folder | index and copies of your files |
 

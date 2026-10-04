@@ -22,7 +22,7 @@ ocr_confidence = 0.2         # EasyOCR's own default (0.5) drops many lines of n
 tables = true
 
 [embedding]
-model = "BAAI/bge-m3"
+model = "ibm-granite/granite-embedding-311m-multilingual-r2"   # or "BAAI/bge-m3"
 # revision = "main"          # pin a commit for reproducible indexes
 device = "auto"              # "auto", "cuda", "cpu" or "mps"
 batch_size = 16
