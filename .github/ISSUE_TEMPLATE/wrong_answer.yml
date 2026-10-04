@@ -1,0 +1,39 @@
+name: Risposta sbagliata
+description: fonti ha risposto in modo sbagliato, ha citato la fonte sbagliata o ha detto "non lo so" a torto
+labels: ["qualità delle risposte"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie! Non allegare documenti privati: se il documento non è pubblico, descrivi il problema con un testo pubblico o inventato.
+  - type: textarea
+    id: question
+    attributes:
+      label: Domanda
+      description: La domanda esatta che hai fatto.
+    validations:
+      required: true
+  - type: textarea
+    id: answer
+    attributes:
+      label: Risposta di fonti
+      description: Testo della risposta e fonti citate (documento e pagina). Va bene anche l'output di `fonti ask --json`.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Risposta attesa
+      description: Cosa ti aspettavi e in quale punto del documento si trova (pagina, articolo).
+    validations:
+      required: true
+  - type: input
+    id: document
+    attributes:
+      label: Documento (se pubblico)
+      description: Link al documento, se è pubblico.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Configurazione
+      description: Output di `fonti doctor` e del modello LLM usato.

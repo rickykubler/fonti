@@ -1,0 +1,27 @@
+fonti
+Copyright 2026 Ricky Kubler
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It bundles:
+- htmx 2.0.11 (src/fonti/web/static/htmx.min.js), Zero-Clause BSD license,
+  https://github.com/bigskysoftware/htmx
+
+It downloads at run time, from their publishers, models that are not part of this
+repository and keep their own licenses:
+- BAAI/bge-m3 (MIT) - embeddings
+- BAAI/bge-reranker-v2-m3 (Apache-2.0) - reranking
+- Docling layout and table structure models (docling-project, see their model cards)
+- EasyOCR detection and recognition models (Apache-2.0)
+- the LLM chosen in Ollama, by default qwen2.5:14b (Apache-2.0)
+
+The evaluation corpus (eval/corpus) is downloaded by `fonti eval corpus` and is not
+redistributed. Its documents keep their own terms:
+- Costituzione della Repubblica Italiana: official act, excluded from copyright
+  (art. 5, Legge 633/1941); source: Presidenza della Repubblica
+- Regulations (EU) 2016/679 and 2024/1689: (c) European Union, https://eur-lex.europa.eu,
+  reuse authorised with acknowledgement of the source (Decision 2011/833/EU)
+- AgID, Linee guida sul documento informatico: act of a public administration
+- ISTAT, Occupati e disoccupati, luglio 2026: Creative Commons Attribution 4.0
+The synthetic documents in eval/corpus/synthetic are part of this project (CC0) and contain
+only invented names and data.

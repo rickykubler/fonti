@@ -1,8 +1,9 @@
+import tomllib
 from pathlib import Path
 
 import pytest
 
-from fonti.config import ConfigError, load_settings
+from fonti.config import ConfigError, Settings, load_settings
 
 
 def test_defaults_are_local_only() -> None:
@@ -50,6 +51,14 @@ def test_unknown_keys_are_rejected(tmp_path: Path) -> None:
 def test_explicit_missing_config_file_raises(tmp_path: Path) -> None:
     with pytest.raises(ConfigError, match="non trovato"):
         load_settings(tmp_path / "missing.toml")
+
+
+def test_example_config_documents_the_defaults() -> None:
+    example = Path(__file__).parents[1] / "fonti.example.toml"
+    with example.open("rb") as f:
+        documented = Settings(**tomllib.load(f)).model_dump(exclude={"data_dir"})
+
+    assert documented == Settings().model_dump(exclude={"data_dir"})
 
 
 def test_api_key_is_not_exposed(monkeypatch: pytest.MonkeyPatch) -> None:

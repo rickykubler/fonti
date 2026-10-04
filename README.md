@@ -2,34 +2,123 @@
 
 **Ask questions about your own documents — in Italian, on your machine, with sources you can check.**
 
-> **In italiano.** *fonti* è un sistema RAG open source per fare domande sui propri documenti in italiano: contratti, normative, verbali, manuali. Gira interamente in locale per impostazione predefinita, gestisce PDF difficili, scansioni e tabelle, e ogni risposta riporta documento, pagina e passaggio esatto. Se le fonti non bastano, risponde che non lo sa invece di inventare.
+> **In italiano.** *fonti* è un sistema open source per fare domande ai propri documenti in
+> italiano: contratti, normative, verbali, manuali. Gira interamente sul tuo computer, legge
+> anche PDF difficili, scansioni e tabelle, e ogni risposta indica documento, pagina e passaggio
+> esatto, copiato dal testo e mai inventato. Se i documenti non bastano, risponde «Non lo so».
 
-**Status: pre-alpha, under active development.** Progress is tracked in [docs/ROADMAP.md](docs/ROADMAP.md).
+**Status: pre-alpha (0.1.0.dev0).** Progress and results are tracked in
+[docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Why
 
-- **Italian first.** Tuned and evaluated on Italian documents: legal references ("art. 1341 c.c.", "D.Lgs. 196/2003"), accents and apostrophes, hyphenated line breaks, scanned pages and tables.
-- **Local-first.** Embeddings, reranking and the LLM run on your machine (the LLM through [Ollama](https://ollama.com)). Nothing is sent to external services by default; cloud providers are opt-in.
-- **Verifiable citations.** Every answer cites document, page and the exact passage, copied from the source rather than generated. When the sources are not enough, the answer is "non lo so".
-- **Measured, not guessed.** A small evaluation framework (retrieval recall@k and MRR, abstention, citation accuracy, groundedness) drives every default.
+- **Italian first.** Italian stemming and stopwords, legal headings (Parte, Titolo, Capo, Art.)
+  and abbreviations (art., d.lgs., c.c.), hyphenation, running headers, scanned pages and tables.
+- **Local first.** Embeddings, reranking and OCR run in-process; answers come from a local LLM
+  through [Ollama](https://ollama.com). Nothing leaves your computer by default: remote LLMs are
+  refused unless you opt in, models load offline once downloaded, the web UI listens only on
+  127.0.0.1 and no library sends telemetry.
+- **Verifiable citations.** Every sentence of an answer cites its source; the cited passage is
+  copied verbatim from the document with its page, and you can open the PDF at that page with
+  the passage highlighted. Without enough evidence the answer is «Non lo so».
+- **Measured.** A golden set of 59 Italian questions drives every default (see
+  [docs/evaluation.md](docs/evaluation.md)): recall@1 0.95, correct refusals 100%, cited pages
+  correct 96%, groundedness 0.92 with a 14B local model.
 
 ## How it works
 
-1. **Ingest:** parse PDFs (including OCR for scans), clean the text, split it into chunks that follow the document structure (titles, articles, sections) and keep page offsets.
-2. **Index:** store everything in a single SQLite file — text, a BM25 keyword index (FTS5) and the embedding vectors.
-3. **Retrieve:** hybrid search (keywords + semantic), rank fusion, then a multilingual reranker.
-4. **Answer:** a local LLM answers in Italian using only the retrieved sources and cites them; citations are checked mechanically and the system abstains when evidence is missing.
+1. **Ingest**: read the PDF text layer (Docling with OCR for scanned pages), recognise the
+   document structure, split it into chunks that keep their pages, embed them and store
+   everything in one SQLite file.
+2. **Retrieve**: keyword search (BM25 with Italian stems) and semantic search, fused and
+   reranked by a multilingual cross-encoder. If nothing is relevant enough, stop here.
+3. **Answer**: a local LLM answers in Italian from the best six passages, citing them as `[n]`.
+4. **Verify**: each cited passage is located verbatim in the source; sentences without support
+   lose their citation, and answers without any verified citation become «Non lo so».
 
-## Getting started (development)
+Details in [docs/architecture.md](docs/architecture.md).
 
-Requirements: Windows, Linux or macOS and [uv](https://docs.astral.sh/uv/). Ollama is needed for answers.
+## Getting started
+
+Requirements: Windows, Linux or macOS; [uv](https://docs.astral.sh/uv/);
+[Ollama](https://ollama.com); about 15 GB of disk for models. An NVIDIA GPU with 8+ GB of
+VRAM makes it fast; a CPU works too, slowly.
 
 ```
-uv sync
+git clone <repository-url> fonti
+cd fonti
+uv sync --extra gpu --extra docling      # without an NVIDIA GPU: --extra cpu --extra docling
+ollama pull qwen2.5:14b
+uv run fonti models pull                 # embedding, reranker and OCR models (once, needs network)
+uv run fonti doctor                      # checks that everything is in place
+```
+
+Then:
+
+```
+uv run fonti ingest C:\Documenti\contratti
+uv run fonti ask "Quanto dura il contratto di locazione?"
+uv run fonti serve --open                # web UI on http://127.0.0.1:8000
+```
+
+Example answer:
+
+```
+La locazione ha durata di quattro anni, con decorrenza dal 1° febbraio 2026 [1].
+
+Fonti:
+[1] Contratto di locazione ad uso abitativo — Art. 2 - Durata
+    pag. 1: «La locazione ha durata di quattro anni, con decorrenza dal 1° febbraio 2026, ...»
+```
+
+Other commands: `fonti docs` (list), `fonti remove ID`, `fonti reindex` (after changing
+models or settings), `fonti --help`.
+
+## Configuration
+
+Copy [`fonti.example.toml`](fonti.example.toml) to `fonti.toml` and change what you need, or
+use environment variables such as `FONTI_LLM__MODEL=gemma4:12b`. Useful settings:
+
+| Setting | Default | |
+|---|---|---|
+| `llm.model` | `qwen2.5:14b` | any Ollama model; set `llm.think = false` for thinking models |
+| `parser.mode` | `auto` | `fast` (text layer only), `docling` (always) |
+| `embedding.model` | see `fonti.example.toml` | any sentence-transformers model |
+| `rerank.min_score` | `0.1` | higher = more «Non lo so» |
+| `data_dir` | per-user app data folder | index and copies of your files |
+
+Supported files: PDF (digital or scanned), DOCX, TXT, Markdown.
+
+## Privacy
+
+- Your documents and questions stay on your computer. The only network traffic is the
+  one-time download of models from Hugging Face and Ollama.
+- A remote LLM (any OpenAI-compatible API) is possible only with `llm.allow_remote = true`
+  and an API key in `.env`; `fonti doctor` warns when it is on.
+- The web UI has no authentication: it is meant for one person on one computer and refuses
+  to listen on other addresses.
+
+## Limits
+
+- No handwriting. Complex tables (merged cells, tables split across pages) are read only
+  partially; arithmetic over tables is not guaranteed.
+- OCR of dense justified text can scramble word order (see the evaluation); answers usually
+  stay correct but quoted passages are noisier.
+- Each question is independent (no conversation memory). One user, one collection.
+- Answers about contracts and laws are not legal advice: always read the cited passages.
+
+## Development
+
+```
+uv sync --extra cpu
 uv run pytest
-uv run fonti --version
+uv run ruff check .
+uv run mypy
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/evaluation.md](docs/evaluation.md).
 
 ## License
 
-[Apache-2.0](LICENSE).
+[Apache-2.0](LICENSE). Third-party components, models and corpus terms are listed in
+[NOTICE](NOTICE).
