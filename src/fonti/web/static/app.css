@@ -105,6 +105,8 @@ button.danger { background: none; color: var(--danger); border: 1px solid var(--
   font-weight: 600;
 }
 
+.separator { font-size: 0.75em; vertical-align: super; }
+
 .citations { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 0.9rem; }
 
 .card {

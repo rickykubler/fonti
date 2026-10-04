@@ -30,12 +30,20 @@ function renderAnswerText(text) {
   const paragraph = element("p");
   const pattern = /\[(\d+(?:\s*[,;]\s*\d+)*)\]/g;
   let last = 0;
+  let afterMarker = false;
   for (const match of text.matchAll(pattern)) {
-    paragraph.append(document.createTextNode(text.slice(last, match.index)));
+    const between = text.slice(last, match.index);
+    if (between) {
+      paragraph.append(document.createTextNode(between));
+      afterMarker = false;
+    }
     for (const number of match[1].split(/\s*[,;]\s*/)) {
+      // Adjacent markers ([3][4]) would read as one number (34).
+      if (afterMarker) paragraph.append(element("span", "separator", ","));
       const link = element("a", "marker", number);
       link.href = "#fonte-" + number;
       paragraph.append(link);
+      afterMarker = true;
     }
     last = match.index + match[0].length;
   }
