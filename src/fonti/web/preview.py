@@ -6,6 +6,7 @@ from pathlib import Path
 import pypdfium2 as pdfium
 
 _WINDOW = 4  # words searched at a time: short enough to stay on one line
+_MAX_GAP = 5  # characters between consecutive windows: a space or a line break
 _HIGHLIGHT = (255, 214, 0, 96)
 
 Box = tuple[float, float, float, float]  # left, bottom, right, top in PDF points
@@ -45,24 +46,56 @@ def passage_boxes(page: pdfium.PdfPage, passage: str) -> list[Box]:
     """Rectangles (PDF points) covering the passage, found a few words at a time so that line
     breaks and hyphenation in the PDF do not prevent the match."""
     words = passage.split()
+    windows = [" ".join(words[i : i + _WINDOW]) for i in range(0, len(words), _WINDOW)]
     textpage = page.get_textpage()
     boxes: list[Box] = []
     try:
-        start_index = 0
-        for first in range(0, len(words), _WINDOW):
-            window = " ".join(words[first : first + _WINDOW])
-            searcher = textpage.search(window, index=start_index, match_case=False)
-            found = searcher.get_next()
-            searcher.close()
-            if found is None:
-                continue
-            index, count = found
-            start_index = index + count
+        for index, count in _locate(textpage, windows):
             for i in range(textpage.count_rects(index, count)):
                 boxes.append(textpage.get_rect(i))
     finally:
         textpage.close()
     return merge_lines(boxes)
+
+
+def _locate(textpage: pdfium.PdfTextPage, windows: list[str]) -> list[tuple[int, int]]:
+    """Matches (char index, count) of windows that follow one another in the page text.
+
+    Searching each window on its own would match the first occurrence of a repeated phrase,
+    such as a heading with the words that open the passage. A window that is not found close
+    to the previous one (a word hyphenated across lines, a ligature) is skipped.
+    """
+    best: list[tuple[int, int]] = []
+    for anchor, first_window in enumerate(windows):
+        start = 0
+        while (first := _find(textpage, first_window, start)) is not None:
+            chain = [first]
+            slack = 0
+            for window in windows[anchor + 1 :]:
+                end = chain[-1][0] + chain[-1][1]
+                match = _find(textpage, window, end)
+                if match is not None and match[0] - end <= _MAX_GAP + slack:
+                    chain.append(match)
+                    slack = 0
+                else:
+                    slack += len(window) + 1
+            if len(chain) > len(best):
+                best = chain
+            if len(best) == len(windows) - anchor:
+                return best
+            start = first[0] + 1
+        if best:
+            return best
+    return best
+
+
+def _find(textpage: pdfium.PdfTextPage, text: str, start: int) -> tuple[int, int] | None:
+    searcher = textpage.search(text, index=start, match_case=False)
+    try:
+        found: tuple[int, int] | None = searcher.get_next()
+    finally:
+        searcher.close()
+    return found
 
 
 def merge_lines(boxes: list[Box]) -> list[Box]:
