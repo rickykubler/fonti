@@ -39,7 +39,8 @@ vinto i Mondiali di calcio del 2006?" returns "Non lo so" with the nearest passa
       the PDFs by hand into `eval/corpus/files/`, record their SHA-256, add questions
 - [x] Embedder comparison: granite R2, Qwen3-Embedding-0.6B and bge-m3 are equivalent with the
       reranker; granite R2 is the default (faster, smaller)
-- [ ] LLM comparison: `gemma4:12b`, `qwen3.5:9b` vs `qwen2.5:14b` (full runs, `llm.think = false`)
+- [x] LLM comparison: `gemma4:12b` (now the default, thinking off), `qwen2.5:14b`, `qwen3.5:9b`;
+      see docs/evaluation.md
 - [x] OCR engines on scans: EasyOCR (default) vs RapidOCR latin; see docs/evaluation.md
 - [ ] OCR reading order on justified multi-line text: EasyOCR interleaves adjacent lines (CER
       ~25% on the Constitution scan); RapidOCR keeps the order but drops accents: an
@@ -57,16 +58,17 @@ the baseline:
 | Cited page correct | ≥ 90% |
 | CER on clean synthetic scans | ≤ 3% |
 
-**Results** (`eval/reports/`, main dataset, qwen2.5:14b):
+**Results** (`eval/reports/`, main dataset; answering model qwen2.5:14b unless noted):
 
 | Run | Recall@1 | Recall@5 | MRR@10 | Correct refusals | False refusals | Cited pages | Groundedness |
 |---|---|---|---|---|---|---|---|
 | baseline (M1) | 0.808 | 0.957 | 0.873 | 0.83 | 0.00 | 0.90 | 0.88 |
 | + stemming, reranker, gate, generation fixes | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.96 | 0.92 |
+| + gemma4:12b as the answering model | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.97 | 0.91 |
 
 Scans (Docling + EasyOCR): correctness 0.94, cited pages 1.0, recall@5 0.80 (OCR noise lowers
-quote matching), ingest 1.5 s/page. Known failure: cost-08 answers with the historical text of
-Art. 56 quoted in the notes instead of the current one.
+quote matching), ingest 1.5 s/page. qwen2.5:14b answers cost-08 with the historical text of
+Art. 56 quoted in the notes instead of the current one; gemma4:12b answers it correctly.
 
 ## M3 — Web UI and demo
 
@@ -99,7 +101,8 @@ Art. 56 quoted in the notes instead of the current one.
 | Storage | Single SQLite file: FTS5 + float32 vectors, exact search with numpy | No servers, one file to back up; exact search is fast enough up to ~100–200k chunks |
 | Retrieval | BM25 + dense, RRF, cross-encoder reranker | Keyword search catches exact legal references that embeddings miss |
 | Parsing | pypdfium2 (fast) + Docling (OCR, tables) behind one interface | Permissive licenses; Docling covers hard PDFs, the fast parser keeps CI light |
-| LLM runtime | Ollama via the OpenAI-compatible API | Native on Windows with GPU; the same client works with other local servers |
+| LLM runtime | Ollama's native API; any OpenAI-compatible server as an alternative | Native on Windows with GPU; the native API sets the context window and turns thinking off |
+| LLM | `gemma4:12b`, thinking off | Best groundedness and correctness of the three local models tested, faster than qwen2.5:14b; Apache-2.0 |
 | Web | FastAPI + Jinja2 + HTMX | Few dependencies, custom citation UI, no telemetry |
 | License | Apache-2.0 | Permissive, with an explicit patent grant |
 | Citations | LLM cites `[n]`; passages are aligned verbatim from the source by term overlap | Small local models paraphrase quotes; extracted passages always exist in the document |

@@ -13,9 +13,9 @@ First version: ask questions about your documents in Italian, locally, with veri
   a content-addressed copy of every file.
 - Hybrid retrieval: BM25 with Italian stems and expanded legal abbreviations, dense search,
   RRF fusion, cross-encoder reranking and a relevance gate.
-- Answers from a local LLM through Ollama (or any OpenAI-compatible server, opt-in for remote
-  ones) with `[n]` citations; passages copied verbatim from the source with their page;
-  «Non lo so» when evidence is missing.
+- Answers from a local LLM through Ollama (default `gemma4:12b`, chosen on the golden set; or
+  any OpenAI-compatible server, opt-in for remote ones) with `[n]` citations; passages copied
+  verbatim from the source with their page; «Non lo so» when evidence is missing.
 - CLI: `ingest`, `ask`, `docs`, `remove`, `reindex`, `models pull`, `doctor`, `serve`, `eval`.
 - Local web UI: streamed answers, citation cards, PDF opened at the cited page, page preview
   with the passage highlighted, upload with background indexing.

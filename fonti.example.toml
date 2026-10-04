@@ -1,6 +1,6 @@
 # Example configuration. Copy it to fonti.toml (ignored by git) and change only what you need:
 # every value below is the default. Environment variables override this file, e.g.
-# FONTI_LLM__MODEL=gemma4:12b. Point to another file with --config or FONTI_CONFIG.
+# FONTI_LLM__MODEL=qwen2.5:14b. Point to another file with --config or FONTI_CONFIG.
 
 # Index, copies of the indexed files and models' metadata. Default: %LOCALAPPDATA%\fonti on
 # Windows, ~/.local/share/fonti on Linux, ~/Library/Application Support/fonti on macOS.
@@ -50,8 +50,8 @@ min_score = 0.1              # below this the system answers "non lo so" without
 [llm]
 provider = "ollama"          # "ollama" or "openai" (any OpenAI-compatible server)
 base_url = "http://127.0.0.1:11434"
-model = "qwen2.5:14b"
-# think = false              # for thinking models (gemma4, qwen3.5): answer directly
+model = "gemma4:12b"         # any Ollama model, e.g. "qwen2.5:14b"
+think = false                # answer without a reasoning phase (Ollama only)
 context_window = 8192
 max_answer_tokens = 800
 temperature = 0.0

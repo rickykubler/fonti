@@ -78,10 +78,13 @@ class RerankSettings(_Section):
 class LLMSettings(_Section):
     provider: Literal["ollama", "openai"] = "ollama"
     base_url: str = "http://127.0.0.1:11434"
-    model: str = "qwen2.5:14b"
+    # Chosen on the golden set against qwen2.5:14b and qwen3.5:9b (docs/evaluation.md).
+    model: str = "gemma4:12b"
     api_key: SecretStr | None = None
     allow_remote: bool = False
-    think: bool | None = None  # Ollama only; None leaves the model default
+    # Ollama only. Thinking models (gemma4, qwen3.5) otherwise reason before answering, which is
+    # slower and spends the answer's token budget; None leaves the model's default.
+    think: bool | None = False
     context_window: int = Field(default=8192, ge=1024)
     max_answer_tokens: int = Field(default=800, ge=16)
     temperature: float = Field(default=0.0, ge=0.0)
