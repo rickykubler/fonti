@@ -130,6 +130,26 @@ def test_highlight_of_one_line_is_one_box(contract: Path) -> None:
     assert len(boxes) == 1
 
 
+def test_highlight_is_where_the_whole_passage_is(tmp_path: Path) -> None:
+    pdf_path = render_pdf(
+        "# Il Presidente della Repubblica\n\n"
+        "Il Presidente della Repubblica è eletto dal Parlamento in seduta comune.\n\n"
+        "Il Presidente della Repubblica è eletto per sette anni.",
+        tmp_path / "presidente.pdf",
+    )
+    pdf = pdfium.PdfDocument(pdf_path)
+    page = pdf[0]
+    try:
+        boxes = passage_boxes(page, "Il Presidente della Repubblica è eletto per sette anni.")
+        [unique] = passage_boxes(page, "per sette anni.")
+    finally:
+        page.close()
+        pdf.close()
+
+    assert len(boxes) == 1
+    assert boxes[0][1] == pytest.approx(unique[1])  # on the line of the cited sentence
+
+
 def test_merge_lines_keeps_other_lines_and_columns_apart() -> None:
     first = (10.0, 100.0, 50.0, 110.0)
     same_line = (53.0, 100.5, 90.0, 110.0)
