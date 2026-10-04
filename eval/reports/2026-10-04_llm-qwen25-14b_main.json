@@ -1,0 +1,1884 @@
+{
+  "summary": {
+    "recall@1": 0.9468,
+    "recall@3": 0.9574,
+    "recall@5": 0.9787,
+    "recall@10": 1.0,
+    "recall@candidates": 1.0,
+    "mrr@10": 0.9663,
+    "correct_refusals": 1.0,
+    "false_refusals": 0.0,
+    "page_precision": 0.9645,
+    "cites_evidence": 0.9574,
+    "groundedness": 0.8936,
+    "correctness": 0.9468,
+    "generation_p50_s": 7.877,
+    "generation_p95_s": 25.749,
+    "retrieval_p50_s": 0.759,
+    "retrieval_p95_s": 0.964
+  },
+  "dataset": "main",
+  "label": "llm-qwen25-14b",
+  "created_at": "2026-10-04T19:53:11+00:00",
+  "settings": {
+    "offline": false,
+    "parser": {
+      "mode": "auto",
+      "ocr": true,
+      "ocr_engine": "easyocr",
+      "ocr_languages": [],
+      "force_ocr": false,
+      "ocr_confidence": 0.2,
+      "tables": true
+    },
+    "embedding": {
+      "model": "BAAI/bge-m3",
+      "revision": null,
+      "device": "auto",
+      "batch_size": 16,
+      "query_prefix": "",
+      "document_prefix": ""
+    },
+    "chunking": {
+      "max_chars": 1500,
+      "overlap_chars": 200
+    },
+    "retrieval": {
+      "bm25_k": 50,
+      "dense_k": 50,
+      "fused_k": 30,
+      "final_k": 6,
+      "rrf_k": 60,
+      "keyword_terms": "stemmed"
+    },
+    "rerank": {
+      "enabled": true,
+      "model": "BAAI/bge-reranker-v2-m3",
+      "revision": null,
+      "device": "auto",
+      "batch_size": 16,
+      "max_length": 512,
+      "min_score": 0.1
+    },
+    "llm": {
+      "provider": "ollama",
+      "base_url": "http://127.0.0.1:11434",
+      "model": "qwen2.5:14b",
+      "allow_remote": false,
+      "think": null,
+      "context_window": 8192,
+      "max_answer_tokens": 800,
+      "temperature": 0.0,
+      "seed": 42,
+      "timeout_s": 300.0
+    },
+    "citations": {
+      "min_support": 0.3
+    },
+    "web": {
+      "host": "127.0.0.1",
+      "port": 8000,
+      "max_upload_mb": 100
+    }
+  },
+  "judge_model": "ollama:qwen2.5:14b",
+  "ingest": {
+    "documents": 6,
+    "pages": 130,
+    "chunks": 372,
+    "seconds": null,
+    "seconds_per_page": null
+  },
+  "questions": [
+    {
+      "id": "cost-01",
+      "question": "Su che cosa è fondata la Repubblica italiana?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 17.419,
+      "top_score": 0.9647,
+      "answer": "La Repubblica italiana è fondata sul lavoro [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 4,
+          "passage": "L’Italia è una Repubblica democratica, fondata sul lavoro.",
+          "claim": "La Repubblica italiana è fondata sul lavoro."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 54.864
+    },
+    {
+      "id": "cost-02",
+      "question": "A chi appartiene la sovranità secondo la Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.561,
+      "top_score": 0.9757,
+      "answer": "La sovranità appartiene al popolo, che la esercita nelle forme e nei limiti della Costituzione [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 4,
+          "passage": "La sovranità appartiene al popolo, che la esercita nelle forme e nei limiti della Costituzione.",
+          "claim": "La sovranità appartiene al popolo, che la esercita nelle forme e nei limiti della Costituzione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 6.986
+    },
+    {
+      "id": "cost-03",
+      "question": "Quando è ammessa la restrizione della libertà personale?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.543,
+      "top_score": 0.9255,
+      "answer": "La restrizione della libertà personale è ammessa solo per atto motivato dell'autorità giudiziaria e nei soli casi e modi previsti dalla legge [1]. In casi eccezionali di necessità ed urgenza, indicati tassativamente dalla legge, l'autorità di pubblica sicurezza può adottare provvedimenti provvisori, che devono essere comunicati entro quarantotto ore all'autorità giudiziaria, che li deve convalidare nelle successive quarantotto ore, altrimenti si intendono revocati e restano privi di ogni effetto [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 7,
+          "passage": "Non è ammessa forma alcuna di detenzione, di ispezione o perquisizione personale, né qualsiasi altra restrizione della libertà personale, se non per atto motivato dell’autorità giudiziaria e nei soli casi e modi previsti dalla legge.",
+          "claim": "La restrizione della libertà personale è ammessa solo per atto motivato dell'autorità giudiziaria e nei soli casi e modi previsti dalla legge."
+        },
+        {
+          "doc": "costituzione",
+          "page": 7,
+          "passage": "In casi eccezionali di necessità ed urgenza, indicati tassativamente dalla legge, l’autorità di pubblica sicurezza può adottare provvedimenti provvisori, che devono essere comunicati entro quarantotto ore all’autorità giudiziaria e, se questa non li convalida nelle successive quarantotto ore, si intendono revocati e restano privi di ogni effetto.",
+          "claim": "In casi eccezionali di necessità ed urgenza, indicati tassativamente dalla legge, l'autorità di pubblica sicurezza può adottare provvedimenti provvisori, che devono essere comunicati entro quarantotto ore all'autorità giudiziaria, che li deve convalidare nelle successive quarantotto ore, altrimenti si intendono revocati e restano privi di ogni effetto."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.75,
+      "correct": 1.0,
+      "generation_s": 25.749
+    },
+    {
+      "id": "cost-04",
+      "question": "Qual è la posizione dell'Italia nei confronti della guerra?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.71,
+      "top_score": 0.9644,
+      "answer": "L'Italia ripudia la guerra come strumento di offesa alla libertà degli altri popoli e come mezzo di risoluzione delle controversie internazionali [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 6,
+          "passage": "L’Italia ripudia la guerra come strumento di offesa alla libertà degli altri popoli e come mezzo di risoluzione delle controversie internazionali; consente, in condizioni di parità con gli altri Stati, alle limitazioni di sovranità necessarie ad un ordinamento che assicuri la pace e la giustizia fra le Nazioni; promuove e favorisce le organizzazioni internazionali rivolte a tale scopo.",
+          "claim": "L'Italia ripudia la guerra come strumento di offesa alla libertà degli altri popoli e come mezzo di risoluzione delle controversie internazionali."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.753
+    },
+    {
+      "id": "cost-05",
+      "question": "Com'è fatta la bandiera della Repubblica?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.221,
+      "top_score": 0.9697,
+      "answer": "La bandiera della Repubblica Italiana è il tricolore italiano: verde, bianco e rosso, a tre bande verticali di eguali dimensioni [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 6,
+          "passage": "La bandiera della Repubblica è il tricolore italiano: verde, bianco e rosso, a tre bande verticali di eguali dimensioni.",
+          "claim": "La bandiera della Repubblica Italiana è il tricolore italiano: verde, bianco e rosso, a tre bande verticali di eguali dimensioni."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 4.24
+    },
+    {
+      "id": "cost-06",
+      "question": "Un lavoratore può rinunciare alle ferie annuali?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.734,
+      "top_score": 0.9771,
+      "answer": "Secondo l'articolo 36 della Costituzione della Repubblica Italiana, il lavoratore ha diritto a ferie annuali retribuite e non può rinunciarvi [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 12,
+          "passage": "Il lavoratore ha diritto al riposo settimanale e a ferie annuali retribuite, e non può rinunziarvi.",
+          "claim": "Secondo l'articolo 36 della Costituzione della Repubblica Italiana, il lavoratore ha diritto a ferie annuali retribuite e non può rinunciarvi."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.0,
+      "correct": 1.0,
+      "generation_s": 9.591
+    },
+    {
+      "id": "cost-07",
+      "question": "Votare è un obbligo secondo la Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.741,
+      "top_score": 0.6594,
+      "answer": "Sì, votare è considerato un dovere civico secondo la Costituzione [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 15,
+          "passage": "Il suo esercizio è dovere civico.",
+          "claim": "Sì, votare è considerato un dovere civico secondo la Costituzione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 0.5,
+      "generation_s": 8.512
+    },
+    {
+      "id": "cost-08",
+      "question": "Quanti sono i deputati e quanti di loro sono eletti all'estero?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.7,
+      "top_score": 0.9915,
+      "answer": "Il numero totale dei deputati è di seicentotrenta, di cui dodici sono eletti nella circoscrizione Estero [2][3].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 51,
+          "passage": "Il numero dei deputati è di seicentotrenta dodici dei quali eletti nella circoscrizione Estero.",
+          "claim": "Il numero totale dei deputati è di seicentotrenta, di cui dodici sono eletti nella circoscrizione Estero."
+        },
+        {
+          "doc": "costituzione",
+          "page": 51,
+          "passage": "Il numero dei deputati è di seicentotrenta dodici dei quali eletti nella circoscrizione Estero.",
+          "claim": "Il numero totale dei deputati è di seicentotrenta, di cui dodici sono eletti nella circoscrizione Estero."
+        }
+      ],
+      "page_precision": 0.0,
+      "cites_evidence": false,
+      "grounded": 1.0,
+      "correct": 0.0,
+      "generation_s": 11.861
+    },
+    {
+      "id": "cost-09",
+      "question": "Quanti anni bisogna avere per essere eletti Presidente della Repubblica e quanto dura il mandato?",
+      "answerable": true,
+      "tags": [
+        "normativa",
+        "multi-passaggio"
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "candidate_ranks": [
+        3,
+        2
+      ],
+      "retrieval_s": 0.813,
+      "top_score": 0.9903,
+      "answer": "Per essere eletti Presidente della Repubblica bisogna avere compiuti cinquanta anni [2]. Il mandato del Presidente della Repubblica dura sette anni [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 24,
+          "passage": "Il Presidente della Repubblica è eletto per sette anni.",
+          "claim": "Il mandato del Presidente della Repubblica dura sette anni."
+        },
+        {
+          "doc": "costituzione",
+          "page": 24,
+          "passage": "Può essere eletto Presidente della Repubblica ogni cittadino che abbia compiuto cinquanta anni d’età e goda dei diritti civili e politici.",
+          "claim": "Per essere eletti Presidente della Repubblica bisogna avere compiuti cinquanta anni."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 11.088
+    },
+    {
+      "id": "cost-10",
+      "question": "Chi nomina il Presidente del Consiglio dei ministri?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.648,
+      "top_score": 0.9957,
+      "answer": "Il Presidente della Repubblica nomina il Presidente del Consiglio dei ministri [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 26,
+          "passage": "Il Presidente della Repubblica nomina il Presidente del Consiglio dei ministri e, su proposta di questo, i ministri.",
+          "claim": "Il Presidente della Repubblica nomina il Presidente del Consiglio dei ministri."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.66
+    },
+    {
+      "id": "cost-11",
+      "question": "Da quanti giudici è composta la Corte costituzionale e chi li nomina?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.843,
+      "top_score": 0.9998,
+      "answer": "La Corte costituzionale è composta di quindici giudici [1][2]. Questi giudici sono nominati per un terzo dal Presidente della Repubblica, per un terzo dal Parlamento in seduta comune e per un terzo dalle supreme magistrature ordinaria ed amministrative [1][2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 42,
+          "passage": "La Corte costituzionale è composta di quindici giudici nominati per un terzo dal Presidente della Repubblica, per un terzo dal Parlamento in seduta comune e per un terzo dalle supreme magistrature ordinaria ed amministrative.",
+          "claim": "La Corte costituzionale è composta di quindici giudici."
+        },
+        {
+          "doc": "costituzione",
+          "page": 60,
+          "passage": "«La Corte costituzionale è composta di quindicigiudici nominati per un terzo dal Presidente della Repubblica, per un terzo dal Parlamentoin seduta comune e per un terzo dalle supreme magistratureordinaria e amministrative.\n\nI giudici della Corte costituzionale sonoscelti tra i magistrati anche a riposo dellegiurisdizioni superiori ordinaria ed amministrative, i professori ordinari di università in materie giuridiche e gli avvocati dopoventi anni d’esercizio.",
+          "claim": "La Corte costituzionale è composta di quindici giudici."
+        },
+        {
+          "doc": "costituzione",
+          "page": 60,
+          "passage": "«La Corte costituzionale è composta di quindicigiudici nominati per un terzo dal Presidente della Repubblica, per un terzo dal Parlamentoin seduta comune e per un terzo dalle supreme magistratureordinaria e amministrative.",
+          "claim": "Questi giudici sono nominati per un terzo dal Presidente della Repubblica, per un terzo dal Parlamento in seduta comune e per un terzo dalle supreme magistrature ordinaria ed amministrative."
+        }
+      ],
+      "page_precision": 0.3333333333333333,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 17.15
+    },
+    {
+      "id": "cost-12",
+      "question": "Si può cambiare la forma repubblicana con una revisione della Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.826,
+      "top_score": 0.9891,
+      "answer": "No, la forma repubblicana non può essere oggetto di revisione costituzionale [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 44,
+          "passage": "La forma repubblicana non può essere oggetto di revisione costituzionale.",
+          "claim": "No, la forma repubblicana non può essere oggetto di revisione costituzionale."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 9.615
+    },
+    {
+      "id": "cost-13",
+      "question": "Come vengono approvate le leggi di revisione della Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.824,
+      "top_score": 0.9993,
+      "answer": "Le leggi di revisione della Costituzione sono adottate da ciascuna Camera con due successive deliberazioni ad intervallo non minore di tre mesi, e sono approvate a maggioranza assoluta dei componenti di ciascuna Camera nella seconda votazione [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 44,
+          "passage": "Le leggi di revisione della Costituzione e le altre leggi costituzionali sono adottate da ciascuna Camera con due successive deliberazioni ad intervallo non minore di tre mesi, e sono approvate a maggioranza assoluta dei componenti di ciascuna Camera nella seconda votazione.",
+          "claim": "Le leggi di revisione della Costituzione sono adottate da ciascuna Camera con due successive deliberazioni ad intervallo non minore di tre mesi, e sono approvate a maggioranza assoluta dei componenti di ciascuna Camera nella seconda votazione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 16.554
+    },
+    {
+      "id": "cost-14",
+      "question": "Chi diventa senatore di diritto e a vita?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.195,
+      "top_score": 0.9933,
+      "answer": "Chi è stato Presidente della Repubblica diventa senatore di diritto e a vita, salvo rinunzia [1]. Inoltre, il Presidente della Repubblica può nominare senatori a vita cittadini che hanno illustrato la Patria per altissimi meriti nel campo sociale, scientifico, artistico e letterario, ma il numero complessivo di senatori in carica nominati dal Presidente non può superare cinque [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 18,
+          "passage": "È senatore di diritto e a vita, salvo rinunzia, chi è stato Presidente della Repubblica.",
+          "claim": "Chi è stato Presidente della Repubblica diventa senatore di diritto e a vita, salvo rinunzia."
+        },
+        {
+          "doc": "costituzione",
+          "page": 18,
+          "passage": "Il Presidente della Repubblica può nominare senatori a vita cittadini che hanno illustrato la Patria per altissimi meriti nel campo sociale, scientifico, artistico e letterario.Il numero complessivo deisenatori in carica nominati dal Presidente della Repubblica non può in alcun caso essere superiore a cinque.",
+          "claim": "Inoltre, il Presidente della Repubblica può nominare senatori a vita cittadini che hanno illustrato la Patria per altissimi meriti nel campo sociale, scientifico, artistico e letterario, ma il numero complessivo di senatori in carica nominati dal Presidente non può superare cinque."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 0.5,
+      "generation_s": 25.635
+    },
+    {
+      "id": "istat-01",
+      "question": "Qual è il tasso di disoccupazione in Italia a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        4
+      ],
+      "retrieval_s": 0.888,
+      "top_score": 0.9999,
+      "answer": "Il tasso di disoccupazione in Italia a luglio 2026 è del 5,8% [1][2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 1,
+          "passage": "Il tasso di disoccupazione scende al 5,8% (-0,1 punti), mentre quello giovanile sale al 18,9% (+0,2 punti).",
+          "claim": "Il tasso di disoccupazione in Italia a luglio 2026 è del 5,8%."
+        },
+        {
+          "doc": "istat",
+          "page": 3,
+          "passage": "Tasso di occupazione 15-64 anni 63,2 0,0 +0,2 +0,8 Tasso di disoccupazione 5,8 -0,1 +0,2 -0,1 Tasso di inattività 15-64 anni 32,8 0,0 -0,4 -0,7 A luglio 2026, rispetto al mese precedente, l’occupazione aumenta di 0,2 punti per gli uomini e cala di 0,1 punti per le donne; la disoccupazione diminuisce tra i primi (-0,2 punti) e cresce tra le seconde (+0,1 punti), mentre l’inattività cala di 0,1 punti tra gli uomini e rimane stabile tra le donne.",
+          "claim": "Il tasso di disoccupazione in Italia a luglio 2026 è del 5,8%."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 12.905
+    },
+    {
+      "id": "istat-02",
+      "question": "Qual è il tasso di disoccupazione giovanile a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.962,
+      "top_score": 0.9999,
+      "answer": "Il tasso di disoccupazione giovanile a luglio 2026 è del 18,9% [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 1,
+          "passage": "Il tasso di disoccupazione scende al 5,8% (-0,1 punti), mentre quello giovanile sale al 18,9% (+0,2 punti).",
+          "claim": "Il tasso di disoccupazione giovanile a luglio 2026 è del 18,9%."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 0.5,
+      "generation_s": 5.55
+    },
+    {
+      "id": "istat-03",
+      "question": "Quanti sono gli occupati in Italia a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.649,
+      "top_score": 1.0,
+      "answer": "A luglio 2026, il numero degli occupati in Italia è di 24 milioni 370mila [1][3].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 1,
+          "passage": "Il commento A luglio 2026 il numero di occupati, pari a 24 milioni 370mila, è stabile rispetto al mese precedente.",
+          "claim": "A luglio 2026, il numero degli occupati in Italia è di 24 milioni 370mila."
+        },
+        {
+          "doc": "istat",
+          "page": 4,
+          "passage": "- a termine 2.486 -64 -2,5 -15 -0,6 -82 -3,2 Indipendenti 5.301 +13 +0,2 -10 -0,2 +85 +1,6 A luglio 2026, la stabilità congiunturale del numero di occupati è sintesi dell’aumento dei dipendenti permanenti (+0,3%) e degli indipendenti (+0,2%) e del calo dei dipendenti a termine (-2,5%).",
+          "claim": "A luglio 2026, il numero degli occupati in Italia è di 24 milioni 370mila."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 17.631
+    },
+    {
+      "id": "istat-04",
+      "question": "Di quanto sono cresciuti gli occupati rispetto a luglio 2025?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.9,
+      "top_score": 0.9999,
+      "answer": "Gli occupati sono cresciuti di 307mila unità rispetto a luglio 2025 [1][2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 1,
+          "passage": "A luglio 2026, la crescita del numero di occupati rispetto a luglio 2025 (+1,3%, +307mila unità) interessa gli uomini, le donne, i 25-34enni e coloro che hanno almeno 50 anni; tra i 15-24enni e i 35-49enni, invece, gli occupati diminuiscono.",
+          "claim": "Gli occupati sono cresciuti di 307mila unità rispetto a luglio 2025."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 13.26
+    },
+    {
+      "id": "istat-05",
+      "question": "Quanti erano i disoccupati maschi a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        6
+      ],
+      "candidate_ranks": [
+        18
+      ],
+      "retrieval_s": 0.373,
+      "top_score": 0.9997,
+      "answer": "A luglio 2026, il numero di disoccupati maschi era di 761 [6].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 3,
+          "passage": "Occupati 13.981 +19 +0,1 +61 +0,4 +145 +1,0 Disoccupati 761 -33 -4,2 +17 +2,2 -29 -3,7 Inattivi 15-64 anni 4.499 -17 -0,4 -69 -1,5 -93 -2,0",
+          "claim": "A luglio 2026, il numero di disoccupati maschi era di 761."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.0,
+      "correct": 1.0,
+      "generation_s": 7.239
+    },
+    {
+      "id": "istat-06",
+      "question": "Qual è il tasso di occupazione 15-64 anni delle donne a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.748,
+      "top_score": 0.9999,
+      "answer": "Il tasso di occupazione 15-64 anni delle donne a luglio 2026 è del 54,5% [1][6].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 3,
+          "passage": "Tasso di occupazione 15-64 anni 63,2 0,0 +0,2 +0,8 Tasso di disoccupazione 5,8 -0,1 +0,2 -0,1 Tasso di inattività 15-64 anni 32,8 0,0 -0,4 -0,7 A luglio 2026, rispetto al mese precedente, l’occupazione aumenta di 0,2 punti per gli uomini e cala di 0,1 punti per le donne; la disoccupazione diminuisce tra i primi (-0,2 punti) e cresce tra le seconde (+0,1 punti), mentre l’inattività cala di 0,1 punti tra gli uomini e rimane stabile tra le donne.",
+          "claim": "Il tasso di occupazione 15-64 anni delle donne a luglio 2026 è del 54,5%."
+        },
+        {
+          "doc": "istat",
+          "page": 3,
+          "passage": "Tasso di occupazione 15-64 anni 54,5 -0,1 +0,2 +0,9 Tasso di disoccupazione 6,6 +0,1 +0,3 0,0 Tasso di inattività15-64 anni 41,6 0,0 -0,4 -1,0",
+          "claim": "Il tasso di occupazione 15-64 anni delle donne a luglio 2026 è del 54,5%."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.787
+    },
+    {
+      "id": "istat-07",
+      "question": "Quanti sono gli occupati con 50 anni e più a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        4
+      ],
+      "candidate_ranks": [
+        5
+      ],
+      "retrieval_s": 0.68,
+      "top_score": 0.9996,
+      "answer": "A luglio 2026, gli occupati con 50 anni e più sono 10.455 [4].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 4,
+          "passage": "Occupati 10.455 -6 -0,1 +75 +0,7 +364 +3,6 Disoccupati 357 -6 -1,5 +6 +1,9 -12 -3,2 Inattivi 17.729 +34 +0,2 -6 0,0 -28 -0,2 Inattivi 50-64 anni 4.158 +24 +0,6 -42 -1,0 -172 -4,0",
+          "claim": "A luglio 2026, gli occupati con 50 anni e più sono 10.455."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 5.8
+    },
+    {
+      "id": "agid-01",
+      "question": "Quali sono le fasi principali della gestione documentale?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.712,
+      "top_score": 0.9995,
+      "answer": "La gestione documentale può essere suddivisa in tre fasi principali: formazione, gestione e conservazione [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 10,
+          "passage": "Principi generali della gestione documentale La gestione documentale è un processo che può essere suddiviso in tre fasi principali: formazione, gestione e conservazione.",
+          "claim": "La gestione documentale può essere suddivisa in tre fasi principali: formazione, gestione e conservazione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.731
+    },
+    {
+      "id": "agid-02",
+      "question": "Le linee guida dell'AgID sono vincolanti?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.585,
+      "top_score": 0.9979,
+      "answer": "Sì, le Linee Guida dell'AgID hanno carattere vincolante e assumono valenza erga omnes [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 10,
+          "passage": "Natura vincolante delle Linee Guida Come precisato dal Consiglio di Stato - nell’ambito del parere reso sullo schema di decreto legislativo del correttivo al CAD, n. 2122/2017 del 10.10.2017 - le Linee Guida adottate da AGID, ai sensi dell’art. 71 del CAD, hanno carattere vincolante e assumono valenza erga omnes.",
+          "claim": "Sì, le Linee Guida dell'AgID hanno carattere vincolante e assumono valenza erga omnes."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.048
+    },
+    {
+      "id": "agid-03",
+      "question": "Che differenza c'è tra un duplicato informatico e una copia di un documento informatico?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "multi-passaggio"
+      ],
+      "ranks": [
+        1,
+        1
+      ],
+      "candidate_ranks": [
+        1,
+        1
+      ],
+      "retrieval_s": 0.707,
+      "top_score": 0.9973,
+      "answer": "Un duplicato informatico ha lo stesso valore giuridico del documento informatico da cui è tratto se è ottenuto mediante la memorizzazione della medesima evidenza informatica, sullo stesso dispositivo o su dispositivi diversi [1]. Invece, la copia di un documento informatico è un documento il cui contenuto è il medesimo dell’originale ma con una diversa evidenza informatica rispetto al documento da cui è tratto, come quando si trasforma un documento con estensione “.doc” in un documento “.pdf” [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 15,
+          "passage": "Duplicati, copie ed estratti informatici di documenti informatici Un duplicato informatico ha lo stesso valore giuridico del documento informatico da cui è tratto se è ottenuto mediante la memorizzazione della medesima evidenza informatica, sullo stesso dispositivo o su dispositivi diversi; ad esempio, effettuando una copia da un PC ad una pen-drive di un documento nel medesimo formato.",
+          "claim": "Un duplicato informatico ha lo stesso valore giuridico del documento informatico da cui è tratto se è ottenuto mediante la memorizzazione della medesima evidenza informatica, sullo stesso dispositivo o su dispositivi diversi."
+        },
+        {
+          "doc": "agid",
+          "page": 15,
+          "passage": "La copia di un documento informatico è un documento il cui contenuto è il medesimo dell’originale ma con una diversa evidenza informatica rispetto al documento da cui è tratto, come quando si trasforma un documento con estensione “.doc” in un documento “.pdf”.",
+          "claim": "Invece, la copia di un documento informatico è un documento il cui contenuto è il medesimo dell’originale ma con una diversa evidenza informatica rispetto al documento da cui è tratto, come quando si trasforma un documento con estensione “.doc” in un documento “.pdf”."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 25.956
+    },
+    {
+      "id": "agid-04",
+      "question": "Quando un documento informatico è immodificabile?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.786,
+      "top_score": 0.9973,
+      "answer": "Un documento informatico è immodificabile quando la sua memorizzazione su supporto informatico in formato digitale non può essere alterata nel suo accesso, gestione e conservazione [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 13,
+          "passage": "Il documento informatico è immodificabile se la sua memorizzazione su supporto informatico in formato digitale non può essere alterata nel suo accesso, gestione e conservazione.",
+          "claim": "Un documento informatico è immodificabile quando la sua memorizzazione su supporto informatico in formato digitale non può essere alterata nel suo accesso, gestione e conservazione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 12.46
+    },
+    {
+      "id": "agid-05",
+      "question": "Chi devono nominare le pubbliche amministrazioni in ciascuna area organizzativa omogenea?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.729,
+      "top_score": 0.9654,
+      "answer": "Le Pubbliche Amministrazioni devono nominare, in ciascuna delle aree organizzative omogenee (AOO), il responsabile della gestione documentale e un suo vicario, in possesso di idonee competenze giuridiche, informatiche ed archivistiche [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 18,
+          "passage": "B. nominare, in ciascuna delle AOO, il responsabile della gestione documentale e un suo vicario, in possesso di idonee competenze giuridiche, informatiche ed archivistiche;",
+          "claim": "Le Pubbliche Amministrazioni devono nominare, in ciascuna delle aree organizzative omogenee (AOO), il responsabile della gestione documentale e un suo vicario, in possesso di idonee competenze giuridiche, informatiche ed archivistiche."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 17.523
+    },
+    {
+      "id": "agid-06",
+      "question": "Come deve essere identificato un documento informatico?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.786,
+      "top_score": 0.9974,
+      "answer": "Un documento informatico deve essere identificato in modo univoco e persistente. Nel caso della Pubblica Amministrazione, l'identificazione dei documenti oggetto di registrazione di protocollo è rappresentata dalla segnatura di protocollo univocamente associata al documento [1]. Per i documenti non protocollati, l'identificazione univoca è affidata alle funzioni del sistema di gestione informatica dei documenti [1]. In alternativa, l'identificazione univoca può essere realizzata mediante associazione al documento di una sua impronta crittografica basata su funzioni di hash che siano ritenute crittograficamente sicure [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 12,
+          "passage": "Nel caso della Pubblica Amministrazione7 , l’identificazione dei documenti oggetto di registrazione di protocollo è rappresentata dalla segnatura di protocollo univocamente associata al documento.",
+          "claim": "Nel caso della Pubblica Amministrazione, l'identificazione dei documenti oggetto di registrazione di protocollo è rappresentata dalla segnatura di protocollo univocamente associata al documento."
+        },
+        {
+          "doc": "agid",
+          "page": 12,
+          "passage": "L’identificazione dei documenti non protocollati è affidata alle funzioni del sistema di gestione informatica dei documenti.",
+          "claim": "Per i documenti non protocollati, l'identificazione univoca è affidata alle funzioni del sistema di gestione informatica dei documenti."
+        },
+        {
+          "doc": "agid",
+          "page": 12,
+          "passage": "In alternativa l’identificazione univoca può essere realizzata mediante associazione al documento di una sua impronta crittografica basata su funzioni di hash che siano ritenute crittograficamente sicure, e conformi alle tipologie di algoritmi previsti nell’allegato 6 delle linee guida nella tabella 1 del paragrafo 2.2 regole di processamento.",
+          "claim": "In alternativa, l'identificazione univoca può essere realizzata mediante associazione al documento di una sua impronta crittografica basata su funzioni di hash che siano ritenute crittograficamente sicure."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": false,
+      "grounded": 0.75,
+      "correct": 1.0,
+      "generation_s": 30.765
+    },
+    {
+      "id": "contratto-01",
+      "question": "A quanto ammonta la rata mensile del canone di locazione?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.944,
+      "top_score": 0.9372,
+      "answer": "La rata mensile del canone di locazione ammonta a euro 800,00 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 2,
+          "passage": "Il canone annuo è convenuto in euro 9.600,00 (novemilaseicento/00), da corrispondere in dodici rate mensili anticipate di euro 800,00 ciascuna, entro il giorno 5 di ogni mese, mediante bonifico bancario sul conto corrente indicato dal locatore.",
+          "claim": "La rata mensile del canone di locazione ammonta a euro 800,00."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 8.827
+    },
+    {
+      "id": "contratto-02",
+      "question": "Quanto dura il contratto di locazione e da quando decorre?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.743,
+      "top_score": 0.992,
+      "answer": "Il contratto di locazione ha una durata di quattro anni, con decorrenza dal 1° febbraio 2026 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 1,
+          "passage": "La locazione ha durata di quattro anni, con decorrenza dal 1° febbraio 2026, e si rinnova automaticamente per ulteriori quattro anni, salvo disdetta da comunicare con lettera raccomandata almeno sei mesi prima della scadenza.",
+          "claim": "Il contratto di locazione ha una durata di quattro anni, con decorrenza dal 1° febbraio 2026."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.574
+    },
+    {
+      "id": "contratto-03",
+      "question": "A quanto ammonta il deposito cauzionale?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.939,
+      "top_score": 0.7912,
+      "answer": "Il deposito cauzionale ammonta a tre mensilità del canone [1]. In base all'articolo 3 del contratto di locazione, il canone mensile è di 800,00 euro [3]. Quindi, il deposito cauzionale è di 2400,00 euro.",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 2,
+          "passage": "A garanzia delle obbligazioni assunte, il conduttore versa al locatore un deposito cauzionale pari a tre mensilità del canone, produttivo di interessi legali, che sarà restituito al termine della locazione previa verifica dello stato dell'immobile.",
+          "claim": "Il deposito cauzionale ammonta a tre mensilità del canone."
+        },
+        {
+          "doc": "contratto",
+          "page": 2,
+          "passage": "Il canone annuo è convenuto in euro 9.600,00 (novemilaseicento/00), da corrispondere in dodici rate mensili anticipate di euro 800,00 ciascuna, entro il giorno 5 di ogni mese, mediante bonifico bancario sul conto corrente indicato dal locatore.",
+          "claim": "In base all'articolo 3 del contratto di locazione, il canone mensile è di 800,00 euro."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 19.045
+    },
+    {
+      "id": "contratto-04",
+      "question": "Quanto paga il conduttore ogni mese in acconto per la pulizia delle scale e l'ascensore?",
+      "answerable": true,
+      "tags": [
+        "contratto",
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.788,
+      "top_score": 0.991,
+      "answer": "Il conduttore paga ogni mese in acconto euro 25,00 per la pulizia delle scale e dell'ascensore [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 2,
+          "passage": "Voce Acconto mensile Riscaldamento euro 60,00 Acqua euro 20,00 Pulizia scale e ascensore euro 25,00",
+          "claim": "Il conduttore paga ogni mese in acconto euro 25,00 per la pulizia delle scale e dell'ascensore."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.298
+    },
+    {
+      "id": "contratto-05",
+      "question": "Chi paga la sostituzione della caldaia nell'appartamento in affitto?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.646,
+      "top_score": 0.9188,
+      "answer": "La sostituzione della caldaia nell'appartamento in affitto è a carico del locatore [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 3,
+          "passage": "Le riparazioni di piccola manutenzione sono a carico del conduttore; quelle straordinarie, compresa la sostituzione della caldaia, restano a carico del locatore.",
+          "claim": "La sostituzione della caldaia nell'appartamento in affitto è a carico del locatore."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 5.613
+    },
+    {
+      "id": "contratto-06",
+      "question": "Si possono tenere animali domestici nell'appartamento?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.526,
+      "top_score": 0.9424,
+      "answer": "Sì, è consentita la detenzione di animali domestici di piccola taglia nell'appartamento, a condizione che non arrechino disturbo agli altri condomini né danni all'immobile [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 3,
+          "passage": "È consentita la detenzione di animali domestici di piccola taglia, purché non arrechino disturbo agli altri condomini né danni all'immobile.",
+          "claim": "Sì, è consentita la detenzione di animali domestici di piccola taglia nell'appartamento, a condizione che non arrechino disturbo agli altri condomini né danni all'immobile."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 11.205
+    },
+    {
+      "id": "contratto-07",
+      "question": "Come viene aggiornato il canone ogni anno?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.996,
+      "top_score": 0.9649,
+      "answer": "Il canone annuo viene aggiornato ogni anno nella misura del 75% della variazione dell'indice ISTAT dei prezzi al consumo per le famiglie di operai e impiegati [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 2,
+          "passage": "Il canone è aggiornato ogni anno nella misura del 75% della variazione dell'indice ISTAT dei prezzi al consumo per le famiglie di operai e impiegati.",
+          "claim": "Il canone annuo viene aggiornato ogni anno nella misura del 75% della variazione dell'indice ISTAT dei prezzi al consumo per le famiglie di operai e impiegati."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 12.577
+    },
+    {
+      "id": "verbale-01",
+      "question": "Chi ha presieduto l'assemblea condominiale del 14 marzo 2026?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.921,
+      "top_score": 0.9925,
+      "answer": "La presidente dell'assemblea condominiale del 14 marzo 2026 è la sig.ra Laura Ferri [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 1,
+          "passage": "L'assemblea nomina presidente la sig.ra Laura Ferri e segretario il sig. Paolo Rinaldi.",
+          "claim": "La presidente dell'assemblea condominiale del 14 marzo 2026 è la sig.ra Laura Ferri."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 13.4
+    },
+    {
+      "id": "verbale-02",
+      "question": "Quale preventivo è stato approvato per il rifacimento della facciata e per quale importo?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.766,
+      "top_score": 0.9973,
+      "answer": "Il preventivo approvato per il rifacimento della facciata è quello della ditta Costruzioni Delta S.r.l., per un importo di euro 92.000,00 oltre IVA [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 2,
+          "passage": "Preventivo Importo Voti favorevoli Millesimi favorevoli Edil Rossi S.n.c. euro 86.400,00 3 140 Costruzioni Delta S.r.l. euro 92.000,00 10 512 Bianchi Restauri euro 97.500,00 1 60 Risulta approvato il preventivo della ditta Costruzioni Delta S.r.l., per un importo di euro 92.000,00 oltre IVA.",
+          "claim": "Il preventivo approvato per il rifacimento della facciata è quello della ditta Costruzioni Delta S.r.l., per un importo di euro 92.000,00 oltre IVA."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 13.433
+    },
+    {
+      "id": "verbale-03",
+      "question": "Quanti millesimi hanno votato a favore del preventivo di Costruzioni Delta?",
+      "answerable": true,
+      "tags": [
+        "verbale",
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.795,
+      "top_score": 0.9676,
+      "answer": "I millesimi che hanno votato a favore del preventivo di Costruzioni Delta S.r.l. sono 512 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 2,
+          "passage": "Preventivo Importo Voti favorevoli Millesimi favorevoli Edil Rossi S.n.c. euro 86.400,00 3 140 Costruzioni Delta S.r.l. euro 92.000,00 10 512 Bianchi Restauri euro 97.500,00 1 60 Risulta approvato il preventivo della ditta Costruzioni Delta S.r.l., per un importo di euro 92.000,00 oltre IVA.",
+          "claim": "I millesimi che hanno votato a favore del preventivo di Costruzioni Delta S.r.l. sono 512."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.353
+    },
+    {
+      "id": "verbale-04",
+      "question": "A quanto ammonta il bilancio preventivo 2026 del condominio?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.704,
+      "top_score": 0.9885,
+      "answer": "Il bilancio preventivo 2026 del condominio ammonta a euro 51.000,00 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 2,
+          "passage": "Punto 2 - Bilancio preventivo 2026 L'assemblea approva il bilancio preventivo 2026 per un importo complessivo di euro 51.000,00, da ripartire in quattro rate trimestrali con scadenza il 31 marzo, il 30 giugno, il 30 settembre e il 31 dicembre 2026.",
+          "claim": "Il bilancio preventivo 2026 del condominio ammonta a euro 51.000,00."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 6.971
+    },
+    {
+      "id": "verbale-05",
+      "question": "Quale problema è stato segnalato tra le varie ed eventuali?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.93,
+      "top_score": 0.2828,
+      "answer": "Il condomino Giorgio Neri ha segnalato infiltrazioni d'acqua nel locale cantine [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 3,
+          "passage": "Punto 4 - Varie ed eventuali Il condomino Giorgio Neri segnala infiltrazioni d'acqua nel locale cantine.",
+          "claim": "Il condomino Giorgio Neri ha segnalato infiltrazioni d'acqua nel locale cantine."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 8.838
+    },
+    {
+      "id": "verbale-06",
+      "question": "Quanti condomini erano presenti all'assemblea?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.921,
+      "top_score": 0.9219,
+      "answer": "Sono presenti, in proprio o per delega, 14 condomini su 20 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 1,
+          "passage": "Sono presenti, in proprio o per delega, 14 condomini su 20, per complessivi 712 millesimi.",
+          "claim": "Sono presenti, in proprio o per delega, 14 condomini su 20."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.421
+    },
+    {
+      "id": "manuale-01",
+      "question": "Cosa significa il codice di errore E04 della caldaia e cosa bisogna fare?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.759,
+      "top_score": 0.5598,
+      "answer": "Il codice di errore E04 indica una pressione dell'impianto insufficiente. Per risolvere la situazione, è necessario ripristinare la pressione a 1,2 bar tramite il rubinetto di carico [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 2,
+          "passage": "Cod ice Significato Intervento E01 Mancata accensione del bruciatore Verificare che il rubinetto del gas sia aperto e premere il tasto reset E02 Intervento del termostato di sicurezza Attendere il raffreddamento e premere il tasto reset E04 Pressione dell'impianto insufficiente Ripristinare la pressione a 1,2 bar tramite il rubinetto di carico E10 Sonda di mandata guasta Chiamare l'assistenza tecnica E35 Fiamma parassita Chiamare l'assistenza tecnica Se lo stesso codice si ripresenta più di tre volte in 24 ore, spegnere la caldaia e contattare l'assistenza tecnica.",
+          "claim": "Per risolvere la situazione, è necessario ripristinare la pressione a 1,2 bar tramite il rubinetto di carico."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 11.404
+    },
+    {
+      "id": "manuale-02",
+      "question": "Ogni quanto va fatta la manutenzione ordinaria della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.583,
+      "top_score": 0.9826,
+      "answer": "La manutenzione ordinaria della caldaia deve essere eseguita almeno una volta all'anno da un tecnico abilitato [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 3,
+          "passage": "La manutenzione ordinaria deve essere eseguita almeno una volta all'anno da un tecnico abilitato, preferibilmente prima dell'inizio della stagione di riscaldamento.",
+          "claim": "La manutenzione ordinaria della caldaia deve essere eseguita almeno una volta all'anno da un tecnico abilitato."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.211
+    },
+    {
+      "id": "manuale-03",
+      "question": "Ogni quanto va eseguita l'analisi dei fumi della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.755,
+      "top_score": 0.9823,
+      "answer": "L'analisi dei fumi della caldaia deve essere eseguita ogni due anni [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 3,
+          "passage": "Il controllo dell'efficienza energetica con analisi dei fumi va eseguito ogni due anni e registrato nel libretto di impianto.\n\nLo scarico della condensa deve essere controllato a ogni manutenzione: un sifone ostruito può provocare il blocco della caldaia.",
+          "claim": "L'analisi dei fumi della caldaia deve essere eseguita ogni due anni."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 5.299
+    },
+    {
+      "id": "manuale-04",
+      "question": "Qual è la potenza termica nominale della caldaia Aurora T24?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.818,
+      "top_score": 0.9987,
+      "answer": "La potenza termica nominale della caldaia Aurora T24 è 24 kW [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 1,
+          "passage": "Parametro Valore Potenza termica nominale 24 kW Rendimento a pieno carico 97,8 % Pressione massima di esercizio 3 bar Temperatura massima acqua sanitaria 60 °C Alimentazione elettrica 230 V - 50 Hz",
+          "claim": "La potenza termica nominale della caldaia Aurora T24 è 24 kW."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 5.837
+    },
+    {
+      "id": "manuale-05",
+      "question": "Quale deve essere la pressione dell'impianto a caldaia fredda?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.73,
+      "top_score": 0.9947,
+      "answer": "La pressione dell'impianto, letta a caldaia fredda, deve essere compresa tra 1 e 1,5 bar [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 2,
+          "passage": "La pressione dell'impianto, letta a caldaia fredda, deve essere compresa tra 1 e 1,5 bar.",
+          "claim": "La pressione dell'impianto, letta a caldaia fredda, deve essere compresa tra 1 e 1,5 bar."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 7.984
+    },
+    {
+      "id": "manuale-06",
+      "question": "Quanto dura la garanzia della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.567,
+      "top_score": 0.989,
+      "answer": "La caldaia è coperta da garanzia di cinque anni dalla data della prima accensione [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 3,
+          "passage": "La caldaia è coperta da garanzia di cinque anni dalla data della prima accensione, a condizione che la manutenzione annuale sia stata eseguita regolarmente e documentata.",
+          "claim": "La caldaia è coperta da garanzia di cinque anni dalla data della prima accensione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 5.841
+    },
+    {
+      "id": "manuale-07",
+      "question": "Cosa bisogna fare se un codice di errore si ripresenta più volte?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.786,
+      "top_score": 0.6318,
+      "answer": "Se lo stesso codice di errore si ripresenta più di tre volte in 24 ore, è consigliato spegnere la caldaia e contattare l'assistenza tecnica [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 2,
+          "passage": "Cod ice Significato Intervento E01 Mancata accensione del bruciatore Verificare che il rubinetto del gas sia aperto e premere il tasto reset E02 Intervento del termostato di sicurezza Attendere il raffreddamento e premere il tasto reset E04 Pressione dell'impianto insufficiente Ripristinare la pressione a 1,2 bar tramite il rubinetto di carico E10 Sonda di mandata guasta Chiamare l'assistenza tecnica E35 Fiamma parassita Chiamare l'assistenza tecnica Se lo stesso codice si ripresenta più di tre volte in 24 ore, spegnere la caldaia e contattare l'assistenza tecnica.",
+          "claim": "Se lo stesso codice di errore si ripresenta più di tre volte in 24 ore, è consigliato spegnere la caldaia e contattare l'assistenza tecnica."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 11.096
+    },
+    {
+      "id": "nr-01",
+      "question": "Quanto dura il mandato del Presidente del Consiglio dei ministri?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.538,
+      "top_score": 0.1641,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 16.919
+    },
+    {
+      "id": "nr-02",
+      "question": "Qual è l'importo annuale del canone RAI?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 1.398,
+      "top_score": 0.1196,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 6.517
+    },
+    {
+      "id": "nr-03",
+      "question": "Il contratto di locazione include un posto auto o un garage?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.94,
+      "top_score": 0.0152,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-04",
+      "question": "Qual era il tasso di disoccupazione in Germania a luglio 2026?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.924,
+      "top_score": 0.9603,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 7.877
+    },
+    {
+      "id": "nr-05",
+      "question": "Come si chiama l'amministratore del condominio di via dei Tigli 12?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.707,
+      "top_score": 0.991,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 9.59
+    },
+    {
+      "id": "nr-06",
+      "question": "Quale codice di errore indica il surriscaldamento dei fumi nella caldaia Aurora T24?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.825,
+      "top_score": 0.9433,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 3.111
+    },
+    {
+      "id": "nr-07",
+      "question": "Qual è la sanzione per chi non va a votare?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.827,
+      "top_score": 0.032,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-08",
+      "question": "Quali requisiti servono per diventare giudice di pace?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.617,
+      "top_score": 0.0142,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-09",
+      "question": "Quanto costa la caldaia Aurora T24?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.765,
+      "top_score": 0.1074,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 2.715
+    },
+    {
+      "id": "nr-10",
+      "question": "Entro quando il conduttore deve pagare le spese condominiali straordinarie?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.492,
+      "top_score": 0.0986,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-11",
+      "question": "Chi ha vinto il campionato di calcio di Serie A nel 2025?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.964,
+      "top_score": 0.001,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-12",
+      "question": "Quanti sono i dipendenti pubblici in Italia?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.793,
+      "top_score": 0.487,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 5.342
+    }
+  ]
+}

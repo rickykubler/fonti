@@ -95,6 +95,25 @@ Main dataset, answering model qwen2.5:14b, judge qwen2.5:14b.
 | + Italian stemming (retrieval only) | 0.851 | 0.979 | 0.903 | | | | | |
 | + reranker, gate 0.1, refusal and citation fixes | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.96 | 0.92 | 0.96 |
 
+Answering models, with the same retrieval (bge-m3, reranker, gate), thinking off and the same
+judge (qwen2.5:14b):
+
+| Model (Ollama, Q4_K_M) | Correct refusals | False refusals | Cited pages | Cites evidence | Groundedness | Correctness | Generation p50 / p95 (s) |
+|---|---|---|---|---|---|---|---|
+| qwen2.5:14b | 1.00 | 0.00 | 0.96 | 0.96 | 0.89 | 0.95 | 7.9 / 25.7 |
+| **gemma4:12b** (default) | 1.00 | 0.02 | 0.97 | 1.00 | 0.91 | 0.98 | 3.5 / 7.3 |
+| qwen3.5:9b | 0.92 | 0.02 | 0.91 | 0.93 | 0.82 | 0.96 | 3.0 / 8.4 |
+
+gemma4:12b has the best groundedness and correctness, cites gold evidence in every answer and
+is the only model that answers cost-08 with the current text of Art. 56 (400 deputies) instead
+of the historical text quoted in the notes; like qwen3.5:9b, it refuses one answerable table
+question (istat-05). qwen3.5:9b also answers an unanswerable question with an evasive sentence,
+and its sentences are less often supported by their citations. The three runs ran while
+another application was using the GPU, so their latencies are higher than the earlier
+qwen2.5:14b run (p50 2.4 s) and are comparable only with each other. Thinking models need
+`llm.think = false` (the default): otherwise Ollama lets them reason before answering, which
+is slower and spends the answer's token budget (`llm.max_answer_tokens`).
+
 Retrieval ablations (retrieval only):
 
 | Variant | Recall@1 | Recall@5 | MRR@10 | Ingest (s, 130 pages, GPU) |
