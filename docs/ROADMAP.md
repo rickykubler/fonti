@@ -10,14 +10,20 @@ Milestones are executed in order. Each step is verified (ruff, mypy, pytest) and
 
 ## M1 — End-to-end pipeline
 
-- [ ] Configuration (TOML + environment variables), domain types, SQLite store (FTS5, vectors, metadata)
-- [ ] Fast PDF parser (pypdfium2), text cleaning, structure-aware chunking with page offsets
-- [ ] Embedder (sentence-transformers, `BAAI/bge-m3`), exact vector search, BM25, RRF fusion
-- [ ] OpenAI-compatible LLM client with local-only guard, Italian prompt, citation alignment, abstention
-- [ ] CLI: `ingest`, `ask`, `docs`, `remove`
+- [x] Configuration (TOML + environment variables), domain types, SQLite store (FTS5, vectors, metadata)
+- [x] Fast PDF parser (pypdfium2), text cleaning, structure-aware chunking with page offsets
+- [x] Embedder (sentence-transformers, `BAAI/bge-m3`, fp16 on CUDA), exact vector search, BM25, RRF
+- [x] LLM clients (Ollama native, OpenAI-compatible) with local-only guard, Italian prompt, citation
+      alignment, abstention
+- [x] CLI: `ingest`, `ask`, `docs`, `remove`, `reindex`, `models pull`
+- [x] Cached models load with the Hub disabled: no network traffic after the first download
 
 **Done when:** `fonti ask "Quando è ammessa la restrizione della libertà personale?"` cites Art. 13
 of the Constitution with page and passage, and an out-of-corpus question returns "Non lo so".
+
+**Result:** verified on the Quirinale edition of the Constitution (65 pages, 188 chunks, ingest
+14 s on an RTX 5060 Ti): the answer cites Art. 13 on page 7 with two verbatim passages; "Chi ha
+vinto i Mondiali di calcio del 2006?" returns "Non lo so" with the nearest passages.
 
 ## M2 — Quality and evaluation
 
@@ -74,6 +80,8 @@ the baseline:
 | LLM runtime | Ollama via the OpenAI-compatible API | Native on Windows with GPU; the same client works with other local servers |
 | Web | FastAPI + Jinja2 + HTMX | Few dependencies, custom citation UI, no telemetry |
 | License | Apache-2.0 | Permissive, with an explicit patent grant |
+| Citations | LLM cites `[n]`; passages are aligned verbatim from the source by term overlap | Small local models paraphrase quotes; extracted passages always exist in the document |
+| Model loading | Offline when cached (`HF_HUB_OFFLINE` set before import), explicit `models pull` | `local_files_only` alone still contacted the Hub on every run |
 
 ## Backlog (after v0.1)
 
