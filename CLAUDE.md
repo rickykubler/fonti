@@ -53,6 +53,14 @@ Status of each part is in `docs/ROADMAP.md`.
 - Never write `\uXXXX` escapes through the editor tools (they get decoded into raw characters);
   use `\N{NAME}` or `chr()` instead.
 
+## Path-scoped rules and skills
+
+- `.claude/rules/` loads extra rules when editing matching paths: `retrieval-quality.md`
+  (eval before/after), `web.md` (web UI safety and states), `untrusted-content.md`
+  (prompt injection, SQL, hostile files).
+- Skill `eval-compare`: baseline vs candidate eval with metric deltas
+  (`.claude/skills/eval-compare/compare.py`).
+
 ## Do not
 
 - Add RAG frameworks (LangChain, LlamaIndex, Haystack) or vector DB servers.
