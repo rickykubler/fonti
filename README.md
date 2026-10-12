@@ -7,7 +7,7 @@
 > anche PDF difficili, scansioni e tabelle, e ogni risposta indica documento, pagina e passaggio
 > esatto, copiato dal testo e mai inventato. Se i documenti non bastano, risponde «Non lo so».
 
-**Status: pre-alpha (0.1.0.dev0).** Progress and results are tracked in
+**Status: alpha (0.1.0).** Progress and results are tracked in
 [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Why
@@ -21,9 +21,9 @@
 - **Verifiable citations.** Every sentence of an answer cites its source; the cited passage is
   copied verbatim from the document with its page, and you can open the PDF at that page with
   the passage highlighted. Without enough evidence the answer is «Non lo so».
-- **Measured.** A golden set of 59 Italian questions drives every default (see
-  [docs/evaluation.md](docs/evaluation.md)): recall@1 0.95, correct refusals 100%, cited pages
-  correct 97%, groundedness 0.90, correctness 0.98 with a 12B local model.
+- **Measured.** A golden set of 75 Italian questions over 8 documents (362 pages) drives every
+  default (see [docs/evaluation.md](docs/evaluation.md)): recall@5 0.97, correct refusals
+  100%, correctness 0.98, cited pages correct 89% with a 12B local model.
 
 ## How it works
 
@@ -46,7 +46,7 @@ Requirements: Windows, Linux or macOS; [uv](https://docs.astral.sh/uv/);
 runs part of it on the CPU); a CPU works too, slowly.
 
 ```
-git clone <repository-url> fonti
+git clone https://github.com/rickykubler/fonti.git
 cd fonti
 uv sync --extra gpu --extra docling      # without an NVIDIA GPU: --extra cpu --extra docling
 ollama pull gemma4:12b
@@ -116,6 +116,7 @@ Supported files: PDF (digital or scanned), DOCX, TXT, Markdown.
   partially; arithmetic over tables is not guaranteed.
 - OCR of dense justified text can scramble word order (see the evaluation); answers usually
   stay correct but quoted passages are noisier.
+- On EU regulations answers often cite a recital instead of the article that states the rule.
 - Pages are numbered as in a PDF viewer (the 24th page is «pagina 24»), which can differ from
   the numbers printed on the pages.
 - Each question is independent (no conversation memory). One user, one collection.
