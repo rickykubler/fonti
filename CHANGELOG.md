@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.0 (2026-10-12)
 
 First version: ask questions about your documents in Italian, locally, with verified citations.
 
@@ -19,11 +19,19 @@ First version: ask questions about your documents in Italian, locally, with veri
 - CLI: `ingest`, `ask`, `docs`, `remove`, `reindex`, `models pull`, `doctor`, `serve`, `eval`.
 - Local web UI: streamed answers, citation cards, PDF opened at the cited page, page preview
   with the passage highlighted, upload with background indexing.
-- Evaluation framework: corpus manifest, synthetic documents and scans, 59-question golden
-  set, retrieval and answer metrics, LLM judge, Markdown/JSON reports.
+- Evaluation framework: corpus manifest, synthetic documents and scans, 75-question golden
+  set (including GDPR and AI Act), retrieval and answer metrics, LLM judge, Markdown/JSON
+  reports.
 
 ### Privacy
 
 - Remote LLM endpoints and Ollama cloud models refused unless `llm.allow_remote = true`.
 - Models load offline once downloaded; Hugging Face telemetry disabled.
 - Web UI bound to 127.0.0.1 with Host and Origin checks.
+
+### Known limitations
+
+- On EU regulations answers often cite a recital instead of the article (cited pages correct
+  61% on the GDPR and AI Act questions, against 97% on the other documents).
+- OCR of dense justified text: EasyOCR interleaves adjacent lines (CER about 25% on the
+  synthetic scan of the Constitution); answers on scans usually stay correct.

@@ -89,8 +89,6 @@ Art. 56 quoted in the notes instead of the current one; gemma4:12b answers it co
 
 ## Needs the maintainer
 
-- Merge to `main` and tag `v0.1.0`
-- Create the GitHub repository and push
 - Feedback from real testers
 - Human review of the golden set and of ~20 LLM-judge verdicts
 

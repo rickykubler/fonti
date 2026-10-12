@@ -1,6 +1,6 @@
 [project]
 name = "fonti"
-version = "0.1.0.dev0"
+version = "0.1.0"
 description = "Local-first RAG for Italian documents with verifiable citations"
 readme = "README.md"
 license = "Apache-2.0"
@@ -9,13 +9,14 @@ authors = [{ name = "Ricky Kubler" }]
 requires-python = ">=3.12"
 keywords = ["rag", "retrieval", "italian", "citations", "local-first", "ocr"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
     "Natural Language :: Italian",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
     "Topic :: Text Processing :: Indexing",
 ]
+urls = { Repository = "https://github.com/rickykubler/fonti", Changelog = "https://github.com/rickykubler/fonti/blob/main/CHANGELOG.md" }
 dependencies = [
     "fastapi>=0.142.2",
     "httpx>=0.28.1",
