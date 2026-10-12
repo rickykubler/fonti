@@ -35,8 +35,8 @@ vinto i Mondiali di calcio del 2006?" returns "Non lo so" with the nearest passa
 - [x] Public corpus manifest, downloader, synthetic documents and synthetic scans
 - [x] Golden set: 59 questions (47 answerable, 12 not) with automatic evidence verification
 - [x] Baseline and ablations: stemming, reranker, gate, Docling on digital PDFs, OCR on scans
-- [ ] GDPR and AI Act in the corpus: EUR-Lex blocks automated downloads (HTTP 202); download
-      the PDFs by hand into `eval/corpus/files/`, record their SHA-256, add questions
+- [x] GDPR and AI Act in the corpus (downloaded by hand: EUR-Lex blocks automated downloads),
+      16 more questions; answers are correct but often cite recitals instead of articles
 - [x] Embedder comparison: granite R2, Qwen3-Embedding-0.6B and bge-m3 are equivalent with the
       reranker; granite R2 is the default (faster, smaller)
 - [x] LLM comparison: `gemma4:12b` (now the default, thinking off), `qwen2.5:14b`, `qwen3.5:9b`;
@@ -65,6 +65,7 @@ the baseline:
 | baseline (M1) | 0.808 | 0.957 | 0.873 | 0.83 | 0.00 | 0.90 | 0.88 |
 | + stemming, reranker, gate, generation fixes | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.96 | 0.92 |
 | defaults: granite R2 embedder, gemma4:12b answering model | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.97 | 0.90 |
+| defaults, 75 questions (+ GDPR and AI Act) | 0.844 | 0.967 | 0.903 | 1.00 | 0.03 | 0.89 | 0.84 |
 
 Scans (Docling + EasyOCR): correctness 0.94, cited pages 1.0, recall@5 0.80 (OCR noise lowers
 quote matching), ingest 1.5 s/page. qwen2.5:14b answers cost-08 with the historical text of
@@ -112,6 +113,9 @@ Art. 56 quoted in the notes instead of the current one; gemma4:12b answers it co
 | Model loading | Offline when cached (`HF_HUB_OFFLINE` set before import), explicit `models pull` | `local_files_only` alone still contacted the Hub on every run |
 
 ## Backlog (after v0.1)
+
+- EU regulations: prefer articles over recitals in retrieval and citations (see
+  docs/evaluation.md)
 
 - Multiple collections and conversation memory (follow-up questions)
 - ANN backend (e.g. LanceDB) for corpora beyond ~200k chunks

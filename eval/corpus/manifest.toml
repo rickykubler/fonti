@@ -19,6 +19,7 @@ title = "Regolamento (UE) 2016/679 - Regolamento generale sulla protezione dei d
 kind = "normativa"
 url = "https://eur-lex.europa.eu/legal-content/IT/TXT/PDF/?uri=CELEX:32016R0679"
 file = "gdpr.pdf"
+sha256 = "8f7504d289853f57647bd94d8926f4661e7b41a1204f4d74eca9d8685069427b"
 license = "© Unione europea, https://eur-lex.europa.eu - riutilizzo autorizzato con citazione della fonte (Decisione 2011/833/UE)."
 
 [[document]]
@@ -27,6 +28,7 @@ title = "Regolamento (UE) 2024/1689 - Regolamento sull'intelligenza artificiale"
 kind = "normativa"
 url = "https://eur-lex.europa.eu/legal-content/IT/TXT/PDF/?uri=CELEX:32024R1689"
 file = "ai_act.pdf"
+sha256 = "a61b61706aee6676e3988ab696162d71d759c3debd48b2ecccac3555207f2b0c"
 license = "© Unione europea, https://eur-lex.europa.eu - riutilizzo autorizzato con citazione della fonte (Decisione 2011/833/UE)."
 
 [[document]]

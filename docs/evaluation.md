@@ -11,25 +11,25 @@ Defined in [`eval/corpus/manifest.toml`](../eval/corpus/manifest.toml) and built
 | Id | Document | Kind | Source and license |
 |---|---|---|---|
 | `costituzione` | Costituzione della Repubblica Italiana, edition with notes (65 pages) | legislation | Presidenza della Repubblica; official act, no copyright (art. 5 L. 633/1941) |
+| `gdpr`, `ai-act` | Regulations (EU) 2016/679 (88 pages) and 2024/1689 (144 pages) in Italian | legislation | EUR-Lex; reuse authorised with attribution (Decision 2011/833/EU) |
 | `agid` | AgID, Linee guida sul documento informatico (40 pages) | guidelines | AgID; act of a public administration |
 | `istat` | ISTAT, Occupati e disoccupati, luglio 2026 (16 pages, many tables) | statistics | ISTAT, CC BY 4.0 |
 | `contratto` | Lease agreement | contract | synthetic (CC0), rendered from Markdown |
 | `verbale` | Condominium meeting minutes with a vote table | minutes | synthetic (CC0) |
 | `manuale` | Boiler manual with technical and error-code tables | manual | synthetic (CC0) |
 | `*-scan` | Synthetic scans of the Constitution, the contract and the manual | scans | derived: 200 dpi, grey, ±0.8° skew, blur, noise, JPEG |
-| `gdpr`, `ai-act` | Regulations (EU) 2016/679 and 2024/1689 in Italian | legislation | EUR-Lex; not in the datasets yet, see below |
 
-Downloads are checked against their SHA-256. EUR-Lex answers automated requests with an
-empty HTTP 202, so the two regulations must currently be downloaded by hand into
-`eval/corpus/files/` (`gdpr.pdf`, `ai_act.pdf`).
+Downloads are checked against their SHA-256. EUR-Lex may answer automated requests with an
+empty HTTP 202: if `fonti eval corpus` fails on `gdpr` or `ai-act`, open the URL from the
+manifest in a browser and save the PDF as `eval/corpus/files/gdpr.pdf` or `ai_act.pdf`.
 
 Synthetic scans have an exact ground truth (the text of the original), so OCR quality can be
 measured as a character error rate (CER).
 
 ## Dataset
 
-[`eval/datasets/questions.jsonl`](../eval/datasets/questions.jsonl) holds 59 questions: 47
-answerable and 12 that the corpus cannot answer, several of them near misses ("Qual era il
+[`eval/datasets/questions.jsonl`](../eval/datasets/questions.jsonl) holds 75 questions: 61
+answerable and 14 that the corpus cannot answer, several of them near misses ("Qual era il
 tasso di disoccupazione in Germania?"). Each answerable question has a short expected answer
 and its evidence: document, page and a verbatim quote, plus alternative locations when the
 same fact appears in the text and in a table:
@@ -69,8 +69,8 @@ Answers:
 - Latencies (p50/p95) of retrieval and generation, ingestion seconds per page.
 
 The judge is an LLM and can be wrong: keep it fixed when comparing runs
-(`--judge-model qwen2.5:14b`) and check a sample of its verdicts by hand. With 47 answerable
-questions each one is worth about 2 points of recall: differences below 5 points are noise.
+(`--judge-model qwen2.5:14b`) and check a sample of its verdicts by hand. With 61 answerable
+questions each one is worth about 1.6 points of recall: differences below 5 points are noise.
 
 ## Running
 
@@ -95,6 +95,17 @@ Main dataset, judge qwen2.5:14b; answering model qwen2.5:14b except in the last 
 | + Italian stemming (retrieval only) | 0.851 | 0.979 | 0.903 | | | | | |
 | + reranker, gate 0.1, refusal and citation fixes | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.96 | 0.92 | 0.96 |
 | **Defaults**: granite R2, gemma4:12b (thinking off), parser `auto` | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.97 | 0.90 | 0.98 |
+| Defaults, 75 questions (+ GDPR and AI Act) | 0.844 | 0.967 | 0.903 | 1.00 | 0.03 | 0.89 | 0.84 | 0.98 |
+
+Rows above the last one use the first 59 questions. Adding the two EU regulations
+(232 pages, 16 questions) leaves the original 47 answerable questions where they were (same
+ranks; groundedness 0.89, correctness 0.98, cited pages 0.97), but the 14 new answerable
+ones score recall@1 0.50, cited pages 0.61 and groundedness 0.69, with correctness 0.96. The
+cause is the recitals: an EU regulation restates most articles in its recitals («(179) Il
+presente regolamento si dovrebbe applicare a decorrere dal 2 agosto 2026»), retrieval often
+ranks the recital first and the answer cites it instead of the article. The gold evidence
+stays on the articles, which are the binding text; preferring articles over recitals is on
+the backlog.
 
 Answering models, with the same retrieval (bge-m3, reranker, gate), thinking off and the same
 judge (qwen2.5:14b):

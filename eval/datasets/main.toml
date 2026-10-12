@@ -1,5 +1,5 @@
 description = "Documenti digitali: normativa, linee guida, comunicato con tabelle, contratto, verbale, manuale"
-# gdpr and ai-act are in the manifest but EUR-Lex currently blocks automated downloads;
-# add them here (with their questions) once eval/corpus/files has them.
-documents = ["costituzione", "agid", "istat", "contratto", "verbale", "manuale"]
+# EUR-Lex blocks automated downloads: gdpr and ai-act are downloaded by hand into
+# eval/corpus/files/ (see docs/evaluation.md) and checked against their SHA-256.
+documents = ["costituzione", "gdpr", "ai-act", "agid", "istat", "contratto", "verbale", "manuale"]
 questions = "questions.jsonl"
