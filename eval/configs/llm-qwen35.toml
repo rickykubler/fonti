@@ -1,4 +1,4 @@
-# Default pipeline with Qwen 3.5 9B (Apache-2.0) as the answering model, thinking off.
+# LLM comparison (bge-m3 retrieval) with Qwen 3.5 9B (Apache-2.0) as the answering model, thinking off.
 [retrieval]
 keyword_terms = "stemmed"
 

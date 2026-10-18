@@ -1,4 +1,4 @@
-# Default pipeline with Gemma 4 12B (Apache-2.0) as the answering model, thinking off.
+# LLM comparison (bge-m3 retrieval) with Gemma 4 12B (Apache-2.0) as the answering model, thinking off.
 [retrieval]
 keyword_terms = "stemmed"
 

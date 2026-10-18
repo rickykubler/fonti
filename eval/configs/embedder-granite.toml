@@ -1,4 +1,4 @@
-# Default pipeline with IBM Granite Embedding Multilingual R2 (311M, Apache-2.0).
+# Embedder comparison (stemmed BM25, reranker) with IBM Granite Embedding Multilingual R2 (311M, Apache-2.0).
 [retrieval]
 keyword_terms = "stemmed"
 

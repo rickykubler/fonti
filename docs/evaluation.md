@@ -77,17 +77,17 @@ questions each one is worth about 1.6 points of recall: differences below 5 poin
 ```
 uv run fonti eval corpus
 uv run fonti eval check
-uv run fonti --config eval/configs/rerank-gate.toml eval run --dataset main --label my-run
-uv run fonti --config eval/configs/rerank-gate.toml eval run --dataset main --label quick --retrieval-only
+uv run fonti --config eval/configs/default.toml eval run --dataset main --label my-run --judge-model qwen2.5:14b
+uv run fonti --config eval/configs/default.toml eval run --dataset main --label quick --retrieval-only
 ```
 
-Configurations live in [`eval/configs/`](../eval/configs/). Indexes are cached in `eval/.work/`
+Configurations live in [`eval/configs/`](../eval/configs/); `default.toml` spells out the shipped defaults. Indexes are cached in `eval/.work/`
 by the settings that define them, so runs that change only retrieval or generation reuse them.
 Reports (Markdown and JSON) go to [`eval/reports/`](../eval/reports/) and are committed.
 
 ## Results
 
-Main dataset, judge qwen2.5:14b; answering model qwen2.5:14b except in the last row.
+Main dataset, judge qwen2.5:14b; answering model qwen2.5:14b except in the rows marked gemma4:12b.
 
 | Run | Recall@1 | Recall@5 | MRR@10 | Correct refusals | False refusals | Cited pages | Groundedness | Correctness |
 |---|---|---|---|---|---|---|---|---|
@@ -143,8 +143,8 @@ fastest and smallest one, granite R2 (it is also slightly better without the rer
 
 OCR (synthetic scans, Docling + EasyOCR, confidence threshold 0.2): character error rate 1-4%
 on the contract and the manual; on the Constitution EasyOCR interleaves words of adjacent
-justified lines and the CER is about 25%, although answers stay correct (correctness 0.94,
-cited pages 1.0 on the `scans` dataset). With EasyOCR's default threshold (0.5) a third of
+justified lines and the CER is about 25%, although answers stay correct (correctness 0.98,
+cited pages 0.97 on the `scans` dataset, see the OCR table below). With EasyOCR's default threshold (0.5) a third of
 the text of noisy 150-dpi pages was lost.
 
 RapidOCR with its Latin model (torch backend) keeps the word order on the same pages (median

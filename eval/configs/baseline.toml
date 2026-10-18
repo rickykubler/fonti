@@ -1,4 +1,7 @@
 # M1 configuration: fast parser, plain BM25 terms, bge-m3, no reranker, qwen2.5:14b.
+[parser]
+mode = "fast"  # as in the committed report
+
 [retrieval]
 keyword_terms = "plain"
 

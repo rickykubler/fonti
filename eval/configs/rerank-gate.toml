@@ -1,4 +1,7 @@
 # Stemmed BM25 + reranker + relevance gate (tau calibrated on the main dataset).
+[parser]
+mode = "fast"  # as in the committed report
+
 [retrieval]
 keyword_terms = "stemmed"
 
