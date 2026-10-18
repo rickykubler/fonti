@@ -69,7 +69,12 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
     ) -> Response:
         if request.method in _UNSAFE_METHODS and not _same_origin(request):
             return Response("Richiesta da un'altra origine rifiutata.", status_code=403)
-        return await call_next(request)
+        if _cross_site_subresource(request):
+            # Another site embedding /documents/... could learn which files are indexed.
+            return Response("Richiesta da un altro sito rifiutata.", status_code=403)
+        response = await call_next(request)
+        response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
+        return response
 
     app.mount("/static", StaticFiles(directory=_HERE / "static"), name="static")
 
@@ -212,6 +217,15 @@ def _event(kind: str, **data: Any) -> str:
 def _check_id(doc_id: str) -> None:
     if not _DOC_ID.fullmatch(doc_id):
         raise HTTPException(404, "Documento non trovato")
+
+
+def _cross_site_subresource(request: Request) -> bool:
+    """A request made by another site's page (image, script, fetch), not a link the user
+    followed: browsers send Sec-Fetch-Site and Sec-Fetch-Mode on every request."""
+    return (
+        request.headers.get("sec-fetch-site") == "cross-site"
+        and request.headers.get("sec-fetch-mode") != "navigate"
+    )
 
 
 def _same_origin(request: Request) -> bool:
