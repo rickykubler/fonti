@@ -8,6 +8,7 @@ and, when available, by embedding similarity.
 import re
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from functools import partial
 
 from fonti.domain import Answer, Citation, Hit, PageSpan, page_for_offset
 from fonti.generation.prompts import NOT_FOUND
@@ -65,12 +66,15 @@ def build_answer(
     if not text or NOT_FOUND in text or is_refusal(text):
         return abstain(question, sources)
     citations: dict[tuple[int, int, int], Citation] = {}
+    supported: list[set[int]] = []  # per sentence, the sources that support it
     for claim in parse_claims(text, len(sources)):
+        supported.append(set())
         for number in claim.sources:
             hit = sources[number - 1]
             alignment = align(claim.text, hit.text, similarity)
             if alignment is None or alignment.support < min_support:
                 continue
+            supported[-1].add(number)
             start, end = hit.start + alignment.start, hit.start + alignment.end
             key = (number, start, end)
             if key in citations and citations[key].support >= alignment.support:
@@ -92,7 +96,7 @@ def build_answer(
         return abstain(question, sources)
     ordered = sorted(citations.values(), key=lambda c: (c.number, c.start))
     return Answer(
-        question, _drop_invalid_markers(text, len(sources)), tuple(ordered), False, tuple(sources)
+        question, _keep_supported_markers(text, supported), tuple(ordered), False, tuple(sources)
     )
 
 
@@ -154,9 +158,23 @@ def align(claim: str, source: str, similarity: Similarity | None = None) -> Alig
     return Alignment(start, end, support)
 
 
-def _drop_invalid_markers(text: str, source_count: int) -> str:
-    def keep_valid(match: re.Match[str]) -> str:
-        numbers = [int(n) for n in re.split(r"\s*[,;]\s*", match.group(1))]
-        return match.group(0) if all(1 <= n <= source_count for n in numbers) else ""
+def _keep_supported_markers(text: str, supported: Sequence[set[int]]) -> str:
+    """Remove from every sentence the markers of sources that do not support it, so that
+    an unsupported sentence never looks cited. Markers outside any sentence support nothing."""
+    parts, previous = [], 0
+    for (start, end), numbers in zip(split_sentences(text), supported, strict=True):
+        parts.append(_MARKER_RE.sub("", text[previous:start]))
+        parts.append(_MARKER_RE.sub(partial(_filter_marker, keep=numbers), text[start:end]))
+        previous = end
+    parts.append(_MARKER_RE.sub("", text[previous:]))
+    return "".join(parts)
 
-    return _MARKER_RE.sub(keep_valid, text)
+
+def _filter_marker(match: re.Match[str], keep: set[int]) -> str:
+    numbers = [int(n) for n in re.split(r"\s*[,;]\s*", match.group(1))]
+    kept = [n for n in numbers if n in keep]
+    if kept == numbers:
+        return match.group(0)
+    if not kept:
+        return ""
+    return match.group(0)[: match.start(1) - match.start(0)] + ", ".join(map(str, kept)) + "]"
