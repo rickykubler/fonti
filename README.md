@@ -1,5 +1,7 @@
 # fonti
 
+[![CI](https://github.com/rickykubler/fonti/actions/workflows/ci.yml/badge.svg)](https://github.com/rickykubler/fonti/actions/workflows/ci.yml)
+
 **Ask questions about your own documents — in Italian, on your machine, with sources you can check.**
 
 > **In italiano.** *fonti* è un sistema open source per fare domande ai propri documenti in
@@ -54,7 +56,7 @@ uv run fonti models pull                 # embedding, reranker and OCR models (o
 uv run fonti doctor                      # checks that everything is in place
 ```
 
-Then:
+Then, with Ollama running (`ollama serve`, or the Ollama app):
 
 ```
 uv run fonti ingest C:\Documenti\contratti
@@ -74,6 +76,9 @@ Fonti:
 
 Other commands: `fonti docs` (list), `fonti remove ID`, `fonti reindex` (after changing
 models or settings), `fonti --help`.
+
+The first question after a start waits for Ollama to load the model (up to a minute);
+then answers take a few seconds. `fonti serve` keeps the models loaded between questions.
 
 ## Web UI
 
