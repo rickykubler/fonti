@@ -135,3 +135,18 @@ def test_thinking_and_invalid_markers_are_removed_from_the_text() -> None:
     result = build_answer("q", output, hits(), pages, 0.3)
 
     assert result.text == "Le rate mensili sono di 800 euro [1]."
+
+
+def test_unsupported_sentences_lose_their_markers() -> None:
+    output = (
+        "Si pagano dodici rate mensili di 800 euro [1, 2]. "
+        "Il conduttore versa un deposito [1]. Il canone è di 9.600 euro all'anno [1]."
+    )
+
+    result = build_answer("Quanto si paga?", output, hits(), pages, 0.3)
+
+    assert result.text == (
+        "Si pagano dodici rate mensili di 800 euro [1]. "
+        "Il conduttore versa un deposito. Il canone è di 9.600 euro all'anno [1]."
+    )
+    assert {c.number for c in result.citations} == {1}
