@@ -23,7 +23,7 @@ from fonti.evaluation.metrics import (
     reciprocal_rank,
 )
 from fonti.evaluation.report import write_report
-from fonti.evaluation.runner import run
+from fonti.evaluation.runner import _groundedness, run
 from fonti.service import Fonti
 from tests.fakes import ScriptedChat
 from tests.samples import CONTRACT_MD
@@ -97,8 +97,15 @@ def test_quote_score_is_exact_or_fuzzy() -> None:
     text = "Il canone è pagato in dodici rate mensili anticipate di euro 800,00 ciascuna."
 
     assert quote_score("RATE  mensili anticipate", text) == 100.0
-    assert quote_score("rate mensili antlcipate di eur0 800,00", text) > 90
+    assert quote_score("rate mensili antlcipate di curo 800,00", text) > 90
     assert quote_score("deposito cauzionale", text) < 70
+
+
+def test_quote_score_requires_the_same_numbers() -> None:
+    text = "Tasso di disoccupazione 5,2 | Tasso di occupazione 62,0"
+
+    assert quote_score("Tasso di disoccupazione 5,8", text) == 0.0
+    assert quote_score("Tasso di disoccupazione 5.2", text) > 90
 
 
 def test_evidence_ranks_recall_and_mrr() -> None:
@@ -233,3 +240,26 @@ def test_run_requires_prepared_documents(eval_dir: Path) -> None:
             label="x",
             generate=False,
         )
+
+
+def test_groundedness_judges_every_sentence_on_its_cited_passages() -> None:
+    from fonti.generation.citations import build_answer
+    from tests.test_citations import hits, pages
+
+    # Both sentences align to the same source sentence: one citation, two claims.
+    answer = build_answer(
+        "Come si paga?",
+        "Si pagano dodici rate mensili [1]. Ogni rata è di euro 800,00 [1].",
+        hits(),
+        pages,
+        0.3,
+    )
+    prompts: list[str] = []
+
+    def verdict(prompt: str) -> str:
+        prompts.append(prompt)
+        return "SUPPORTATA"
+
+    assert len(answer.citations) == 1
+    assert _groundedness(Judge(ScriptedChat(verdict)), answer) == 1.0
+    assert len(prompts) == 2

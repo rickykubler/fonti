@@ -223,11 +223,13 @@ def _evaluate(
 
 
 def _groundedness(judge: Judge, answer: Answer) -> float:
-    """Mean verdict over the answer's sentences; a sentence without citations scores 0."""
+    """Mean verdict over the answer's sentences; a sentence without citations scores 0.
+    A sentence is judged on the verified passages of the sources it cites (the answer keeps
+    only supported markers), as a reader following its markers would see them."""
     claims = parse_claims(answer.text, len(answer.sources))
     scores = []
     for claim in claims:
-        passages = [c.passage for c in answer.citations if c.claim == claim.text]
+        passages = [c.passage for c in answer.citations if c.number in claim.sources]
         scores.append(judge.grounded(claim.text, passages).score if passages else 0.0)
     return _mean(scores) or 0.0
 

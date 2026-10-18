@@ -1,5 +1,6 @@
 """Evaluation metrics. Pure functions over retrieved passages, answers and gold evidence."""
 
+import re
 from collections.abc import Callable, Sequence
 
 from rapidfuzz import fuzz
@@ -12,6 +13,7 @@ from fonti.evaluation.text import normalize
 # A passage contains a quote when the quote matches one of its substrings at this level
 # (100 = verbatim). The tolerance absorbs OCR errors and small parser differences.
 QUOTE_MATCH = 90.0
+_NUMBER_RE = re.compile(r"\d(?:[\d.,]*\d)?")
 
 
 def quote_score(quote: str, text: str) -> float:
@@ -21,7 +23,15 @@ def quote_score(quote: str, text: str) -> float:
         return 0.0
     if needle in haystack:
         return 100.0
+    # Fuzzy matching cannot tell "5,8" from "5,2": every number of the quote must be there.
+    if not _numbers(needle) <= _numbers(haystack):
+        return 0.0
     return float(fuzz.partial_ratio(needle, haystack))
+
+
+def _numbers(text: str) -> set[str]:
+    """Numbers without separators, so that "800,00" and "800.00" are the same number."""
+    return {re.sub(r"[.,]", "", number) for number in _NUMBER_RE.findall(text)}
 
 
 def evidence_ranks(
