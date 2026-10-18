@@ -1,17 +1,20 @@
+import asyncio
 import json
 import threading
 import time
-from collections.abc import Iterator
+from collections.abc import AsyncIterator, Iterator
 from pathlib import Path
+from typing import Any, cast
 
 import pypdfium2 as pdfium
 import pytest
+from fastapi.routing import APIRoute
 from fastapi.testclient import TestClient
 
 from fonti.config import EmbeddingSettings, Settings
 from fonti.evaluation.synthetic import render_pdf
 from fonti.service import Fonti
-from fonti.web.app import create_app
+from fonti.web.app import AskRequest, create_app
 from fonti.web.jobs import IngestJobs, JobState
 from fonti.web.preview import merge_lines, passage_boxes
 from tests.fakes import FakeChat
@@ -214,3 +217,32 @@ def test_unexpected_ingest_errors_fail_the_job(
 
     assert job.state is JobState.FAILED
     assert not jobs.busy()
+
+
+def test_abandoned_stream_releases_the_model(service: Fonti, contract: Path) -> None:
+    ingested_id(service, contract)
+    app = create_app(service.settings, fonti=service)
+    [route] = [r for r in app.routes if isinstance(r, APIRoute) and r.path == "/api/ask/stream"]
+
+    async def read_first_event() -> AsyncIterator[str]:
+        response = route.endpoint(AskRequest(question="Quanto è il canone mensile?"))
+        body = cast(AsyncIterator[str], response.body_iterator)
+        await anext(body)
+        return body  # never read to the end: like a client that went away
+
+    # The loop stays open, as in a running server: nothing closes the abandoned stream.
+    loop = asyncio.new_event_loop()
+    abandoned = loop.run_until_complete(read_first_event())
+    answered: list[int] = []
+
+    def ask() -> None:
+        with TestClient(app, base_url="http://127.0.0.1") as client:
+            answered.append(client.post("/api/ask", json={"question": "Canone?"}).status_code)
+
+    worker = threading.Thread(target=ask, daemon=True)
+    worker.start()
+    worker.join(timeout=20)
+
+    assert answered == [200]
+    loop.run_until_complete(cast(Any, abandoned).aclose())
+    loop.close()
