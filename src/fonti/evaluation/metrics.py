@@ -38,7 +38,8 @@ def evidence_ranks(
     evidence: Sequence[Evidence], hits: Sequence[Hit], doc_of: Callable[[str], str | None]
 ) -> list[int | None]:
     """For every evidence item, the 1-based rank of the first hit that contains any of its
-    locations."""
+    locations: same document, a page range that includes the location's page and the quote.
+    The page keeps a restatement elsewhere (an EU recital repeating an article) from counting."""
     ranks: list[int | None] = []
     for item in evidence:
         rank = next(
@@ -47,6 +48,7 @@ def evidence_ranks(
                 for position, hit in enumerate(hits, start=1)
                 if any(
                     doc_of(hit.doc_id) == location.doc
+                    and hit.page_start <= location.page <= hit.page_end
                     and quote_score(location.quote, hit.text) >= QUOTE_MATCH
                     for location in item.locations
                 )
