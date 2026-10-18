@@ -24,7 +24,8 @@ _STRUCTURAL = [
     (re.compile(rf"(?:SEZIONE|Sezione)\s+{_NUMBER}\b"), 4),
     (re.compile(rf"(?:ARTICOLO|Articolo|ART\.?|Art\.?)\s*\d+(?:\s*[-–]?\s*{_LATIN}\b)?"), 5),
 ]
-_NUMBERED_TITLE = re.compile(r"(\d+(?:\.\d+)*)\.?\s+(\S.*)")
+# Section numbers ("3", "4.2.1"), not dates ("4.5.2016") or years: at most 3 digits a part.
+_NUMBERED_TITLE = re.compile(r"(\d{1,3}(?:\.\d{1,3})*)\.?\s+(\S.*)")
 # "ART. 56.9": the 9 is a footnote mark glued to the heading.
 _ARTICLE_FOOTNOTE = re.compile(
     rf"^((?:ARTICOLO|Articolo|ART\.?|Art\.?)\s*\d+(?:\s*{_LATIN})?\.)\d{{1,3}}$"

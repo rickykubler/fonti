@@ -4,7 +4,7 @@ import pytest
 
 from fonti.domain import BlockKind
 from fonti.evaluation.synthetic import render_pdf
-from fonti.ingest.parsers import ParseError, drop_running_headers, parse_file
+from fonti.ingest.parsers import ParseError, _clean_title, drop_running_headers, parse_file
 from tests.samples import CONTRACT_MD
 
 
@@ -41,6 +41,45 @@ def test_running_headers_and_page_counters_are_dropped() -> None:
 
     assert cleaned[0] == ["ART. 1.", "Testo della pagina 1."]
     assert cleaned[3] == ["ART. 4.", "Testo della pagina 4."]
+
+
+TEXTS = [
+    "Il presente regolamento stabilisce norme relative alla protezione dei dati.",
+    "Il trattamento è lecito solo se ricorre almeno una delle condizioni seguenti.",
+    "Il titolare del trattamento deve essere in grado di dimostrare il consenso.",
+    "L'interessato ha il diritto di ottenere la rettifica dei dati inesatti.",
+    "Ciascuno Stato membro dispone che una o più autorità pubbliche indipendenti vigilino.",
+    "Le sanzioni sono effettive, proporzionate e dissuasive.",
+]
+
+
+def test_headers_alternating_between_even_and_odd_pages_are_dropped() -> None:
+    def page(n: int) -> list[str]:
+        header = (
+            f"{n}.5.2016 IT Gazzetta ufficiale dell'Unione europea L 119/{n}"
+            if n % 2
+            else f"L 119/{n} IT Gazzetta ufficiale dell'Unione europea {n}.5.2016"
+        )
+        return [header, f"Articolo {n}", TEXTS[n - 1]]
+
+    cleaned = drop_running_headers([page(n) for n in range(1, 7)])
+
+    assert cleaned[0] == ["Articolo 1", TEXTS[0]]
+    assert cleaned[1] == ["Articolo 2", TEXTS[1]]
+
+
+def test_long_titles_are_shortened() -> None:
+    raw = (
+        "REGOLAMENTO  (UE)  2016/  679  DEL  PARLAMENTO  EUROPEO " + "relativo alla protezione " * 8
+    )
+
+    title = _clean_title(raw)
+
+    assert title is not None
+    assert title.startswith("REGOLAMENTO (UE) 2016/ 679 DEL PARLAMENTO EUROPEO relativo")
+    assert len(title) <= 121
+    assert title.endswith("\N{HORIZONTAL ELLIPSIS}")
+    assert _clean_title("  ") is None
 
 
 def test_short_documents_keep_their_edges() -> None:
