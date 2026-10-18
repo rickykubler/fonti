@@ -9,7 +9,8 @@ import pypdfium2 as pdfium
 _WINDOW = 4  # words searched at a time: short enough to stay on one line
 _MAX_GAP = 5  # characters between consecutive windows: a space or a line break
 _HIGHLIGHT = (255, 214, 0, 96)
-_NOTE = "Evidenziazione non disponibile: pagina scansionata"
+# Pillow's default font has no accented letters.
+_NOTE = "Evidenziazione non disponibile (pagina scansionata o passaggio su due pagine)"
 
 Box = tuple[float, float, float, float]  # left, bottom, right, top in PDF points
 
