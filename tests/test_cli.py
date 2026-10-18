@@ -1,4 +1,6 @@
+import io
 import json
+import sys
 from pathlib import Path
 
 import pytest
@@ -87,3 +89,14 @@ def test_ingest_failure_sets_exit_code(tmp_path: Path, capsys: pytest.CaptureFix
 
     assert main(["ingest", str(broken)]) == 1
     assert "! rotto.pdf: Impossibile aprire" in capsys.readouterr().out
+
+
+def test_help_is_utf8_when_redirected(monkeypatch: pytest.MonkeyPatch) -> None:
+    buffer = io.BytesIO()
+    monkeypatch.setattr(sys, "stdout", io.TextIOWrapper(buffer, encoding="cp1252"))
+
+    with pytest.raises(SystemExit):
+        main(["--help"])
+    sys.stdout.flush()
+
+    assert "più".encode() in buffer.getvalue()

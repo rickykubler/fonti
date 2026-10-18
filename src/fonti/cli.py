@@ -80,6 +80,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    _tolerate_unencodable_output()  # before --help, which prints accented letters
     parser = build_parser()
     args = parser.parse_args(argv)
     if args.command is None:
@@ -89,7 +90,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     logging.basicConfig(
         level=levels[min(args.verbose, 2)], format="%(levelname)s %(name)s: %(message)s"
     )
-    _tolerate_unencodable_output()
     try:
         settings = load_settings(args.config)
         if args.command == "eval":
@@ -268,7 +268,8 @@ def _shorten(text: str, limit: int = 300) -> str:
 
 
 def _tolerate_unencodable_output() -> None:
-    """Replace characters the console encoding cannot show instead of crashing."""
+    """Write UTF-8 also when the output is piped or redirected (on Windows it would be the
+    ANSI code page, which garbles accented letters), and never crash on a character."""
     for stream in (sys.stdout, sys.stderr):
         if isinstance(stream, io.TextIOWrapper):
-            stream.reconfigure(errors="replace")
+            stream.reconfigure(encoding="utf-8", errors="replace")
