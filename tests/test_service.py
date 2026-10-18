@@ -6,7 +6,13 @@ import pytest
 from fonti.config import EmbeddingSettings, Settings
 from fonti.evaluation.synthetic import render_pdf
 from fonti.index.store import IndexMismatchError
-from fonti.service import DocumentLookupError, Fonti, IngestStatus
+from fonti.service import (
+    DocumentLookupError,
+    Fonti,
+    IngestResult,
+    IngestStatus,
+    ReindexIncompleteError,
+)
 from tests.fakes import FakeChat
 from tests.samples import CONTRACT_MD
 
@@ -97,6 +103,27 @@ def test_changing_the_embedder_requires_a_reindex(tmp_path: Path, contract_pdf: 
 
         assert result.status is IngestStatus.UPDATED
         assert service.search("canone")
+
+
+def test_reindex_with_a_missing_file_keeps_the_index_flagged(
+    tmp_path: Path, contract_pdf: Path
+) -> None:
+    data_dir = tmp_path / "data"
+    with Fonti(settings(data_dir, "hashing:256")) as service:
+        [added] = service.ingest([contract_pdf])
+    assert added.doc_id is not None
+
+    with Fonti(settings(data_dir, "hashing:128")) as service:
+        stored = service.stored_file(added.doc_id)
+        assert stored is not None
+        stored.unlink()
+        results: list[IngestResult] = []
+        with pytest.raises(ReindexIncompleteError):
+            results.extend(service.reindex())
+
+        assert [r.status for r in results] == [IngestStatus.FAILED]
+        with pytest.raises(IndexMismatchError):
+            service.search("canone")
 
 
 def test_ask_returns_verified_citations(tmp_path: Path, contract_pdf: Path) -> None:

@@ -52,6 +52,10 @@ class IngestResult:
     message: str = ""
 
 
+class ReindexIncompleteError(FontiError):
+    """Some documents could not be rebuilt, so the index keeps its previous settings."""
+
+
 class DocumentLookupError(FontiError, LookupError):
     """No document, or more than one, matches the given id prefix."""
 
@@ -136,9 +140,16 @@ class Fonti:
         """Download the models in use, so later runs never need the network."""
         paths = pull(self.model_names())
         if self.settings.parser.mode != "fast":
-            from fonti.ingest.docling_parser import download_models
+            from fonti.ingest.docling_parser import (
+                MISSING_DOCLING_MESSAGE,
+                DoclingUnavailableError,
+                download_models,
+            )
 
-            paths.append(download_models(self.settings.parser))
+            try:
+                paths.append(download_models(self.settings.parser))
+            except ImportError as exc:
+                raise DoclingUnavailableError(MISSING_DOCLING_MESSAGE) from exc
         return paths
 
     def stored_file(self, doc_id: str) -> Path | None:
@@ -156,9 +167,11 @@ class Fonti:
     def reindex(self) -> Iterator[IngestResult]:
         """Rebuild every document with the current settings, e.g. after changing the
         embedding model. Safe to interrupt and run again."""
+        failed = 0
         for info in self.store.list_documents():
             stored = self.stored_file(info.id)
             if stored is None or not stored.is_file():
+                failed += 1
                 yield IngestResult(
                     Path(info.filename), IngestStatus.FAILED, info.id, 0, "file mancante"
                 )
@@ -166,6 +179,7 @@ class Fonti:
             try:
                 prepared = self._prepare(stored, info.id, info.filename)
             except ParseError as exc:
+                failed += 1
                 yield IngestResult(Path(info.filename), IngestStatus.FAILED, info.id, 0, str(exc))
                 continue
             self.store.replace_document(
@@ -173,6 +187,13 @@ class Fonti:
             )
             yield IngestResult(
                 Path(info.filename), IngestStatus.UPDATED, info.id, len(prepared.chunks)
+            )
+        if failed:
+            # Their old vectors would not match the new settings: keep the index flagged.
+            raise ReindexIncompleteError(
+                f"{failed} documenti non sono stati ricostruiti e l'indice non è ancora "
+                "utilizzabile con la nuova configurazione: rimuovili con `fonti remove ID` "
+                "e riesegui `fonti reindex`."
             )
         self.store.force_settings(self._index_settings())
 
