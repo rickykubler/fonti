@@ -43,8 +43,10 @@ vinto i Mondiali di calcio del 2006?" returns "Non lo so" with the nearest passa
       see docs/evaluation.md
 - [x] OCR engines on scans: EasyOCR (default) vs RapidOCR latin; see docs/evaluation.md
 - [ ] OCR reading order on justified multi-line text: EasyOCR interleaves adjacent lines (CER
-      ~25% on the Constitution scan); RapidOCR keeps the order but drops accents: an
-      accent-aware Latin recognition model or a post-OCR line re-ordering is still to try
+      ~25% on the Constitution scan). Tesseract with `tessdata_best` Italian fixes order and
+      accents (median CER 2%, better retrieval and groundedness on scans) but empties short
+      table cells (two false refusals); still to try: Tesseract for text regions with
+      EasyOCR for table cells, see docs/evaluation.md
 
 **Done when:** a committed report compares against the baseline. Initial targets, to be revised after
 the baseline:

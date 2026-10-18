@@ -1,0 +1,5 @@
+# Candidate OCR engine: Tesseract CLI with the Italian "best" model (tessdata_best).
+# Needs tesseract on PATH and TESSDATA_PREFIX pointing to a folder with ita, eng, osd
+# and configs/ (see docs/evaluation.md).
+[parser]
+ocr_engine = "tesseract"
