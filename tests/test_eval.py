@@ -48,8 +48,8 @@ QUESTIONS = [
 ]
 
 
-def hit(doc_id: str, text: str) -> Hit:
-    return Hit(1, doc_id, "f.pdf", None, text, 0, len(text), 1, 1, "", BlockKind.TEXT)
+def hit(doc_id: str, text: str, page: int = 1) -> Hit:
+    return Hit(1, doc_id, "f.pdf", None, text, 0, len(text), page, page, "", BlockKind.TEXT)
 
 
 @pytest.fixture
@@ -110,14 +110,19 @@ def test_quote_score_requires_the_same_numbers() -> None:
 
 def test_evidence_ranks_recall_and_mrr() -> None:
     evidence = [Evidence("contratto", 2, RENT_QUOTE), Evidence("contratto", 3, "recedere")]
-    hits = [hit("x", "altro"), hit("sha", f"... {RENT_QUOTE} ..."), hit("other", "recedere")]
+    hits = [
+        hit("x", "altro"),
+        hit("sha", f"... {RENT_QUOTE} ...", page=5),  # same quote, wrong page
+        hit("sha", f"... {RENT_QUOTE} ...", page=2),
+        hit("other", "recedere"),
+    ]
 
     ranks = evidence_ranks(evidence, hits, {"sha": "contratto", "other": "altro"}.get)
 
-    assert ranks == [2, None]
+    assert ranks == [3, None]
     assert recall_at(ranks, 1) == 0.0
     assert recall_at(ranks, 5) == 0.5
-    assert reciprocal_rank(ranks) == 0.5
+    assert reciprocal_rank(ranks) == 1 / 3
 
 
 def test_quotes_match_flat_text_and_markdown_tables() -> None:
@@ -135,7 +140,7 @@ def test_any_location_of_an_evidence_counts() -> None:
             (Location("istat", 3, "Tasso di disoccupazione 5,8"),),
         )
     ]
-    hits = [hit("sha", "altro"), hit("sha", "Tasso di disoccupazione 5,8 -0,1")]
+    hits = [hit("sha", "altro"), hit("sha", "Tasso di disoccupazione 5,8 -0,1", page=3)]
 
     assert evidence_ranks(evidence, hits, {"sha": "istat"}.get) == [2]
 
