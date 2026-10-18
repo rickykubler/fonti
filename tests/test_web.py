@@ -1,4 +1,5 @@
 import asyncio
+import io
 import json
 import threading
 import time
@@ -16,7 +17,7 @@ from fonti.evaluation.synthetic import render_pdf
 from fonti.service import Fonti
 from fonti.web.app import AskRequest, create_app
 from fonti.web.jobs import IngestJobs, JobState
-from fonti.web.preview import merge_lines, passage_boxes
+from fonti.web.preview import merge_lines, passage_boxes, render_page
 from tests.fakes import FakeChat
 from tests.samples import CONTRACT_MD
 
@@ -246,3 +247,13 @@ def test_abandoned_stream_releases_the_model(service: Fonti, contract: Path) -> 
     assert answered == [200]
     loop.run_until_complete(cast(Any, abandoned).aclose())
     loop.close()
+
+
+def test_preview_explains_a_passage_it_cannot_highlight(contract: Path) -> None:
+    from PIL import Image
+
+    plain = Image.open(io.BytesIO(render_page(contract, 2)))
+    noted = Image.open(io.BytesIO(render_page(contract, 2, "testo che non è su questa pagina")))
+
+    assert plain.getpixel((5, 5)) == (255, 255, 255)
+    assert noted.getpixel((5, 5)) != (255, 255, 255)  # the dark note band

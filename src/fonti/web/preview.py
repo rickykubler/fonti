@@ -2,12 +2,14 @@
 
 import io
 from pathlib import Path
+from typing import Any
 
 import pypdfium2 as pdfium
 
 _WINDOW = 4  # words searched at a time: short enough to stay on one line
 _MAX_GAP = 5  # characters between consecutive windows: a space or a line break
 _HIGHLIGHT = (255, 214, 0, 96)
+_NOTE = "Evidenziazione non disponibile: pagina scansionata"
 
 Box = tuple[float, float, float, float]  # left, bottom, right, top in PDF points
 
@@ -25,7 +27,8 @@ def render_page(path: Path, page_number: int, passage: str = "", scale: float = 
             if passage:
                 height = page.get_height()
                 draw = ImageDraw.Draw(image, "RGBA")
-                for left, bottom, right, top in passage_boxes(page, passage):
+                boxes = passage_boxes(page, passage)
+                for left, bottom, right, top in boxes:
                     box = (
                         left * scale,
                         (height - top) * scale,
@@ -33,6 +36,8 @@ def render_page(path: Path, page_number: int, passage: str = "", scale: float = 
                         (height - bottom) * scale,
                     )
                     draw.rectangle(box, fill=_HIGHLIGHT)
+                if not boxes:
+                    _draw_note(draw, image.width)
         finally:
             page.close()
     finally:
@@ -40,6 +45,15 @@ def render_page(path: Path, page_number: int, passage: str = "", scale: float = 
     buffer = io.BytesIO()
     image.save(buffer, "PNG", optimize=True)
     return buffer.getvalue()
+
+
+def _draw_note(draw: Any, width: int) -> None:
+    from PIL import ImageFont
+
+    size = max(12, width // 40)  # the note fits the page width at any preview scale
+    font = ImageFont.load_default(size=size)
+    draw.rectangle((0, 0, width, size * 2), fill=(40, 40, 40, 220))
+    draw.text((size // 2, size // 2), _NOTE, fill=(255, 255, 255, 255), font=font)
 
 
 def passage_boxes(page: pdfium.PdfPage, passage: str) -> list[Box]:
