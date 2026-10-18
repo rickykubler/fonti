@@ -9,7 +9,7 @@ import httpx
 
 from fonti import __version__
 from fonti.config import Settings
-from fonti.generation.llm import RemoteEndpointError, ensure_local
+from fonti.generation.llm import remote_reason
 from fonti.ml.hub import is_cached
 
 
@@ -84,17 +84,13 @@ def _docling(settings: Settings) -> Check:
 
 def _llm(settings: Settings, transport: httpx.BaseTransport | None) -> list[Check]:
     llm = settings.llm
-    try:
-        ensure_local(llm)
+    reason = remote_reason(llm)
+    if reason is None:
         privacy = Check("Privacy", Status.OK, f"LLM locale su {llm.base_url}")
-    except RemoteEndpointError:
-        return [
-            Check(
-                "Privacy",
-                Status.WARNING,
-                f"LLM remoto su {llm.base_url}: domande e passaggi escono dal computer",
-            )
-        ]
+    elif llm.allow_remote:
+        privacy = Check("Privacy", Status.WARNING, f"{reason} (llm.allow_remote = true)")
+    else:
+        return [Check("Privacy", Status.WARNING, f"{reason} Bloccato: llm.allow_remote = false.")]
     if llm.provider != "ollama":
         return [privacy, Check("LLM", Status.SKIPPED, f"{llm.provider}: controllo non disponibile")]
     try:

@@ -46,3 +46,10 @@ def test_warns_about_remote_llm(tmp_path: Path) -> None:
     )
 
     assert statuses(settings, tags())["Privacy"] is Status.WARNING
+
+
+def test_warns_about_remote_llm_also_when_allowed(tmp_path: Path) -> None:
+    llm = LLMSettings(base_url="https://api.example.com/v1", provider="openai", allow_remote=True)
+    settings = Settings(data_dir=tmp_path, embedding=EmbeddingSettings(model="hashing"), llm=llm)
+
+    assert statuses(settings, tags())["Privacy"] is Status.WARNING
