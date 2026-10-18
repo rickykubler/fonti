@@ -90,9 +90,13 @@ citation shows its page and the verbatim passage, opens the PDF at that page or 
 with the passage highlighted. The Documenti page uploads files and indexes them in the
 background.
 
-<img src="docs/images/ask.png" width="720" alt="An answer about the Constitution with two citations; the second shows page 24 with the cited sentence of Art. 85 highlighted">
+<img src="docs/images/ask.png" width="720" alt="An answer about the President of the Republic citing Art. 83 and Art. 85 of the Constitution; the preview of page 24 highlights the cited sentence of Art. 83">
 
-<img src="docs/images/documents.png" width="720" alt="The Documenti page: upload form, a completed indexing job and the indexed documents">
+<img src="docs/images/documents.png" width="720" alt="The Documenti page: upload form and four indexed documents, one of them a scan read with OCR">
+
+Without enough evidence the answer is «Non lo so», with the nearest passages it found:
+
+<img src="docs/images/abstain.png" width="720" alt="«Non lo so» for the term of office of the Prime Minister, which the Constitution does not state, with Art. 95, 85 and 92 as nearest passages">
 
 ## Configuration
 
