@@ -1,0 +1,1285 @@
+{
+  "summary": {
+    "recall@1": 0.8393,
+    "recall@3": 0.8393,
+    "recall@5": 0.8393,
+    "recall@10": 0.8393,
+    "recall@candidates": 0.8393,
+    "mrr@10": 0.8571,
+    "correct_refusals": 1.0,
+    "false_refusals": 0.0,
+    "page_precision": 0.9702,
+    "cites_evidence": 0.9286,
+    "groundedness": 0.825,
+    "correctness": 0.9821,
+    "generation_p50_s": 1.048,
+    "generation_p95_s": 3.309,
+    "retrieval_p50_s": 0.2,
+    "retrieval_p95_s": 0.237
+  },
+  "dataset": "scans",
+  "label": "ocr-easyocr",
+  "created_at": "2026-10-12T11:22:26+00:00",
+  "settings": {
+    "offline": false,
+    "parser": {
+      "mode": "auto",
+      "ocr": true,
+      "ocr_engine": "easyocr",
+      "ocr_languages": [],
+      "force_ocr": false,
+      "ocr_confidence": 0.2,
+      "tables": true
+    },
+    "embedding": {
+      "model": "ibm-granite/granite-embedding-311m-multilingual-r2",
+      "revision": null,
+      "device": "auto",
+      "batch_size": 16,
+      "query_prefix": "",
+      "document_prefix": ""
+    },
+    "chunking": {
+      "max_chars": 1500,
+      "overlap_chars": 200
+    },
+    "retrieval": {
+      "bm25_k": 50,
+      "dense_k": 50,
+      "fused_k": 30,
+      "final_k": 6,
+      "rrf_k": 60,
+      "keyword_terms": "stemmed"
+    },
+    "rerank": {
+      "enabled": true,
+      "model": "BAAI/bge-reranker-v2-m3",
+      "revision": null,
+      "device": "auto",
+      "batch_size": 16,
+      "max_length": 512,
+      "min_score": 0.1
+    },
+    "llm": {
+      "provider": "ollama",
+      "base_url": "http://127.0.0.1:11434",
+      "model": "gemma4:12b",
+      "allow_remote": false,
+      "think": false,
+      "context_window": 8192,
+      "max_answer_tokens": 800,
+      "temperature": 0.0,
+      "seed": 42,
+      "timeout_s": 300.0
+    },
+    "citations": {
+      "min_support": 0.3
+    },
+    "web": {
+      "host": "127.0.0.1",
+      "port": 8000,
+      "max_upload_mb": 100
+    }
+  },
+  "judge_model": "ollama:qwen2.5:14b",
+  "ingest": {
+    "documents": 3,
+    "pages": 71,
+    "chunks": 188,
+    "seconds": 126.53,
+    "seconds_per_page": 1.782
+  },
+  "questions": [
+    {
+      "id": "cost-01",
+      "question": "Su che cosa è fondata la Repubblica italiana?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        null
+      ],
+      "candidate_ranks": [
+        null
+      ],
+      "retrieval_s": 6.563,
+      "top_score": 0.3772,
+      "answer": "La Repubblica italiana è fondata sul lavoro [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 4,
+          "passage": "Repubblica democratica, fondata sul lavoro: della Costituzione.",
+          "claim": "La Repubblica italiana è fondata sul lavoro."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": false,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 7.61
+    },
+    {
+      "id": "cost-02",
+      "question": "A chi appartiene la sovranità secondo la Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        null
+      ],
+      "candidate_ranks": [
+        null
+      ],
+      "retrieval_s": 0.205,
+      "top_score": 0.9919,
+      "answer": "La sovranità appartiene al popolo [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 4,
+          "passage": "Ltalia € una La sovranità appartiene al popolo, che la esercita nelle forme e nci limiti",
+          "claim": "La sovranità appartiene al popolo."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 0.5,
+      "generation_s": 1.046
+    },
+    {
+      "id": "cost-03",
+      "question": "Quando è ammessa la restrizione della libertà personale?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        null
+      ],
+      "candidate_ranks": [
+        null
+      ],
+      "retrieval_s": 0.162,
+      "top_score": 0.8572,
+      "answer": "La libertà personale è inviolabile e non è ammessa alcuna forma di detenzione, ispezione o perquisizione personale, né qualsiasi altra restrizione, se non per atto motivato dell'autorità giudiziaria nei soli casi e modi previsti dalla legge [1].\n\nIn casi eccezionali di necessità ed urgenza, indicati tassativamente dalla legge, l'autorità di pubblica sicurezza può adottare provvedimenti provvisori, che devono essere comunicati entro quarantotto ore all'autorità giudiziaria [1]. Se quest'ultima non li convalida nelle successive quarantotto ore, si intendono revocati e restano di effetto [1].\n\nPer i membri del Parlamento, nessun membro può essere sottoposto ad arresto, mantenuto in detenzione o privato della libertà personale senza autorizzazione della Camera alla quale appartiene, salvo che in esecuzione di una sentenza irrevocabile di condanna, oppure se sia colto nell'atto di commettere un delitto per il quale è previsto l'arresto obbligatorio in flagranza [3].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 7,
+          "passage": "Non è ammessa forma alcuna di detenzione, di ispezione 0 perquisizione personale, né qualsiasialtra restrizione della libertà personale, se non per atto motivato dellautorità giudiziaria enci soli casi € modi previsti dalla In casi eccezionali di necessità ed urgenza, indicati tassauvamente dalla legge, Vautorità di pubblica sicurezza adottare provvedimenti provvisori, che devono essere comunicati entro quarantotto ore allautorità giudiziaria €, s€ questa non li convalida nelle successive quarantotto ore, si intendono revocati € restano di effetto.",
+          "claim": "In casi eccezionali di necessità ed urgenza, indicati tassativamente dalla legge, l'autorità di pubblica sicurezza può adottare provvedimenti provvisori, che devono essere comunicati entro quarantotto ore all'autorità giudiziaria."
+        },
+        {
+          "doc": "costituzione-scan",
+          "page": 20,
+          "passage": "Senza autorizzazione della Camera alla quale appartiene, nessun mem - bro del Parlamento esserC sottoposto a perquisizione personale 0 domiciliare, né esserC arrestato O altrimenti privato della libertà personale, 0 mantenuto in detenzione, salvo che in esecuzione di una sentenza irrevocabile di condanna, ovvero se sia colto nellatto di com - mettere Un delitto per il quale & previsto Parresto obbligatorio in fla - granza, può può",
+          "claim": "Per i membri del Parlamento, nessun membro può essere sottoposto ad arresto, mantenuto in detenzione o privato della libertà personale senza autorizzazione della Camera alla quale appartiene, salvo che in esecuzione di una sentenza irrevocabile di condanna, oppure se sia colto nell'atto di commettere un delitto per il quale è previsto l'arresto obbligatorio in flagranza."
+        }
+      ],
+      "page_precision": 0.5,
+      "cites_evidence": false,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 3.309
+    },
+    {
+      "id": "cost-04",
+      "question": "Qual è la posizione dell'Italia nei confronti della guerra?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        3
+      ],
+      "retrieval_s": 0.151,
+      "top_score": 0.9294,
+      "answer": "L'Italia ripudia la guerra come strumento di offesa alla libertà degli altri popoli o come mezzo di risoluzione delle controversie internazionali [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 6,
+          "passage": "EItalia ripudia la guerra come strumento di offesa alla libertà degli altri po€ comc mezzo di risoluzione delle controversie internazionali; consente, in condizioni di parità con altri Stati, alle limitazioni di sovranità necessarie ad un ordinamento che assicuri la pace € la giustizia fra le Nazioni; promuove € favorisce le organizzazioni internazionali rivolte a tale scopo. poli gli",
+          "claim": "L'Italia ripudia la guerra come strumento di offesa alla libertà degli altri popoli o come mezzo di risoluzione delle controversie internazionali."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.148
+    },
+    {
+      "id": "cost-05",
+      "question": "Com'è fatta la bandiera della Repubblica?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        30
+      ],
+      "retrieval_s": 0.171,
+      "top_score": 0.321,
+      "answer": "La bandiera della Repubblica è il tricolore italiano: verde, bianco e rosso, a tre bande verticali di dimensioni uguali [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 6,
+          "passage": "La bandicra della Repubblica è il tricolore italiano: verde, bianco € rosso, a tre bande verticali di dimensioni. eguali Il domicilio è inviolabile.",
+          "claim": "La bandiera della Repubblica è il tricolore italiano: verde, bianco e rosso, a tre bande verticali di dimensioni uguali."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 0.938
+    },
+    {
+      "id": "cost-06",
+      "question": "Un lavoratore può rinunciare alle ferie annuali?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.15,
+      "top_score": 0.5752,
+      "answer": "Il lavoratore non può rinunciare alle ferie annuali retribuite [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 12,
+          "passage": "Illavoratore ha diritto al riposo settimanale € a ferie annuali retribuite; €",
+          "claim": "Il lavoratore non può rinunciare alle ferie annuali retribuite."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.0,
+      "correct": 1.0,
+      "generation_s": 1.106
+    },
+    {
+      "id": "cost-07",
+      "question": "Votare è un obbligo secondo la Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.179,
+      "top_score": 0.3206,
+      "answer": "L'esercizio del voto è considerato un dovere civico [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 15,
+          "passage": "Il voto à personale ed eguale, libero € segreto, Il suo esercizio è dovere civico.",
+          "claim": "L'esercizio del voto è considerato un dovere civico."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.243
+    },
+    {
+      "id": "cost-08",
+      "question": "Quanti sono i deputati e quanti di loro sono eletti all'estero?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 2.414,
+      "top_score": 0.8791,
+      "answer": "Il numero dei deputati è di quattrocento [1]. Di questi, otto sono eletti nella circoscrizione Estero [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 17,
+          "passage": "Il numero dei deputati è di quattrocento, otto dei eletti nella circo - scrizione Estero quali",
+          "claim": "Il numero dei deputati è di quattrocento."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 1.654
+    },
+    {
+      "id": "cost-09",
+      "question": "Quanti anni bisogna avere per essere eletti Presidente della Repubblica e quanto dura il mandato?",
+      "answerable": true,
+      "tags": [
+        "normativa",
+        "multi-passaggio"
+      ],
+      "ranks": [
+        null,
+        1
+      ],
+      "candidate_ranks": [
+        null,
+        3
+      ],
+      "retrieval_s": 0.237,
+      "top_score": 0.9567,
+      "answer": "Per essere eletto Presidente della Repubblica, è necessario aver compiuto cinquanta anni di età [2]. Il mandato del Presidente della Repubblica dura sette anni [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 24,
+          "passage": "Il Presidente della Repubblica & eletto per sette anni.",
+          "claim": "Il mandato del Presidente della Repubblica dura sette anni."
+        },
+        {
+          "doc": "costituzione-scan",
+          "page": 24,
+          "passage": "Può essere eletto Presidente della Repubblica cittadino che abbia compiuto cinquanta anni detà e dei diritti civili € politici. ogni goda",
+          "claim": "Per essere eletto Presidente della Repubblica, è necessario aver compiuto cinquanta anni di età."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.784
+    },
+    {
+      "id": "cost-10",
+      "question": "Chi nomina il Presidente del Consiglio dei ministri?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.178,
+      "top_score": 0.983,
+      "answer": "Il Presidente della Repubblica nomina il Presidente del Consiglio dei ministri [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 26,
+          "passage": "Il Presidente della Repubblica nomina il Presidente del Consiglio dci mini - e, su proposta di questo, ministri. suri",
+          "claim": "Il Presidente della Repubblica nomina il Presidente del Consiglio dei ministri."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.122
+    },
+    {
+      "id": "cost-11",
+      "question": "Da quanti giudici è composta la Corte costituzionale e chi li nomina?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        null
+      ],
+      "candidate_ranks": [
+        null
+      ],
+      "retrieval_s": 0.234,
+      "top_score": 0.9993,
+      "answer": "La Corte costituzionale è composta da quindici giudici [1][2]. La nomina dei giudici avviene per un terzo da parte del Presidente della Repubblica, per un terzo dal Parlamento in seduta comune e per un terzo dalle supreme magistrature [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 42,
+          "passage": "Ia Corte costituzionale è composta di quindici giudici nominati per un magistrature ordinaria ed am-",
+          "claim": "La Corte costituzionale è composta da quindici giudici."
+        },
+        {
+          "doc": "costituzione-scan",
+          "page": 42,
+          "passage": "Ia Corte costituzionale è composta di quindici giudici nominati per un magistrature ordinaria ed am-\n\nterzo dal Presidente della Repubblica, per un terzo dal Parlamento in seduta comune € per un terzo dalle supreme ministrative.",
+          "claim": "La nomina dei giudici avviene per un terzo da parte del Presidente della Repubblica, per un terzo dal Parlamento in seduta comune e per un terzo dalle supreme magistrature."
+        },
+        {
+          "doc": "costituzione-scan",
+          "page": 60,
+          "passage": "La Corte costituzionake è oomposta di quindici giudici nowinati per unt terzo dal Prsidente",
+          "claim": "La Corte costituzionale è composta da quindici giudici."
+        }
+      ],
+      "page_precision": 0.6666666666666666,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.021
+    },
+    {
+      "id": "cost-12",
+      "question": "Si può cambiare la forma repubblicana con una revisione della Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.148,
+      "top_score": 0.9576,
+      "answer": "No, la forma repubblicana non può essere oggetto di revisione costituzionale [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 44,
+          "passage": "La forma repubblicana non esserC oggetto di revisione costituzionale. può",
+          "claim": "No, la forma repubblicana non può essere oggetto di revisione costituzionale."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 0.959
+    },
+    {
+      "id": "cost-13",
+      "question": "Come vengono approvate le leggi di revisione della Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.179,
+      "top_score": 0.9978,
+      "answer": "Le leggi di revisione della Costituzione sono adottate da ciascuna Camera con due successive deliberazioni a intervallo non minore di tre mesi [1]. Nella seconda votazione, esse devono essere approvate a maggioranza assoluta dei componenti di ciascuna Camera [1]. Le leggi stesse sono sottoposte a referendum quando, entro tre mesi dalla loro pubblicazione, ne facciano domanda un quinto dei membri di una Camera, cinquecentomila elettori o cinque Consigli regionali [1]. La legge sottoposta a referendum non è promulgata se non è approvata dalla maggioranza dei voti popolari [1]. Non si fa luogo a referendum se la legge è stata approvata nella seconda votazione da ciascuna delle Camere a maggioranza di due terzi dei suoi componenti [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 44,
+          "passage": "Le leggi di revisione della Costituzione € le altre leggi costituzionali sono adottate da ciascuna Camera con due successive deliberazioni ad intervallo non minore di mesi, € sono approvate maggioranza assoluta dei componenti di ciascuna Camera nella seconda votazione: Le leggi stesse sono sottoposte a referendum quando, entro tr€ mesi dalla loro pubblicazione, ne facciano domanda quinto dei membri di una Camera cinquecentomila elettori 0 cinque Consigli regionali.",
+          "claim": "Le leggi stesse sono sottoposte a referendum quando, entro tre mesi dalla loro pubblicazione, ne facciano domanda un quinto dei membri di una Camera, cinquecentomila elettori o cinque Consigli regionali."
+        },
+        {
+          "doc": "costituzione-scan",
+          "page": 44,
+          "passage": "La legge sottoposta a referendum non è promulgata se non è approvata dalla maggioranza dei voti validi. popolare un",
+          "claim": "La legge sottoposta a referendum non è promulgata se non è approvata dalla maggioranza dei voti popolari."
+        },
+        {
+          "doc": "costituzione-scan",
+          "page": 44,
+          "passage": "Non si fa luogo a referendum se la €stata approvata nella scconda votazione da ciascuna delle Camere a maggioranza di due terzi dei suoi componenti. legge",
+          "claim": "Non si fa luogo a referendum se la legge è stata approvata nella seconda votazione da ciascuna delle Camere a maggioranza di due terzi dei suoi componenti."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.6,
+      "correct": 1.0,
+      "generation_s": 2.563
+    },
+    {
+      "id": "cost-14",
+      "question": "Chi diventa senatore di diritto e a vita?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.198,
+      "top_score": 0.7642,
+      "answer": "Chi è stato Presidente della Repubblica diventa senatore di diritto a vita, a salvo rinunzi [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione-scan",
+          "page": 18,
+          "passage": "E senatore di diritto € a salvo rinunzia, chi è stato Presidente della Repubblica. vita,",
+          "claim": "Chi è stato Presidente della Repubblica diventa senatore di diritto a vita, a salvo rinunzi."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.555
+    },
+    {
+      "id": "contratto-01",
+      "question": "A quanto ammonta la rata mensile del canone di locazione?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.224,
+      "top_score": 0.9123,
+      "answer": "La rata mensile del canone di locazione ammonta a euro 800,00 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto-scan",
+          "page": 2,
+          "passage": "Il canone annuo è convenuto in euro 9.600,00 (novemilaseicentol0o), da corrispondere in dodici rate mensili anticipate di euro 800,00 ciascuna, entro il giorno 5 di ogni mese, mediante bonifico bancario sul conto corrente indicato dal locatore",
+          "claim": "La rata mensile del canone di locazione ammonta a euro 800,00."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.048
+    },
+    {
+      "id": "contratto-02",
+      "question": "Quanto dura il contratto di locazione e da quando decorre?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.202,
+      "top_score": 0.9893,
+      "answer": "La locazione ha una durata di quattro anni [1]. La decorrenza è fissata al 1° febbraio 2026 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto-scan",
+          "page": 1,
+          "passage": "La locazione ha durata di quattro anni; con decorrenza dal 1* febbraio 2026, e si rinnova automaticamente per ulteriori quattro anni; salvo disdetta da comunicare con lettera raccomandata almeno sei mesi prima della scadenza.",
+          "claim": "La locazione ha una durata di quattro anni."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 1.132
+    },
+    {
+      "id": "contratto-03",
+      "question": "A quanto ammonta il deposito cauzionale?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.211,
+      "top_score": 0.5622,
+      "answer": "Il deposito cauzionale ammonta a tre mensilità del canone [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto-scan",
+          "page": 2,
+          "passage": "A garanzia delle obbligazioni assunte, il conduttore versa al locatore un deposito cauzionale a tre mensilità del canone; produttivo di interessi legali, che sarà restituito al termine della locazione previa verifica dello stato dell'immobile. pari",
+          "claim": "Il deposito cauzionale ammonta a tre mensilità del canone."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.224
+    },
+    {
+      "id": "contratto-04",
+      "question": "Quanto paga il conduttore ogni mese in acconto per la pulizia delle scale e l'ascensore?",
+      "answerable": true,
+      "tags": [
+        "contratto",
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.199,
+      "top_score": 0.849,
+      "answer": "Il conduttore versa un acconto mensile di euro 25,00 per la pulizia delle scale e dell'ascensore [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto-scan",
+          "page": 2,
+          "passage": "| Pulizia scale e ascensore | euro 25,00 |",
+          "claim": "Il conduttore versa un acconto mensile di euro 25,00 per la pulizia delle scale e dell'ascensore."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 1.024
+    },
+    {
+      "id": "contratto-05",
+      "question": "Chi paga la sostituzione della caldaia nell'appartamento in affitto?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.204,
+      "top_score": 0.9026,
+      "answer": "La sostituzione della caldaia resta a carico del locatore [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto-scan",
+          "page": 3,
+          "passage": "Le riparazioni di piccola manutenzione sono a carico del conduttore; quelle straordinarie, compresa la sostituzione della caldaia, restano a carico del locatore_",
+          "claim": "La sostituzione della caldaia resta a carico del locatore."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 0.866
+    },
+    {
+      "id": "contratto-06",
+      "question": "Si possono tenere animali domestici nell'appartamento?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.145,
+      "top_score": 0.9237,
+      "answer": "È consentita la detenzione di animali domestici di piccola taglia, a condizione che non arrechino danni all'immobile né disturbo agli altri condomini [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto-scan",
+          "page": 3,
+          "passage": "È consentita la detenzione di animali domestici di piccola taglia, purché non arrechino disturbo agli altri condomini né danni all'immobile .",
+          "claim": "È consentita la detenzione di animali domestici di piccola taglia, a condizione che non arrechino danni all'immobile né disturbo agli altri condomini."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.145
+    },
+    {
+      "id": "contratto-07",
+      "question": "Come viene aggiornato il canone ogni anno?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.2,
+      "top_score": 0.8757,
+      "answer": "Il canone viene aggiornato ogni anno nella misura del 75% della variazione dell'indice ISTAT dei prezzi al consumo per le famiglie di operai e impiegati [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto-scan",
+          "page": 2,
+          "passage": "Il canone & aggiornato ogni anno nella misura del 75% della variazione dell'indice ISTAT dei prezzi al consumo le famiglie di operai e impiegati . per",
+          "claim": "Il canone viene aggiornato ogni anno nella misura del 75% della variazione dell'indice ISTAT dei prezzi al consumo per le famiglie di operai e impiegati."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.4
+    },
+    {
+      "id": "manuale-01",
+      "question": "Cosa significa il codice di errore E04 della caldaia e cosa bisogna fare?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        3
+      ],
+      "retrieval_s": 0.173,
+      "top_score": 0.6303,
+      "answer": "Il codice di errore E04 significa che la pressione dell'impianto è insufficiente [1]. L'intervento da eseguire consiste nel ripristinare la pressione a 1,2 bar tramite il rubinetto di carico [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale-scan",
+          "page": 2,
+          "passage": "| E04 | Pressione dell'impianto insufficiente | Ripristinare la pressione a 1,2 bar tramite il rubinetto di carico |",
+          "claim": "L'intervento da eseguire consiste nel ripristinare la pressione a 1,2 bar tramite il rubinetto di carico."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 4.432
+    },
+    {
+      "id": "manuale-02",
+      "question": "Ogni quanto va fatta la manutenzione ordinaria della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.185,
+      "top_score": 0.9697,
+      "answer": "La manutenzione ordinaria deve essere eseguita almeno una volta all'anno da un tecnico abilitato [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale-scan",
+          "page": 3,
+          "passage": "La manutenzione ordinaria deve essere eseguita almeno una volta all'anno da un tecnico abilitato; preferibilmente prima dell'inizio della stagione di riscaldamento: Il controllo dell'efficienza energetica con analisi dei fumi va eseguito ogni due anni e registrato nel libretto di impianto .",
+          "claim": "La manutenzione ordinaria deve essere eseguita almeno una volta all'anno da un tecnico abilitato."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 0.962
+    },
+    {
+      "id": "manuale-03",
+      "question": "Ogni quanto va eseguita l'analisi dei fumi della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.198,
+      "top_score": 0.9762,
+      "answer": "Il controllo dell'efficienza energetica con analisi dei fumi va eseguito ogni due anni e deve essere registrato nel libretto di impianto [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale-scan",
+          "page": 3,
+          "passage": "La manutenzione ordinaria deve essere eseguita almeno una volta all'anno da un tecnico abilitato; preferibilmente prima dell'inizio della stagione di riscaldamento: Il controllo dell'efficienza energetica con analisi dei fumi va eseguito ogni due anni e registrato nel libretto di impianto .",
+          "claim": "Il controllo dell'efficienza energetica con analisi dei fumi va eseguito ogni due anni e deve essere registrato nel libretto di impianto."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.136
+    },
+    {
+      "id": "manuale-04",
+      "question": "Qual è la potenza termica nominale della caldaia Aurora T24?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.222,
+      "top_score": 0.9996,
+      "answer": "La potenza termica nominale della caldaia è di 24 kW [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale-scan",
+          "page": 1,
+          "passage": "| Potenza termica nominale | 24 kW |",
+          "claim": "La potenza termica nominale della caldaia è di 24 kW."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.092
+    },
+    {
+      "id": "manuale-05",
+      "question": "Quale deve essere la pressione dell'impianto a caldaia fredda?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.165,
+      "top_score": 0.9918,
+      "answer": "La pressione dell'impianto, letta a caldaia fredda, deve essere compresa tra 1 e 1,5 bar [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale-scan",
+          "page": 2,
+          "passage": "La pressione dell'impianto, letta a caldaia fredda; deve essere compresa tra 1 e 1,5 bar .",
+          "claim": "La pressione dell'impianto, letta a caldaia fredda, deve essere compresa tra 1 e 1,5 bar."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.17
+    },
+    {
+      "id": "manuale-06",
+      "question": "Quanto dura la garanzia della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.169,
+      "top_score": 0.9817,
+      "answer": "La caldaia è coperta da una garanzia di cinque anni dalla data della prima accensione [1]. Tale garanzia è valida a condizione che la manutenzione annuale sia stata eseguita regolarmente e documentata [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale-scan",
+          "page": 3,
+          "passage": "La caldaia è coperta da garanzia di cinque anni dalla data della prima accensione; a condizione che la manutenzione annuale sia stata eseguita regolarmente e documentata.",
+          "claim": "La caldaia è coperta da una garanzia di cinque anni dalla data della prima accensione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 1.296
+    },
+    {
+      "id": "manuale-07",
+      "question": "Cosa bisogna fare se un codice di errore si ripresenta più volte?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.215,
+      "top_score": 0.875,
+      "answer": "Se lo stesso codice di errore si ripresenta più di tre volte in 24 ore, occorre spegnere la caldaia e contattare l'assistenza tecnica [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale-scan",
+          "page": 2,
+          "passage": "Se lo stesso codice si ripresenta plù di tre volte in 24 ore, spegnere la caldaia e contattare lassistenza tecnica",
+          "claim": "Se lo stesso codice di errore si ripresenta più di tre volte in 24 ore, occorre spegnere la caldaia e contattare l'assistenza tecnica."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.314
+    },
+    {
+      "id": "nr-01",
+      "question": "Quanto dura il mandato del Presidente del Consiglio dei ministri?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.186,
+      "top_score": 0.136,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.969
+    },
+    {
+      "id": "nr-02",
+      "question": "Qual è l'importo annuale del canone RAI?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.217,
+      "top_score": 0.0925,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-03",
+      "question": "Il contratto di locazione include un posto auto o un garage?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.196,
+      "top_score": 0.0142,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-04",
+      "question": "Qual era il tasso di disoccupazione in Germania a luglio 2026?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.211,
+      "top_score": 0.0003,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-05",
+      "question": "Come si chiama l'amministratore del condominio di via dei Tigli 12?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.218,
+      "top_score": 0.0004,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-06",
+      "question": "Quale codice di errore indica il surriscaldamento dei fumi nella caldaia Aurora T24?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.209,
+      "top_score": 0.9105,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.976
+    },
+    {
+      "id": "nr-07",
+      "question": "Qual è la sanzione per chi non va a votare?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.228,
+      "top_score": 0.03,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-08",
+      "question": "Quali requisiti servono per diventare giudice di pace?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.223,
+      "top_score": 0.0097,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-09",
+      "question": "Quanto costa la caldaia Aurora T24?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.217,
+      "top_score": 0.0898,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-10",
+      "question": "Entro quando il conduttore deve pagare le spese condominiali straordinarie?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.171,
+      "top_score": 0.1174,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.667
+    },
+    {
+      "id": "nr-11",
+      "question": "Chi ha vinto il campionato di calcio di Serie A nel 2025?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.224,
+      "top_score": 0.0001,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-12",
+      "question": "Quanti sono i dipendenti pubblici in Italia?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.213,
+      "top_score": 0.0031,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-13",
+      "question": "Chi è l'attuale presidente del Garante per la protezione dei dati personali?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.178,
+      "top_score": 0.002,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-14",
+      "question": "Quale autorità italiana vigila sull'applicazione del regolamento sull'intelligenza artificiale?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.227,
+      "top_score": 0.0014,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    }
+  ]
+}

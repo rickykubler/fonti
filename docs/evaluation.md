@@ -153,6 +153,32 @@ page CER 0.07 against 0.20 for EasyOCR on six Constitution pages) but drops Ital
 region order also varies on some pages, which the order-sensitive CER punishes. EasyOCR stays
 the default; `parser.ocr_engine = "rapidocr"` is available for experiments.
 
+OCR engines compared on the three synthetic scans (all 71 pages; page CER against the
+original text layer, accents = share of accented words of the original found in the OCR):
+
+| Engine | Constitution: median CER | accents | Contract: median CER | accents | Manual: accents | s/page |
+|---|---|---|---|---|---|---|
+| EasyOCR it/en (default) | 0.276 | 0.68 | 0.046 | 0.75 | 0.50 | 0.8-1.7 |
+| RapidOCR latin (torch) | 0.103 | 0.04 | 0.154 | 0.13 | 0.00 | 0.4-0.7 |
+| Tesseract 5.4 `ita+eng`, tessdata | 0.027 | 0.39 | 0.004 | 0.70 | 0.25 | 1.3-2.7 |
+| Tesseract 5.4 `ita+eng`, tessdata_best | **0.019** | **0.84** | **0.000** | **1.00** | **1.00** | 1.5-3.0 |
+
+Full runs on the `scans` dataset (judge qwen2.5:14b, reports `2026-10-12_ocr-*_scans`):
+
+| OCR | Recall@1 | Recall@5 | MRR@10 | False refusals | Cited pages | Groundedness | Correctness | Ingest s/page |
+|---|---|---|---|---|---|---|---|---|
+| EasyOCR (default) | 0.839 | 0.839 | 0.857 | 0.00 | 0.97 | 0.83 | 0.98 | 1.8 |
+| Tesseract, tessdata_best | 0.911 | 0.964 | 0.941 | 0.07 | 0.98 | 0.92 | 1.00 | 3.1 |
+
+Tesseract with the `best` Italian model keeps word order and accents and lifts retrieval and
+groundedness on running text, but it loses short tokens inside table cells: the error codes
+of the manual (E01, E04...) and the rows of the contract's charges table come out empty, so
+two table questions (manuale-01, contratto-04) become false refusals. Page segmentation modes
+3, 6 and 11 do not fix it (11 recovers the contract table but degrades running text). It is
+also a separate install (the Tesseract binary and `tessdata_best/ita.traineddata`, found
+through `TESSDATA_PREFIX`) and twice as slow. EasyOCR stays the default; Tesseract is
+available with `parser.ocr_engine = "tesseract"` (config `eval/configs/ocr-tesseract.toml`).
+
 The reranker gate was calibrated on the main dataset: every answerable question had a best
 reranker score of at least 0.28, while 8 of the 12 unanswerable ones scored below 0.17; the
 LLM has to reject the other four, which are topically close to the corpus.
