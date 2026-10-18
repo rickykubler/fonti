@@ -1,5 +1,6 @@
 """Background ingestion of uploaded files, one at a time."""
 
+import logging
 import shutil
 import tempfile
 import threading
@@ -12,6 +13,8 @@ from pathlib import Path
 
 from fonti.errors import FontiError
 from fonti.service import Fonti, IngestStatus
+
+logger = logging.getLogger(__name__)
 
 
 class JobState(StrEnum):
@@ -75,5 +78,8 @@ class IngestJobs:
                 )
         except FontiError as exc:
             job.state, job.message = JobState.FAILED, str(exc)
+        except Exception:  # the executor would swallow it and leave the job running forever
+            logger.exception("Ingestion of %s failed", job.filename)
+            job.state, job.message = JobState.FAILED, "errore imprevisto: dettagli nel log"
         finally:
             shutil.rmtree(path.parent, ignore_errors=True)

@@ -1,4 +1,5 @@
 import json
+import threading
 import time
 from collections.abc import Iterator
 from pathlib import Path
@@ -11,6 +12,7 @@ from fonti.config import EmbeddingSettings, Settings
 from fonti.evaluation.synthetic import render_pdf
 from fonti.service import Fonti
 from fonti.web.app import create_app
+from fonti.web.jobs import IngestJobs, JobState
 from fonti.web.preview import merge_lines, passage_boxes
 from tests.fakes import FakeChat
 from tests.samples import CONTRACT_MD
@@ -184,3 +186,31 @@ def test_cross_origin_writes_are_rejected(client: TestClient) -> None:
 
     assert foreign.status_code == 403
     assert same.status_code == 200
+
+
+def test_cross_site_reads_are_rejected_but_links_work(client: TestClient) -> None:
+    cross_site = {"Sec-Fetch-Site": "cross-site"}
+    embedded = client.get("/", headers=cross_site | {"Sec-Fetch-Mode": "no-cors"})
+    followed = client.get("/", headers=cross_site | {"Sec-Fetch-Mode": "navigate"})
+
+    assert embedded.status_code == 403
+    assert followed.status_code == 200
+    assert followed.headers["cross-origin-resource-policy"] == "same-origin"
+
+
+def test_unexpected_ingest_errors_fail_the_job(
+    service: Fonti, contract: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def broken(paths: object) -> list[object]:
+        raise RuntimeError("CUDA out of memory")
+
+    monkeypatch.setattr(service, "ingest", broken)
+    jobs = IngestJobs(service, threading.Lock())
+    job = jobs.submit("contratto.pdf", contract.read_bytes())
+    deadline = time.monotonic() + 10
+    while time.monotonic() < deadline and jobs.busy():
+        time.sleep(0.05)
+    jobs.shutdown()
+
+    assert job.state is JobState.FAILED
+    assert not jobs.busy()
