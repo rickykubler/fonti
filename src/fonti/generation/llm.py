@@ -38,20 +38,25 @@ class RemoteEndpointError(LLMError):
     """A non-local endpoint or a cloud model was configured without `allow_remote`."""
 
 
+def remote_reason(settings: LLMSettings) -> str | None:
+    """Why questions and passages would leave the computer with these settings, if they would."""
+    host = urlsplit(settings.base_url).hostname or ""
+    if not is_loopback(host):
+        return (
+            f"L'endpoint {settings.base_url} non è locale: le domande e i documenti uscirebbero "
+            "dal computer."
+        )
+    if settings.provider == "ollama" and _is_ollama_cloud_model(settings.model):
+        return f"Il modello {settings.model} gira nel cloud di Ollama."
+    return None
+
+
 def ensure_local(settings: LLMSettings) -> None:
     if settings.allow_remote:
         return
-    host = urlsplit(settings.base_url).hostname or ""
-    if not is_loopback(host):
-        raise RemoteEndpointError(
-            f"L'endpoint {settings.base_url} non è locale: le domande e i documenti uscirebbero "
-            "dal computer. Per usarlo imposta llm.allow_remote = true."
-        )
-    if settings.provider == "ollama" and _is_ollama_cloud_model(settings.model):
-        raise RemoteEndpointError(
-            f"Il modello {settings.model} gira nel cloud di Ollama. "
-            "Per usarlo imposta llm.allow_remote = true."
-        )
+    reason = remote_reason(settings)
+    if reason is not None:
+        raise RemoteEndpointError(f"{reason} Per usarlo imposta llm.allow_remote = true.")
 
 
 def create_chat_client(
