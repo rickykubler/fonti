@@ -1,0 +1,20 @@
+# The shipped defaults, spelled out so that the reports stay reproducible if a default
+# changes. Use it as the baseline when measuring a change.
+[parser]
+mode = "auto"
+ocr_engine = "easyocr"
+
+[retrieval]
+keyword_terms = "stemmed"
+
+[rerank]
+enabled = true
+model = "BAAI/bge-reranker-v2-m3"
+min_score = 0.1
+
+[embedding]
+model = "ibm-granite/granite-embedding-311m-multilingual-r2"
+
+[llm]
+model = "gemma4:12b"
+think = false

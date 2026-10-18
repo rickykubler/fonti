@@ -1,7 +1,7 @@
 # Roadmap
 
-Milestones are executed in order. Each step is verified (ruff, mypy, pytest) and committed on
-`feat/v0.1`. Check boxes are updated as work lands.
+Milestones are executed in order. Each step is verified (ruff, mypy, pytest) in CI on Ubuntu
+and Windows. Check boxes are updated as work lands; v0.1.0 is tagged on `main`.
 
 ## M0 — Skeleton
 
@@ -69,8 +69,8 @@ the baseline:
 | defaults: granite R2 embedder, gemma4:12b answering model | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.97 | 0.90 |
 | defaults, 75 questions (+ GDPR and AI Act) | 0.844 | 0.967 | 0.903 | 1.00 | 0.03 | 0.89 | 0.84 |
 
-Scans (Docling + EasyOCR): correctness 0.94, cited pages 1.0, recall@5 0.80 (OCR noise lowers
-quote matching), ingest 1.5 s/page. qwen2.5:14b answers cost-08 with the historical text of
+Scans (Docling + EasyOCR, 42 questions): correctness 0.98, cited pages 0.97, recall@5 0.84
+(OCR noise lowers quote matching), ingest 1.8 s/page; see docs/evaluation.md for Tesseract. qwen2.5:14b answers cost-08 with the historical text of
 Art. 56 quoted in the notes instead of the current one; gemma4:12b answers it correctly.
 
 ## M3 — Web UI and demo
@@ -87,12 +87,11 @@ Art. 56 quoted in the notes instead of the current one; gemma4:12b answers it co
 
 - [x] Full README, `docs/architecture.md`, `docs/evaluation.md`
 - [x] CONTRIBUTING, issue templates, CHANGELOG, NOTICE (model and data licenses)
-- [x] Clean install test from a fresh clone (`uv sync --extra cpu`, 164 tests passing)
+- [x] Clean install test from a fresh clone (`uv sync --extra cpu`, all fast tests passing)
 
 ## Needs the maintainer
 
 - Feedback from real testers
-- Human review of the golden set and of ~20 LLM-judge verdicts
 
 ## Decision log
 

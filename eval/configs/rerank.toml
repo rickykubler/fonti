@@ -1,4 +1,7 @@
 # Stemmed BM25 + cross-encoder reranking (no relevance gate yet).
+[parser]
+mode = "fast"  # as in the committed report
+
 [retrieval]
 keyword_terms = "stemmed"
 

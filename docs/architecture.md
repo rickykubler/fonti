@@ -1,6 +1,6 @@
 # Architecture
 
-fonti is a small Python package (about 2,500 lines without tests) with no RAG framework: every
+fonti is a small Python package (about 3,000 lines without tests and the evaluation code) with no RAG framework: every
 step is plain code that can be read and tested on its own. This page explains how a document
 becomes searchable and how a question becomes a cited answer.
 
@@ -9,7 +9,7 @@ becomes searchable and how a question becomes a cited answer.
 ```
                  ingest                                          ask
 file ──► parse ──► clean ──► chunk ──► embed ──► SQLite ◄── retrieve ◄── question
-         (fast │ Docling)    (sections,   (bge-m3)  │ documents          │ BM25 + dense
+         (fast │ Docling)    (sections, (granite R2)│ documents          │ BM25 + dense
                              offsets)              │ pages              │ RRF fusion
                                                    │ chunks             │ reranker
                                                    │ FTS5 (BM25)        │ gate
@@ -65,7 +65,7 @@ evaluation runner (`evaluation/`) all go through `ingest()`, `retrieve()`, `answ
    keeps its document-level character offsets; pages are derived from offsets, so a chunk that
    spans two pages, or a passage inside it, always maps to the right page.
 5. **Indexing.** The text indexed for a chunk is its heading path plus its text. It is
-   embedded (bge-m3, float16 on CUDA) and its Italian keyword terms go to an FTS5 table. One
+   embedded (granite-embedding-311m-multilingual-r2, float16 on CUDA) and its Italian keyword terms go to an FTS5 table. One
    SQLite transaction stores the document, its pages, chunks, terms and vectors. The settings
    that define the index (embedder, chunker, parser and keyword versions) are recorded: a
    mismatch stops queries and ingestion with "esegui `fonti reindex`".

@@ -1,4 +1,7 @@
 # Baseline + Italian stemming and stopwords in BM25.
+[parser]
+mode = "fast"  # as in the committed report
+
 [retrieval]
 keyword_terms = "stemmed"
 

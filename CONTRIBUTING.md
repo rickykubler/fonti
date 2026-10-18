@@ -48,7 +48,7 @@ Every change to parsing, chunking, retrieval or prompts must be measured:
 ```
 uv run fonti eval corpus
 uv run fonti eval check
-uv run fonti --config eval/configs/rerank-gate.toml eval run --dataset main --label my-change
+uv run fonti --config eval/configs/default.toml eval run --dataset main --label my-change --judge-model qwen2.5:14b
 ```
 
 Compare the new report in `eval/reports/` with the latest one and commit both the change and
