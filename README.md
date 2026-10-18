@@ -9,7 +9,7 @@
 > anche PDF difficili, scansioni e tabelle, e ogni risposta indica documento, pagina e passaggio
 > esatto, copiato dal testo e mai inventato. Se i documenti non bastano, risponde «Non lo so».
 
-**Status: alpha (0.1.0).** Progress and results are tracked in
+**Status: alpha (0.1.1).** Progress and results are tracked in
 [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Why
@@ -23,9 +23,12 @@
 - **Verifiable citations.** Every sentence of an answer cites its source; the cited passage is
   copied verbatim from the document with its page, and you can open the PDF at that page with
   the passage highlighted. Without enough evidence the answer is «Non lo so».
-- **Measured.** A golden set of 75 Italian questions over 8 documents (362 pages) drives every
-  default (see [docs/evaluation.md](docs/evaluation.md)): recall@5 0.97, correct refusals
-  100%, correctness 0.98, cited pages correct 89% with a 12B local model.
+- **Measured.** Defaults were chosen on a golden set of Italian questions with verbatim
+  evidence, now 75 questions over 8 public and synthetic documents (362 pages). With a 12B
+  local model ([report](eval/reports/2026-10-18_default_main.md)): recall@5 0.93, correct
+  refusals 100%, false refusals 3%, correctness 0.97 and groundedness 0.90 (LLM judge,
+  spot-checked by an independent review), cited pages correct 89% (63% on EU regulations,
+  see Limits). Details in [docs/evaluation.md](docs/evaluation.md).
 
 ## How it works
 
