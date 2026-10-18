@@ -150,3 +150,14 @@ def test_unsupported_sentences_lose_their_markers() -> None:
         "Il conduttore versa un deposito. Il canone è di 9.600 euro all'anno [1]."
     )
     assert {c.number for c in result.citations} == {1}
+
+
+def test_citations_are_numbered_without_gaps() -> None:
+    sources = [hits()[1], hits()[0]]  # deposit first, rent second
+    output = "La Luna è lontana [1]. Si pagano dodici rate mensili di 800 euro [2]."
+
+    result = build_answer("Quanto si paga?", output, sources, pages, 0.3)
+
+    assert result.text == "La Luna è lontana. Si pagano dodici rate mensili di 800 euro [1]."
+    assert [c.number for c in result.citations] == [1]
+    assert result.citations[0].section == "Art. 3 - Canone"

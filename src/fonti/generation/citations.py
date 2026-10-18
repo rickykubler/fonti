@@ -6,8 +6,8 @@ and, when available, by embedding similarity.
 """
 
 import re
-from collections.abc import Callable, Sequence
-from dataclasses import dataclass
+from collections.abc import Callable, Mapping, Sequence
+from dataclasses import dataclass, replace
 from functools import partial
 
 from fonti.domain import Answer, Citation, Hit, PageSpan, page_for_offset
@@ -94,10 +94,16 @@ def build_answer(
             )
     if not citations:
         return abstain(question, sources)
-    ordered = sorted(citations.values(), key=lambda c: (c.number, c.start))
-    return Answer(
-        question, _keep_supported_markers(text, supported), tuple(ordered), False, tuple(sources)
+    # Sources that support nothing are dropped: number the rest 1, 2, 3... with no gaps.
+    renumber = {
+        old: new for new, old in enumerate(sorted({c.number for c in citations.values()}), 1)
+    }
+    ordered = sorted(
+        (replace(c, number=renumber[c.number]) for c in citations.values()),
+        key=lambda c: (c.number, c.start),
     )
+    text = _keep_supported_markers(text, supported, renumber)
+    return Answer(question, text, tuple(ordered), False, tuple(sources))
 
 
 def is_refusal(text: str) -> bool:
@@ -158,21 +164,25 @@ def align(claim: str, source: str, similarity: Similarity | None = None) -> Alig
     return Alignment(start, end, support)
 
 
-def _keep_supported_markers(text: str, supported: Sequence[set[int]]) -> str:
+def _keep_supported_markers(
+    text: str, supported: Sequence[set[int]], renumber: Mapping[int, int]
+) -> str:
     """Remove from every sentence the markers of sources that do not support it, so that
-    an unsupported sentence never looks cited. Markers outside any sentence support nothing."""
+    an unsupported sentence never looks cited, and renumber the others. Markers outside any
+    sentence support nothing."""
     parts, previous = [], 0
     for (start, end), numbers in zip(split_sentences(text), supported, strict=True):
+        rewrite = partial(_rewrite_marker, keep=numbers, renumber=renumber)
         parts.append(_MARKER_RE.sub("", text[previous:start]))
-        parts.append(_MARKER_RE.sub(partial(_filter_marker, keep=numbers), text[start:end]))
+        parts.append(_MARKER_RE.sub(rewrite, text[start:end]))
         previous = end
     parts.append(_MARKER_RE.sub("", text[previous:]))
     return "".join(parts)
 
 
-def _filter_marker(match: re.Match[str], keep: set[int]) -> str:
+def _rewrite_marker(match: re.Match[str], keep: set[int], renumber: Mapping[int, int]) -> str:
     numbers = [int(n) for n in re.split(r"\s*[,;]\s*", match.group(1))]
-    kept = [n for n in numbers if n in keep]
+    kept = [renumber[n] for n in numbers if n in keep]
     if kept == numbers:
         return match.group(0)
     if not kept:
