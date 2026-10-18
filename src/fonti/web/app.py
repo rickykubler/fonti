@@ -5,9 +5,11 @@ hosts (DNS rebinding) or coming from other origins (CSRF from a web page).
 """
 
 import json
+import logging
+import queue
 import re
 import threading
-from collections.abc import Awaitable, Callable, Iterator
+from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
 from dataclasses import asdict
 from pathlib import Path
@@ -19,6 +21,7 @@ from fastapi.responses import FileResponse, HTMLResponse, Response, StreamingRes
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
+from starlette.concurrency import run_in_threadpool
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from fonti import __version__
@@ -29,6 +32,8 @@ from fonti.ingest.parsers import SUPPORTED_SUFFIXES
 from fonti.service import DocumentLookupError, Fonti
 from fonti.web.jobs import IngestJobs
 from fonti.web.preview import render_page
+
+logger = logging.getLogger(__name__)
 
 _HERE = Path(__file__).parent
 _DOC_ID = re.compile(r"[0-9a-f]{64}")
@@ -191,21 +196,43 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
     @app.post("/api/ask/stream")
     def api_ask_stream(body: AskRequest) -> StreamingResponse:
         """NDJSON events: {"type": "token"} while the model writes (provisional text), then
-        {"type": "answer"} with the verified answer, or {"type": "error"}."""
+        {"type": "answer"} with the verified answer, or {"type": "error"}.
 
-        def events() -> Iterator[str]:
-            with lock:
-                try:
+        The model runs in its own thread, which holds the lock only while it generates and
+        stops when the client goes away. A generator holding the lock across its yields kept
+        it after a disconnect until garbage collection, blocking every later request."""
+        events: queue.Queue[str | None] = queue.Queue()
+        gone = threading.Event()
+
+        def produce() -> None:
+            try:
+                with lock:
                     retrieval = service.retrieve(body.question)
                     for item in service.stream_answer(retrieval):
+                        if gone.is_set():
+                            return
                         if isinstance(item, Answer):
-                            yield _event("answer", answer=asdict(item))
+                            events.put(_event("answer", answer=asdict(item)))
                         else:
-                            yield _event("token", text=item)
-                except FontiError as exc:
-                    yield _event("error", message=str(exc))
+                            events.put(_event("token", text=item))
+            except FontiError as exc:
+                events.put(_event("error", message=str(exc)))
+            except Exception:
+                logger.exception("Streamed answer failed")
+                events.put(_event("error", message="Errore imprevisto: dettagli nel log."))
+            finally:
+                events.put(None)
 
-        return StreamingResponse(events(), media_type="application/x-ndjson")
+        threading.Thread(target=produce, name="ask-stream", daemon=True).start()
+
+        async def stream() -> AsyncIterator[str]:
+            try:
+                while (event := await run_in_threadpool(events.get)) is not None:
+                    yield event
+            finally:
+                gone.set()
+
+        return StreamingResponse(stream(), media_type="application/x-ndjson")
 
     return app
 
