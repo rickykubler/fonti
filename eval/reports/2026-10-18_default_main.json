@@ -1,0 +1,2557 @@
+{
+  "summary": {
+    "recall@1": 0.7951,
+    "recall@3": 0.9016,
+    "recall@5": 0.9344,
+    "recall@10": 0.9836,
+    "recall@candidates": 0.9836,
+    "mrr@10": 0.8654,
+    "correct_refusals": 1.0,
+    "false_refusals": 0.0328,
+    "page_precision": 0.8934,
+    "cites_evidence": 0.9661,
+    "groundedness": 0.9016,
+    "correctness": 0.9746,
+    "generation_p50_s": 1.57,
+    "generation_p95_s": 4.314,
+    "retrieval_p50_s": 0.202,
+    "retrieval_p95_s": 0.236
+  },
+  "dataset": "main",
+  "label": "default",
+  "created_at": "2026-10-18T12:23:37+00:00",
+  "settings": {
+    "offline": false,
+    "parser": {
+      "mode": "auto",
+      "ocr": true,
+      "ocr_engine": "easyocr",
+      "ocr_languages": [],
+      "force_ocr": false,
+      "ocr_confidence": 0.2,
+      "tables": true
+    },
+    "embedding": {
+      "model": "ibm-granite/granite-embedding-311m-multilingual-r2",
+      "revision": null,
+      "device": "auto",
+      "batch_size": 16,
+      "query_prefix": "",
+      "document_prefix": ""
+    },
+    "chunking": {
+      "max_chars": 1500,
+      "overlap_chars": 200
+    },
+    "retrieval": {
+      "bm25_k": 50,
+      "dense_k": 50,
+      "fused_k": 30,
+      "final_k": 6,
+      "rrf_k": 60,
+      "keyword_terms": "stemmed"
+    },
+    "rerank": {
+      "enabled": true,
+      "model": "BAAI/bge-reranker-v2-m3",
+      "revision": null,
+      "device": "auto",
+      "batch_size": 16,
+      "max_length": 512,
+      "min_score": 0.1
+    },
+    "llm": {
+      "provider": "ollama",
+      "base_url": "http://127.0.0.1:11434",
+      "model": "gemma4:12b",
+      "allow_remote": false,
+      "think": false,
+      "context_window": 8192,
+      "max_answer_tokens": 800,
+      "temperature": 0.0,
+      "seed": 42,
+      "timeout_s": 300.0
+    },
+    "citations": {
+      "min_support": 0.3
+    },
+    "web": {
+      "host": "127.0.0.1",
+      "port": 8000,
+      "max_upload_mb": 100
+    }
+  },
+  "judge_model": "ollama:qwen2.5:14b",
+  "ingest": {
+    "documents": 8,
+    "pages": 362,
+    "chunks": 1373,
+    "seconds": 18.57,
+    "seconds_per_page": 0.051
+  },
+  "questions": [
+    {
+      "id": "cost-01",
+      "question": "Su che cosa è fondata la Repubblica italiana?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 2.529,
+      "top_score": 0.9647,
+      "answer": "L’Italia è una Repubblica democratica, fondata sul lavoro [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 4,
+          "passage": "L’Italia è una Repubblica democratica, fondata sul lavoro.",
+          "claim": "L’Italia è una Repubblica democratica, fondata sul lavoro."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 6.223
+    },
+    {
+      "id": "cost-02",
+      "question": "A chi appartiene la sovranità secondo la Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.161,
+      "top_score": 0.9757,
+      "answer": "La sovranità appartiene al popolo, che la esercita nelle forme e nei limiti della Costituzione [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 4,
+          "passage": "La sovranità appartiene al popolo, che la esercita nelle forme e nei limiti della Costituzione.",
+          "claim": "La sovranità appartiene al popolo, che la esercita nelle forme e nei limiti della Costituzione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.099
+    },
+    {
+      "id": "cost-03",
+      "question": "Quando è ammessa la restrizione della libertà personale?",
+      "answerable": true,
+      "tags": [
+        "normativa",
+        "multi-passaggio"
+      ],
+      "ranks": [
+        1,
+        1
+      ],
+      "candidate_ranks": [
+        1,
+        1
+      ],
+      "retrieval_s": 0.183,
+      "top_score": 0.9255,
+      "answer": "La restrizione della libertà personale non è ammessa se non per atto motivato dell’autorità giudiziaria e nei soli casi e modi previsti dalla legge [1]. In casi eccezionali di necessità ed urgenza, indicati tassativamente dalla legge, l’autorità di pubblica sicurezza può adottare provvedimenti provvisori, che devono essere comunicati entro quarantotto ore all’autorità giudiziaria e, se questa non li convalida nelle successive quarantott ore, si intendono revocati e restano privi di ogni effetto [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 7,
+          "passage": "Non è ammessa forma alcuna di detenzione, di ispezione o perquisizione personale, né qualsiasi altra restrizione della libertà personale, se non per atto motivato dell’autorità giudiziaria e nei soli casi e modi previsti dalla legge.",
+          "claim": "La restrizione della libertà personale non è ammessa se non per atto motivato dell’autorità giudiziaria e nei soli casi e modi previsti dalla legge."
+        },
+        {
+          "doc": "costituzione",
+          "page": 7,
+          "passage": "In casi eccezionali di necessità ed urgenza, indicati tassativamente dalla legge, l’autorità di pubblica sicurezza può adottare provvedimenti provvisori, che devono essere comunicati entro quarantotto ore all’autorità giudiziaria e, se questa non li convalida nelle successive quarantotto ore, si intendono revocati e restano privi di ogni effetto.",
+          "claim": "In casi eccezionali di necessità ed urgenza, indicati tassativamente dalla legge, l’autorità di pubblica sicurezza può adottare provvedimenti provvisori, che devono essere comunicati entro quarantotto ore all’autorità giudiziaria e, se questa non li convalida nelle successive quarantott ore, si intendono revocati e restano privi di ogni effetto."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.448
+    },
+    {
+      "id": "cost-04",
+      "question": "Qual è la posizione dell'Italia nei confronti della guerra?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.171,
+      "top_score": 0.9644,
+      "answer": "L’Italia ripudia la guerra come strumento di offesa alla libertà degli altri popoli e come mezzo di risoluzione delle controversie internazionali [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 6,
+          "passage": "L’Italia ripudia la guerra come strumento di offesa alla libertà degli altri popoli e come mezzo di risoluzione delle controversie internazionali; consente, in condizioni di parità con gli altri Stati, alle limitazioni di sovranità necessarie ad un ordinamento che assicuri la pace e la giustizia fra le Nazioni; promuove e favorisce le organizzazioni internazionali rivolte a tale scopo.",
+          "claim": "L’Italia ripudia la guerra come strumento di offesa alla libertà degli altri popoli e come mezzo di risoluzione delle controversie internazionali."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.099
+    },
+    {
+      "id": "cost-05",
+      "question": "Com'è fatta la bandiera della Repubblica?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.143,
+      "top_score": 0.9697,
+      "answer": "La bandiera della Repubblica è il tricolore italiano: verde, bianco e rosso, a tre bande verticali di eguali dimensioni [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 6,
+          "passage": "La bandiera della Repubblica è il tricolore italiano: verde, bianco e rosso, a tre bande verticali di eguali dimensioni.",
+          "claim": "La bandiera della Repubblica è il tricolore italiano: verde, bianco e rosso, a tre bande verticali di eguali dimensioni."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 0.911
+    },
+    {
+      "id": "cost-06",
+      "question": "Un lavoratore può rinunciare alle ferie annuali?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.176,
+      "top_score": 0.9771,
+      "answer": "No, il lavoratore non può rinunciare alle ferie annuali retribuite [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 12,
+          "passage": "Il lavoratore ha diritto al riposo settimanale e a ferie annuali retribuite, e non può rinunziarvi.",
+          "claim": "No, il lavoratore non può rinunciare alle ferie annuali retribuite."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.238
+    },
+    {
+      "id": "cost-07",
+      "question": "Votare è un obbligo secondo la Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.214,
+      "top_score": 0.6594,
+      "answer": "L'esercizio del voto è considerato un dovere civico [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 15,
+          "passage": "Il voto è personale ed eguale, libero e segreto. Il suo esercizio è dovere civico.",
+          "claim": "L'esercizio del voto è considerato un dovere civico."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.488
+    },
+    {
+      "id": "cost-08",
+      "question": "Quanti sono i deputati e quanti di loro sono eletti all'estero?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.191,
+      "top_score": 0.9915,
+      "answer": "Il numero dei deputati è di quattrocento, di cui otto sono eletti nella circoscrizione Estero [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 17,
+          "passage": "Il numero dei deputati è di quattrocento, otto dei quali eletti nella circoscrizione Estero.",
+          "claim": "Il numero dei deputati è di quattrocento, di cui otto sono eletti nella circoscrizione Estero."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.688
+    },
+    {
+      "id": "cost-09",
+      "question": "Quanti anni bisogna avere per essere eletti Presidente della Repubblica e quanto dura il mandato?",
+      "answerable": true,
+      "tags": [
+        "normativa",
+        "multi-passaggio"
+      ],
+      "ranks": [
+        2,
+        1
+      ],
+      "candidate_ranks": [
+        1,
+        2
+      ],
+      "retrieval_s": 0.179,
+      "top_score": 0.9903,
+      "answer": "Ogni cittadino che abbia compiuto cinquanta anni d’età e goda dei diritti civili e politici può essere eletto Presidente della Repubblica [2]. Il Presidente della Repubblica è eletto per sette anni [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 24,
+          "passage": "Il Presidente della Repubblica è eletto per sette anni.",
+          "claim": "Il Presidente della Repubblica è eletto per sette anni."
+        },
+        {
+          "doc": "costituzione",
+          "page": 24,
+          "passage": "Può essere eletto Presidente della Repubblica ogni cittadino che abbia compiuto cinquanta anni d’età e goda dei diritti civili e politici.",
+          "claim": "Ogni cittadino che abbia compiuto cinquanta anni d’età e goda dei diritti civili e politici può essere eletto Presidente della Repubblica."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.3
+    },
+    {
+      "id": "cost-10",
+      "question": "Chi nomina il Presidente del Consiglio dei ministri?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.153,
+      "top_score": 0.9957,
+      "answer": "Il Presidente della Repubblica nomina il Presidente del Consiglio dei ministri [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 26,
+          "passage": "Il Presidente della Repubblica nomina il Presidente del Consiglio dei ministri e, su proposta di questo, i ministri.",
+          "claim": "Il Presidente della Repubblica nomina il Presidente del Consiglio dei ministri."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.252
+    },
+    {
+      "id": "cost-11",
+      "question": "Da quanti giudici è composta la Corte costituzionale e chi li nomina?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.204,
+      "top_score": 0.9998,
+      "answer": "La Corte costituzionale è composta da quindici giudici [1]. La nomina avviene per un terzo dal Presidente della Repubblica, per un terzo dal Parlamento in seduta comune e per un terzo dalle supreme magistrature ordinaria ed amministrative [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 42,
+          "passage": "La Corte costituzionale è composta di quindici giudici nominati per un terzo dal Presidente della Repubblica, per un terzo dal Parlamento in seduta comune e per un terzo dalle supreme magistrature ordinaria ed amministrative.",
+          "claim": "La Corte costituzionale è composta da quindici giudici."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.766
+    },
+    {
+      "id": "cost-12",
+      "question": "Si può cambiare la forma repubblicana con una revisione della Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.205,
+      "top_score": 0.9891,
+      "answer": "No, la forma repubblicana non può essere oggetto di revisione costituzionale [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 44,
+          "passage": "La forma repubblicana non può essere oggetto di revisione costituzionale.",
+          "claim": "No, la forma repubblicana non può essere oggetto di revisione costituzionale."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.706
+    },
+    {
+      "id": "cost-13",
+      "question": "Come vengono approvate le leggi di revisione della Costituzione?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.212,
+      "top_score": 0.9993,
+      "answer": "Le leggi di revisione della Costituzione sono adottate da ciascuna Camera con due successive deliberazioni a intervallo non minore di tre mesi [1]. Nella seconda votazione, esse devono essere approvate a maggioranza assoluta dei componenti di ciascuna Camera [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 44,
+          "passage": "Le leggi di revisione della Costituzione e le altre leggi costituzionali sono adottate da ciascuna Camera con due successive deliberazioni ad intervallo non minore di tre mesi, e sono approvate a maggioranza assoluta dei componenti di ciascuna Camera nella seconda votazione.",
+          "claim": "Le leggi di revisione della Costituzione sono adottate da ciascuna Camera con due successive deliberazioni a intervallo non minore di tre mesi."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.327
+    },
+    {
+      "id": "cost-14",
+      "question": "Chi diventa senatore di diritto e a vita?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.198,
+      "top_score": 0.9933,
+      "answer": "È senatore di diritto e a vita, salvo rinunzia, chi è stato Presidente della Repubblica [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "costituzione",
+          "page": 18,
+          "passage": "È senatore di diritto e a vita, salvo rinunzia, chi è stato Presidente della Repubblica.",
+          "claim": "È senatore di diritto e a vita, salvo rinunzia, chi è stato Presidente della Repubblica."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.398
+    },
+    {
+      "id": "istat-01",
+      "question": "Qual è il tasso di disoccupazione in Italia a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.205,
+      "top_score": 0.9999,
+      "answer": "A luglio 2026, il tasso di disoccupazione è pari al 5,8% [1][3]. Il valore preciso riportato nel comunicato stampa è del 5,778% [2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 1,
+          "passage": "Il tasso di disoccupazione scende al 5,8% (-0,1 punti), mentre quello giovanile sale al 18,9% (+0,2 punti).",
+          "claim": "A luglio 2026, il tasso di disoccupazione è pari al 5,8%."
+        },
+        {
+          "doc": "istat",
+          "page": 11,
+          "passage": "2 Ad esempio, nell’attuale comunicato stampa, il tasso di disoccupazione totale di luglio 2026 è pari a 5,778%, che arrotondato è riportato nel prospetto 2 come 5,8%.",
+          "claim": "Il valore preciso riportato nel comunicato stampa è del 5,778%."
+        },
+        {
+          "doc": "istat",
+          "page": 1,
+          "passage": "Su base mensile il tasso di occupazione e quello di inattività rimangono stabili al 63,2% e al 32,8%, rispettivamente, e il tasso di disoccupazione scende al 5,8%.",
+          "claim": "A luglio 2026, il tasso di disoccupazione è pari al 5,8%."
+        }
+      ],
+      "page_precision": 0.6666666666666666,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.141
+    },
+    {
+      "id": "istat-02",
+      "question": "Qual è il tasso di disoccupazione giovanile a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.2,
+      "top_score": 0.9999,
+      "answer": "Il tasso di disoccupazione giovanile a luglio 2026 è del 18,9% [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 1,
+          "passage": "Il tasso di disoccupazione scende al 5,8% (-0,1 punti), mentre quello giovanile sale al 18,9% (+0,2 punti).",
+          "claim": "Il tasso di disoccupazione giovanile a luglio 2026 è del 18,9%."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 0.5,
+      "generation_s": 3.863
+    },
+    {
+      "id": "istat-03",
+      "question": "Quanti sono gli occupati in Italia a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.217,
+      "top_score": 1.0,
+      "answer": "A luglio 2026, il numero di occupati è pari a 24 milioni 370mila [1][2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 1,
+          "passage": "Il commento A luglio 2026 il numero di occupati, pari a 24 milioni 370mila, è stabile rispetto al mese precedente.",
+          "claim": "A luglio 2026, il numero di occupati è pari a 24 milioni 370mila."
+        },
+        {
+          "doc": "istat",
+          "page": 4,
+          "passage": "- a termine 2.486 -64 -2,5 -15 -0,6 -82 -3,2 Indipendenti 5.301 +13 +0,2 -10 -0,2 +85 +1,6 A luglio 2026, la stabilità congiunturale del numero di occupati è sintesi dell’aumento dei dipendenti permanenti (+0,3%) e degli indipendenti (+0,2%) e del calo dei dipendenti a termine (-2,5%).",
+          "claim": "A luglio 2026, il numero di occupati è pari a 24 milioni 370mila."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.03
+    },
+    {
+      "id": "istat-04",
+      "question": "Di quanto sono cresciuti gli occupati rispetto a luglio 2025?",
+      "answerable": true,
+      "tags": [
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.242,
+      "top_score": 0.9999,
+      "answer": "A luglio 2026, il numero di occupati è cresciuto di 307mila unità rispetto a luglio 2025, pari a un incremento del 1,3% [1][2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 1,
+          "passage": "A luglio 2026, la crescita del numero di occupati rispetto a luglio 2025 (+1,3%, +307mila unità) interessa gli uomini, le donne, i 25-34enni e coloro che hanno almeno 50 anni; tra i 15-24enni e i 35-49enni, invece, gli occupati diminuiscono.",
+          "claim": "A luglio 2026, il numero di occupati è cresciuto di 307mila unità rispetto a luglio 2025, pari a un incremento del 1,3%."
+        },
+        {
+          "doc": "istat",
+          "page": 4,
+          "passage": "- a termine 2.486 -64 -2,5 -15 -0,6 -82 -3,2 Indipendenti 5.301 +13 +0,2 -10 -0,2 +85 +1,6 A luglio 2026, la stabilità congiunturale del numero di occupati è sintesi dell’aumento dei dipendenti permanenti (+0,3%) e degli indipendenti (+0,2%) e del calo dei dipendenti a termine (-2,5%).",
+          "claim": "A luglio 2026, il numero di occupati è cresciuto di 307mila unità rispetto a luglio 2025, pari a un incremento del 1,3%."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.04
+    },
+    {
+      "id": "istat-05",
+      "question": "Quanti erano i disoccupati maschi a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        6
+      ],
+      "candidate_ranks": [
+        10
+      ],
+      "retrieval_s": 0.197,
+      "top_score": 0.9997,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 1.76
+    },
+    {
+      "id": "istat-06",
+      "question": "Qual è il tasso di occupazione 15-64 anni delle donne a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        6
+      ],
+      "candidate_ranks": [
+        6
+      ],
+      "retrieval_s": 0.203,
+      "top_score": 0.9999,
+      "answer": "Il tasso di occupazione 15-64 anni delle donne a luglio 2026 è pari al 54,5% [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 3,
+          "passage": "Tasso di occupazione 15-64 anni 54,5 -0,1 +0,2 +0,9 Tasso di disoccupazione 6,6 +0,1 +0,3 0,0 Tasso di inattività15-64 anni 41,6 0,0 -0,4 -1,0",
+          "claim": "Il tasso di occupazione 15-64 anni delle donne a luglio 2026 è pari al 54,5%."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.0,
+      "correct": 1.0,
+      "generation_s": 1.654
+    },
+    {
+      "id": "istat-07",
+      "question": "Quanti sono gli occupati con 50 anni e più a luglio 2026?",
+      "answerable": true,
+      "tags": [
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        4
+      ],
+      "candidate_ranks": [
+        7
+      ],
+      "retrieval_s": 0.202,
+      "top_score": 0.9996,
+      "answer": "A luglio 2026, il numero di occupati tra coloro che hanno almeno 50 anni è pari a 10.455 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "istat",
+          "page": 4,
+          "passage": "Occupati 10.455 -6 -0,1 +75 +0,7 +364 +3,6 Disoccupati 357 -6 -1,5 +6 +1,9 -12 -3,2 Inattivi 17.729 +34 +0,2 -6 0,0 -28 -0,2 Inattivi 50-64 anni 4.158 +24 +0,6 -42 -1,0 -172 -4,0",
+          "claim": "A luglio 2026, il numero di occupati tra coloro che hanno almeno 50 anni è pari a 10.455."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.831
+    },
+    {
+      "id": "agid-01",
+      "question": "Quali sono le fasi principali della gestione documentale?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.213,
+      "top_score": 0.9995,
+      "answer": "La gestione documentale è un processo che può essere suddiviso in tre fasi principali: formazione, gestione e conservazione [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 10,
+          "passage": "Principi generali della gestione documentale La gestione documentale è un processo che può essere suddiviso in tre fasi principali: formazione, gestione e conservazione.",
+          "claim": "La gestione documentale è un processo che può essere suddiviso in tre fasi principali: formazione, gestione e conservazione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.637
+    },
+    {
+      "id": "agid-02",
+      "question": "Le linee guida dell'AgID sono vincolanti?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.226,
+      "top_score": 0.9979,
+      "answer": "Sì, le Linee Guida adottate dall'AgID hanno carattere vincolante e assumono valenza erga omnes [1]. Esse sono inquadrate come un atto di regolamentazione di natura tecnica e sono pienamente azionabili davanti al giudice amministrativo in caso di violazione delle prescrizioni contenute [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 10,
+          "passage": "Natura vincolante delle Linee Guida Come precisato dal Consiglio di Stato - nell’ambito del parere reso sullo schema di decreto legislativo del correttivo al CAD, n. 2122/2017 del 10.10.2017 - le Linee Guida adottate da AGID, ai sensi dell’art. 71 del CAD, hanno carattere vincolante e assumono valenza erga omnes.",
+          "claim": "Sì, le Linee Guida adottate dall'AgID hanno carattere vincolante e assumono valenza erga omnes."
+        },
+        {
+          "doc": "agid",
+          "page": 10,
+          "passage": "Ne deriva che, nella gerarchia delle fonti, anche le presenti Linee Guida sono inquadrate come un atto di regolamentazione, seppur di natura tecnica, con la conseguenza che esse sono pienamente azionabili davanti al giudice amministrativo in caso di violazione delle prescrizioni ivi contenute.",
+          "claim": "Esse sono inquadrate come un atto di regolamentazione di natura tecnica e sono pienamente azionabili davanti al giudice amministrativo in caso di violazione delle prescrizioni contenute."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.241
+    },
+    {
+      "id": "agid-03",
+      "question": "Che differenza c'è tra un duplicato informatico e una copia di un documento informatico?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "multi-passaggio"
+      ],
+      "ranks": [
+        1,
+        1
+      ],
+      "candidate_ranks": [
+        1,
+        1
+      ],
+      "retrieval_s": 0.21,
+      "top_score": 0.9973,
+      "answer": "Un duplicato informatico ha lo stesso valore giuridico del documento informatico da cui è tratto se è ottenuto mediante la memorizzazione della medesima evidenza informatica, sia sullo stesso dispositivo che su dispositivi diversi [1]. Un esempio di duplicato è la copia di un documento da un PC a una pen-drive mantenendo lo stesso formato [1].\n\nLa copia di un documento informatico è invece un documento il cui contenuto è identico all'originale, ma presenta una diversa evidenza informatica rispetto al documento da cui è tratto, come nel caso della trasformazione di un documento con estensione \".doc\" in un documento \".pdf\" [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 15,
+          "passage": "Duplicati, copie ed estratti informatici di documenti informatici Un duplicato informatico ha lo stesso valore giuridico del documento informatico da cui è tratto se è ottenuto mediante la memorizzazione della medesima evidenza informatica, sullo stesso dispositivo o su dispositivi diversi; ad esempio, effettuando una copia da un PC ad una pen-drive di un documento nel medesimo formato.",
+          "claim": "Un duplicato informatico ha lo stesso valore giuridico del documento informatico da cui è tratto se è ottenuto mediante la memorizzazione della medesima evidenza informatica, sia sullo stesso dispositivo che su dispositivi diversi."
+        },
+        {
+          "doc": "agid",
+          "page": 15,
+          "passage": "La copia di un documento informatico è un documento il cui contenuto è il medesimo dell’originale ma con una diversa evidenza informatica rispetto al documento da cui è tratto, come quando si trasforma un documento con estensione “.doc” in un documento “.pdf”.",
+          "claim": "La copia di un documento informatico è invece un documento il cui contenuto è identico all'originale, ma presenta una diversa evidenza informatica rispetto al documento da cui è tratto, come nel caso della trasformazione di un documento con estensione \".doc\" in un documento \".pdf\"."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 3.023
+    },
+    {
+      "id": "agid-04",
+      "question": "Quando un documento informatico è immodificabile?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.214,
+      "top_score": 0.9973,
+      "answer": "Un documento informatico è considerato immodificabile quando la sua memorizzazione su supporto informatico in formato digitale non può essere alterata nel suo accesso, gestione e conservazione [1].\n\nLe modalità per garantire l'immodificabilità e l'integrità variano in base alla tipologia di documento informatico:\n\n*   **Per i documenti informatici formati secondo la lettera a):** l'immodificabilità e l'integrità sono garantite da una o più delle seguenti operazioni:\n    *   apposizione di una firma elettronica qualificata, di una firma digitale, di un sigillo elettronico qualificato o di una firma elettronica avanzata [1];\n    *   memorizzazione su sistemi di gestione documentale che adottino idonee misure di sicurezza in accordo con quanto riportato al § 3.9 [1].\n\n*   **Per i documenti informatici formati secondo la lettera b):** l'immodificabilità e l'integrità sono garantite da una o più delle seguenti operazioni:\n    *   apposizione di una firma elettronica qualificata, di una firma digitale, di un sigillo elettronico qualificato o di una firma elettronica avanzata [3];\n    *   memorizzazione su sistemi di gestione documentale che adottino idonee misure di sicurezza in accordo con quanto riportato al § 3.9 [3];\n    *   versamento ad un sistema di conservazione [3].\n\n*   **Per i documenti informatici formati secondo le lettere c) e d):** l'immodificabilità e l'integrità sono garantite da una o più delle seguenti operazioni:\n    *   apposizione di una firma elettronica qualificata, di una firma digitale, di un sigillo elettronico qualificato o di una firma elettronica avanzata [2];\n    *   registrazione nei log di sistema dell'esito dell'operazione di formazione del documento informatico, inclusa l'applicazione di misure per la protezione dell'integrità delle basi di dati e per la produzione e conservazione dei log di sistema [2];\n    *   produzione di una estrazione statica dei dati e il trasferimento della stessa nel sistema di conservazione [2].\n\nInoltre, il documento amministrativo informatico assume le caratteristiche di immodificabilità e di integrità, oltre alle modalità sopra citate, anche con la sua registrazione nel registro di protocollo, negli ulteriori registri, nei repertori, negli albi, negli elenchi, negli archivi o nelle raccolte di dati contenute nel sistema di gestione informatica dei documenti, secondo le modalità descritte nel manuale di gestione documentale [4].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 13,
+          "passage": "Il documento informatico è immodificabile se la sua memorizzazione su supporto informatico in formato digitale non può essere alterata nel suo accesso, gestione e conservazione.",
+          "claim": "Un documento informatico è considerato immodificabile quando la sua memorizzazione su supporto informatico in formato digitale non può essere alterata nel suo accesso, gestione e conservazione."
+        },
+        {
+          "doc": "agid",
+          "page": 13,
+          "passage": "● apposizione di una firma elettronica qualificata, di una firma digitale o di un sigillo elettronico qualificato o firma elettronica avanzata;",
+          "claim": "*   apposizione di una firma elettronica qualificata, di una firma digitale, di un sigillo elettronico qualificato o di una firma elettronica avanzata;"
+        },
+        {
+          "doc": "agid",
+          "page": 13,
+          "passage": "● memorizzazione su sistemi di gestione documentale che adottino idonee misure di sicurezza in accordo con quanto riportato al § 3.9;",
+          "claim": "*   memorizzazione su sistemi di gestione documentale che adottino idonee misure di sicurezza in accordo con quanto riportato al § 3.9."
+        },
+        {
+          "doc": "agid",
+          "page": 13,
+          "passage": "Nel caso di documento informatico formato secondo le sopracitate lettere c) e d) le caratteristiche di immodificabilità e di integrità sono garantite da una o più delle seguenti operazioni: ● apposizione di una firma elettronica qualificata, di una firma digitale o di un sigillo elettronico qualificato o firma elettronica avanzata ● registrazione nei log di sistema dell’esito dell’operazione di formazione del documento informatico, compresa l’applicazione di misure per la protezione dell’integrità delle basi di dati e per la produzione e conservazione dei log di sistema; ● produzione di una estrazione statica dei dati e il trasferimento della stessa nel sistema di conservazione.",
+          "claim": "*   apposizione di una firma elettronica qualificata, di una firma digitale, di un sigillo elettronico qualificato o di una firma elettronica avanzata;"
+        },
+        {
+          "doc": "agid",
+          "page": 13,
+          "passage": "● versamento ad un sistema di conservazione.",
+          "claim": "*   versamento ad un sistema di conservazione."
+        },
+        {
+          "doc": "agid",
+          "page": 13,
+          "passage": "● apposizione di una firma elettronica qualificata, di una firma digitale o di un sigillo elettronico qualificato o firma elettronica avanzata;",
+          "claim": "*   apposizione di una firma elettronica qualificata, di una firma digitale, di un sigillo elettronico qualificato o di una firma elettronica avanzata;"
+        },
+        {
+          "doc": "agid",
+          "page": 13,
+          "passage": "● memorizzazione su sistemi di gestione documentale che adottino idonee misure di sicurezza in accordo con quanto riportato al § 3.9;",
+          "claim": "*   memorizzazione su sistemi di gestione documentale che adottino idonee misure di sicurezza in accordo con quanto riportato al § 3.9;"
+        },
+        {
+          "doc": "agid",
+          "page": 16,
+          "passage": "Il documento amministrativo informatico assume le caratteristiche di immodificabilità e di integrità, oltre che con le modalità di cui al paragrafo 2.1.1, anche con la sua registrazione nel registro di protocollo, negli ulteriori registri, nei repertori, negli albi, negli elenchi, negli archivi o nelle raccolte di dati contenute nel sistema di gestione informatica dei documenti con le modalità descritte nel manuale di gestione documentale.",
+          "claim": "Inoltre, il documento amministrativo informatico assume le caratteristiche di immodificabilità e di integrità, oltre alle modalità sopra citate, anche con la sua registrazione nel registro di protocollo, negli ulteriori registri, nei repertori, negli albi, negli elenchi, negli archivi o nelle raccolte di dati contenute nel sistema di gestione informatica dei documenti, secondo le modalità descritte nel manuale di gestione documentale."
+        }
+      ],
+      "page_precision": 0.875,
+      "cites_evidence": true,
+      "grounded": 0.6786,
+      "correct": 0.5,
+      "generation_s": 6.579
+    },
+    {
+      "id": "agid-05",
+      "question": "Chi devono nominare le pubbliche amministrazioni in ciascuna area organizzativa omogenea?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        7
+      ],
+      "retrieval_s": 0.219,
+      "top_score": 0.9654,
+      "answer": "Le Pubbliche Amministrazioni devono nominare, in ciascuna delle aree organizzative omogenee (AOO), il responsabile della gestione documentale e un suo vicario, entrambi in possesso di idonee competenze giuridiche, informatiche ed archivistiche [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 18,
+          "passage": "B. nominare, in ciascuna delle AOO, il responsabile della gestione documentale e un suo vicario, in possesso di idonee competenze giuridiche, informatiche ed archivistiche;",
+          "claim": "Le Pubbliche Amministrazioni devono nominare, in ciascuna delle aree organizzative omogenee (AOO), il responsabile della gestione documentale e un suo vicario, entrambi in possesso di idonee competenze giuridiche, informatiche ed archivistiche."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.993
+    },
+    {
+      "id": "agid-06",
+      "question": "Come deve essere identificato un documento informatico?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.217,
+      "top_score": 0.9974,
+      "answer": "Il documento informatico deve essere identificato in modo univoco e persistente [1].\n\nL'identificazione avviene in base alla tipologia di documento:\n*   Per i documenti oggetto di registrazione di protocollo nella Pubblica Amministrazione, l'identificazione è rappresentata dalla segnatura di protocollo univocamente associata al documento [1].\n*   Per i documenti non protocollati, l'identificazione è affidata alle funzioni del sistema di gestione informatica dei documenti [1].\n*   In alternativa, l'identificazione univoca può essere realizzata associando al documento una sua impronta crittografica basata su funzioni di hash crittograficamente sicure e conformi agli algoritmi previsti nelle linee guida [1].\n\nNel caso dei documenti amministrativi informatici, questi sono identificati e trattati nel sistema di gestione informatica dei documenti con le modalità descritte nel manuale di gestione documentale [3]. Inoltre, le istanze, le dichiarazioni e le comunicazioni di cui agli articoli 5-bis, 40-bis e 65 del CAD sono identificate e trattate come documenti amministrativi informatici [4].\n\nLa registrazione informatica dei documenti è rappresentata dall'insieme di dati in forma elettronica allegati o connessi al documento informatico per l'identificazione univoca di tutti i documenti prodotti e acquisiti [2]. Al termine della registrazione, il documento è identificato da un insieme di dati in forma elettronica che può includere la classificazione e si integra con il piano di organizzazione delle aggregazioni documentali [2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "agid",
+          "page": 12,
+          "passage": "Il documento informatico deve essere identificato in modo univoco e persistente.",
+          "claim": "Il documento informatico deve essere identificato in modo univoco e persistente."
+        },
+        {
+          "doc": "agid",
+          "page": 12,
+          "passage": "Nel caso della Pubblica Amministrazione7 , l’identificazione dei documenti oggetto di registrazione di protocollo è rappresentata dalla segnatura di protocollo univocamente associata al documento.",
+          "claim": "*   Per i documenti oggetto di registrazione di protocollo nella Pubblica Amministrazione, l'identificazione è rappresentata dalla segnatura di protocollo univocamente associata al documento."
+        },
+        {
+          "doc": "agid",
+          "page": 12,
+          "passage": "L’identificazione dei documenti non protocollati è affidata alle funzioni del sistema di gestione informatica dei documenti.",
+          "claim": "*   Per i documenti non protocollati, l'identificazione è affidata alle funzioni del sistema di gestione informatica dei documenti."
+        },
+        {
+          "doc": "agid",
+          "page": 12,
+          "passage": "In alternativa l’identificazione univoca può essere realizzata mediante associazione al documento di una sua impronta crittografica basata su funzioni di hash che siano ritenute crittograficamente sicure, e conformi alle tipologie di algoritmi previsti nell’allegato 6 delle linee guida nella tabella 1 del paragrafo 2.2 regole di processamento.",
+          "claim": "*   In alternativa, l'identificazione univoca può essere realizzata associando al documento una sua impronta crittografica basata su funzioni di hash crittograficamente sicure e conformi agli algoritmi previsti nelle linee guida."
+        },
+        {
+          "doc": "agid",
+          "page": 19,
+          "passage": "Registrazione di protocollo e altre forme di registrazione La registrazione informatica dei documenti è rappresentata dall’insieme di dati in forma elettronica allegati o connessi al documento informatico al fine dell’identificazione univoca di tutti i documenti prodotti e acquisiti.",
+          "claim": "La registrazione informatica dei documenti è rappresentata dall'insieme di dati in forma elettronica allegati o connessi al documento informatico per l'identificazione univoca di tutti i documenti prodotti e acquisiti."
+        },
+        {
+          "doc": "agid",
+          "page": 19,
+          "passage": "Al termine della registrazione, il documento è identificato da un insieme di dati in forma elettronica che può includere sin da questa fase la classificazione e si integra con il piano di organizzazione delle aggregazioni documentali, definito dal Responsabile della gestione documentale di cui al paragrafo 3.4, nell’ambito del manuale di gestione.",
+          "claim": "Al termine della registrazione, il documento è identificato da un insieme di dati in forma elettronica che può includere la classificazione e si integra con il piano di organizzazione delle aggregazioni documentali."
+        },
+        {
+          "doc": "agid",
+          "page": 16,
+          "passage": "Il documento amministrativo informatico è identificato e trattato nel sistema di gestione informatica dei documenti con le modalità descritte nel manuale di gestione documentale.",
+          "claim": "Nel caso dei documenti amministrativi informatici, questi sono identificati e trattati nel sistema di gestione informatica dei documenti con le modalità descritte nel manuale di gestione documentale."
+        },
+        {
+          "doc": "agid",
+          "page": 16,
+          "passage": "Le istanze, le dichiarazioni e le comunicazioni di cui agli articoli 5-bis, 40-bis e 65 del CAD sono identificate e trattate come i documenti amministrativi informatici.",
+          "claim": "Inoltre, le istanze, le dichiarazioni e le comunicazioni di cui agli articoli 5-bis, 40-bis e 65 del CAD sono identificate e trattate come documenti amministrativi informatici."
+        }
+      ],
+      "page_precision": 0.5,
+      "cites_evidence": true,
+      "grounded": 0.8889,
+      "correct": 1.0,
+      "generation_s": 4.64
+    },
+    {
+      "id": "contratto-01",
+      "question": "A quanto ammonta la rata mensile del canone di locazione?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.205,
+      "top_score": 0.9372,
+      "answer": "La rata mensile del canone di locazione ammonta a euro 800,00 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 2,
+          "passage": "Il canone annuo è convenuto in euro 9.600,00 (novemilaseicento/00), da corrispondere in dodici rate mensili anticipate di euro 800,00 ciascuna, entro il giorno 5 di ogni mese, mediante bonifico bancario sul conto corrente indicato dal locatore.",
+          "claim": "La rata mensile del canone di locazione ammonta a euro 800,00."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.57
+    },
+    {
+      "id": "contratto-02",
+      "question": "Quanto dura il contratto di locazione e da quando decorre?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.163,
+      "top_score": 0.992,
+      "answer": "La locazione ha una durata di quattro anni [1]. La decorrenza è fissata al 1° febbraio 2026 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 1,
+          "passage": "La locazione ha durata di quattro anni, con decorrenza dal 1° febbraio 2026, e si rinnova automaticamente per ulteriori quattro anni, salvo disdetta da comunicare con lettera raccomandata almeno sei mesi prima della scadenza.",
+          "claim": "La locazione ha una durata di quattro anni."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.156
+    },
+    {
+      "id": "contratto-03",
+      "question": "A quanto ammonta il deposito cauzionale?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.198,
+      "top_score": 0.7912,
+      "answer": "Il deposito cauzionale è pari a tre mensilità del canone [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 2,
+          "passage": "A garanzia delle obbligazioni assunte, il conduttore versa al locatore un deposito cauzionale pari a tre mensilità del canone, produttivo di interessi legali, che sarà restituito al termine della locazione previa verifica dello stato dell'immobile.",
+          "claim": "Il deposito cauzionale è pari a tre mensilità del canone."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.903
+    },
+    {
+      "id": "contratto-04",
+      "question": "Quanto paga il conduttore ogni mese in acconto per la pulizia delle scale e l'ascensore?",
+      "answerable": true,
+      "tags": [
+        "contratto",
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.173,
+      "top_score": 0.991,
+      "answer": "Il conduttore versa un acconto mensile di euro 25,00 per la pulizia delle scale e l'ascensore [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 2,
+          "passage": "Voce Acconto mensile Riscaldamento euro 60,00 Acqua euro 20,00 Pulizia scale e ascensore euro 25,00",
+          "claim": "Il conduttore versa un acconto mensile di euro 25,00 per la pulizia delle scale e l'ascensore."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.022
+    },
+    {
+      "id": "contratto-05",
+      "question": "Chi paga la sostituzione della caldaia nell'appartamento in affitto?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.169,
+      "top_score": 0.9188,
+      "answer": "La sostituzione della caldaia è a carico del locatore [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 3,
+          "passage": "Le riparazioni di piccola manutenzione sono a carico del conduttore; quelle straordinarie, compresa la sostituzione della caldaia, restano a carico del locatore.",
+          "claim": "La sostituzione della caldaia è a carico del locatore."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 0.861
+    },
+    {
+      "id": "contratto-06",
+      "question": "Si possono tenere animali domestici nell'appartamento?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.197,
+      "top_score": 0.9424,
+      "answer": "È consentita la detenzione di animali domestici di piccola taglia, a condizione che non arrechino danni all'immobile né disturbo agli altri condomini [1]. Inoltre, la legge dello Stato disciplina i modi e le forme di tutela degli animali [2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 3,
+          "passage": "È consentita la detenzione di animali domestici di piccola taglia, purché non arrechino disturbo agli altri condomini né danni all'immobile.",
+          "claim": "È consentita la detenzione di animali domestici di piccola taglia, a condizione che non arrechino danni all'immobile né disturbo agli altri condomini."
+        },
+        {
+          "doc": "costituzione",
+          "page": 50,
+          "passage": "La legge dello Stato disciplina i modi e le forme di tutela degli animali».",
+          "claim": "Inoltre, la legge dello Stato disciplina i modi e le forme di tutela degli animali."
+        }
+      ],
+      "page_precision": 0.5,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.536
+    },
+    {
+      "id": "contratto-07",
+      "question": "Come viene aggiornato il canone ogni anno?",
+      "answerable": true,
+      "tags": [
+        "contratto"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.219,
+      "top_score": 0.9649,
+      "answer": "Il canone viene aggiornato ogni anno nella misura del 75% della variazione dell'indice ISTAT dei prezzi al consumo per le famiglie di operai e impiegati [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "contratto",
+          "page": 2,
+          "passage": "Il canone è aggiornato ogni anno nella misura del 75% della variazione dell'indice ISTAT dei prezzi al consumo per le famiglie di operai e impiegati.",
+          "claim": "Il canone viene aggiornato ogni anno nella misura del 75% della variazione dell'indice ISTAT dei prezzi al consumo per le famiglie di operai e impiegati."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.641
+    },
+    {
+      "id": "verbale-01",
+      "question": "Chi ha presieduto l'assemblea condominiale del 14 marzo 2026?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.199,
+      "top_score": 0.9925,
+      "answer": "L'assemblea è stata presiediata dalla sig.ra Laura Ferri [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 1,
+          "passage": "L'assemblea nomina presidente la sig.ra Laura Ferri e segretario il sig. Paolo Rinaldi.",
+          "claim": "L'assemblea è stata presiediata dalla sig.ra Laura Ferri."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.254
+    },
+    {
+      "id": "verbale-02",
+      "question": "Quale preventivo è stato approvato per il rifacimento della facciata e per quale importo?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.217,
+      "top_score": 0.9973,
+      "answer": "È stato approvato il preventivo della ditta Costruzioni Delta S.r.l. per un importo di euro 92.000,00 oltre IVA [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 2,
+          "passage": "Preventivo Importo Voti favorevoli Millesimi favorevoli Edil Rossi S.n.c. euro 86.400,00 3 140 Costruzioni Delta S.r.l. euro 92.000,00 10 512 Bianchi Restauri euro 97.500,00 1 60 Risulta approvato il preventivo della ditta Costruzioni Delta S.r.l., per un importo di euro 92.000,00 oltre IVA.",
+          "claim": "È stato approvato il preventivo della ditta Costruzioni Delta S.r.l. per un importo di euro 92.000,00 oltre IVA."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.782
+    },
+    {
+      "id": "verbale-03",
+      "question": "Quanti millesimi hanno votato a favore del preventivo di Costruzioni Delta?",
+      "answerable": true,
+      "tags": [
+        "verbale",
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.199,
+      "top_score": 0.9676,
+      "answer": "Sono stati favorevoli 512 millesimi [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 2,
+          "passage": "Preventivo Importo Voti favorevoli Millesimi favorevoli Edil Rossi S.n.c. euro 86.400,00 3 140 Costruzioni Delta S.r.l. euro 92.000,00 10 512 Bianchi Restauri euro 97.500,00 1 60 Risulta approvato il preventivo della ditta Costruzioni Delta S.r.l., per un importo di euro 92.000,00 oltre IVA.",
+          "claim": "Sono stati favorevoli 512 millesimi."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.563
+    },
+    {
+      "id": "verbale-04",
+      "question": "A quanto ammonta il bilancio preventivo 2026 del condominio?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.167,
+      "top_score": 0.9885,
+      "answer": "Il bilancio preventivo 2026 del condominio ammonta a un importo complessivo di euro 51.000,00 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 2,
+          "passage": "Punto 2 - Bilancio preventivo 2026 L'assemblea approva il bilancio preventivo 2026 per un importo complessivo di euro 51.000,00, da ripartire in quattro rate trimestrali con scadenza il 31 marzo, il 30 giugno, il 30 settembre e il 31 dicembre 2026.",
+          "claim": "Il bilancio preventivo 2026 del condominio ammonta a un importo complessivo di euro 51.000,00."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.161
+    },
+    {
+      "id": "verbale-05",
+      "question": "Quale problema è stato segnalato tra le varie ed eventuali?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.201,
+      "top_score": 0.2828,
+      "answer": "Il condomino Giorgio Neri ha segnalato la presenza di infiltrazioni d'acqua nel locale cantine [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 3,
+          "passage": "Punto 4 - Varie ed eventuali Il condomino Giorgio Neri segnala infiltrazioni d'acqua nel locale cantine.",
+          "claim": "Il condomino Giorgio Neri ha segnalato la presenza di infiltrazioni d'acqua nel locale cantine."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.734
+    },
+    {
+      "id": "verbale-06",
+      "question": "Quanti condomini erano presenti all'assemblea?",
+      "answerable": true,
+      "tags": [
+        "verbale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.183,
+      "top_score": 0.9219,
+      "answer": "All'assemblea erano presenti 14 condomini su 20, per complessivi 712 millesimi [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "verbale",
+          "page": 1,
+          "passage": "Sono presenti, in proprio o per delega, 14 condomini su 20, per complessivi 712 millesimi.",
+          "claim": "All'assemblea erano presenti 14 condomini su 20, per complessivi 712 millesimi."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 1.512
+    },
+    {
+      "id": "manuale-01",
+      "question": "Cosa significa il codice di errore E04 della caldaia e cosa bisogna fare?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "tabelle"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.232,
+      "top_score": 0.5598,
+      "answer": "Il codice di errore E04 significa che la pressione dell'impianto è insufficiente [1]. L'intervento consigliato consiste nel ripristinare la pressione a 1,2 bar tramite il rubinetto di carico [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 2,
+          "passage": "Cod ice Significato Intervento E01 Mancata accensione del bruciatore Verificare che il rubinetto del gas sia aperto e premere il tasto reset E02 Intervento del termostato di sicurezza Attendere il raffreddamento e premere il tasto reset E04 Pressione dell'impianto insufficiente Ripristinare la pressione a 1,2 bar tramite il rubinetto di carico E10 Sonda di mandata guasta Chiamare l'assistenza tecnica E35 Fiamma parassita Chiamare l'assistenza tecnica Se lo stesso codice si ripresenta più di tre volte in 24 ore, spegnere la caldaia e contattare l'assistenza tecnica.",
+          "claim": "L'intervento consigliato consiste nel ripristinare la pressione a 1,2 bar tramite il rubinetto di carico."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.31
+    },
+    {
+      "id": "manuale-02",
+      "question": "Ogni quanto va fatta la manutenzione ordinaria della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.177,
+      "top_score": 0.9826,
+      "answer": "La manutenzione ordinaria deve essere eseguita almeno una volta all'anno da un tecnico abilitato [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 3,
+          "passage": "La manutenzione ordinaria deve essere eseguita almeno una volta all'anno da un tecnico abilitato, preferibilmente prima dell'inizio della stagione di riscaldamento.",
+          "claim": "La manutenzione ordinaria deve essere eseguita almeno una volta all'anno da un tecnico abilitato."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 0.892
+    },
+    {
+      "id": "manuale-03",
+      "question": "Ogni quanto va eseguita l'analisi dei fumi della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.196,
+      "top_score": 0.9823,
+      "answer": "Il controllo dell'efficienza energetica con analisi dei fumi va eseguito ogni due anni e deve essere registrato nel libretto di impianto [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 3,
+          "passage": "Il controllo dell'efficienza energetica con analisi dei fumi va eseguito ogni due anni e registrato nel libretto di impianto.",
+          "claim": "Il controllo dell'efficienza energetica con analisi dei fumi va eseguito ogni due anni e deve essere registrato nel libretto di impianto."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.029
+    },
+    {
+      "id": "manuale-04",
+      "question": "Qual è la potenza termica nominale della caldaia Aurora T24?",
+      "answerable": true,
+      "tags": [
+        "manuale",
+        "tabelle",
+        "tabella-numerica"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.149,
+      "top_score": 0.9987,
+      "answer": "La potenza termica nominale della caldaia Aurora T24 è di 24 kW [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 1,
+          "passage": "Parametro Valore Potenza termica nominale 24 kW Rendimento a pieno carico 97,8 % Pressione massima di esercizio 3 bar Temperatura massima acqua sanitaria 60 °C Alimentazione elettrica 230 V - 50 Hz",
+          "claim": "La potenza termica nominale della caldaia Aurora T24 è di 24 kW."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 0.866
+    },
+    {
+      "id": "manuale-05",
+      "question": "Quale deve essere la pressione dell'impianto a caldaia fredda?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.197,
+      "top_score": 0.9947,
+      "answer": "La pressione dell'impianto, letta a caldaia fredda, deve essere compresa tra 1 e 1,5 bar [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 2,
+          "passage": "La pressione dell'impianto, letta a caldaia fredda, deve essere compresa tra 1 e 1,5 bar.",
+          "claim": "La pressione dell'impianto, letta a caldaia fredda, deve essere compresa tra 1 e 1,5 bar."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.27
+    },
+    {
+      "id": "manuale-06",
+      "question": "Quanto dura la garanzia della caldaia?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.165,
+      "top_score": 0.989,
+      "answer": "La caldaia è coperta da una garanzia di cinque anni dalla data della prima accensione [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 3,
+          "passage": "La caldaia è coperta da garanzia di cinque anni dalla data della prima accensione, a condizione che la manutenzione annuale sia stata eseguita regolarmente e documentata.",
+          "claim": "La caldaia è coperta da una garanzia di cinque anni dalla data della prima accensione."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 0.5,
+      "generation_s": 0.914
+    },
+    {
+      "id": "manuale-07",
+      "question": "Cosa bisogna fare se un codice di errore si ripresenta più volte?",
+      "answerable": true,
+      "tags": [
+        "manuale"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.256,
+      "top_score": 0.6318,
+      "answer": "Se lo stesso codice di errore si ripresenta più di tre volte in 24 ore, è necessario spegnere la caldaia e contattare l'assistenza tecnica [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "manuale",
+          "page": 2,
+          "passage": "Cod ice Significato Intervento E01 Mancata accensione del bruciatore Verificare che il rubinetto del gas sia aperto e premere il tasto reset E02 Intervento del termostato di sicurezza Attendere il raffreddamento e premere il tasto reset E04 Pressione dell'impianto insufficiente Ripristinare la pressione a 1,2 bar tramite il rubinetto di carico E10 Sonda di mandata guasta Chiamare l'assistenza tecnica E35 Fiamma parassita Chiamare l'assistenza tecnica Se lo stesso codice si ripresenta più di tre volte in 24 ore, spegnere la caldaia e contattare l'assistenza tecnica.",
+          "claim": "Se lo stesso codice di errore si ripresenta più di tre volte in 24 ore, è necessario spegnere la caldaia e contattare l'assistenza tecnica."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 1.831
+    },
+    {
+      "id": "gdpr-01",
+      "question": "Che cosa si intende per dato personale secondo il GDPR?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.209,
+      "top_score": 0.979,
+      "answer": "Ai fini del regolamento, si intende per «dato personale» qualsiasi informazione riguardante una persona fisica identificata o identificabile [1]. Si considera identificabile la persona fisica che può essere identificata, direttamente o indirettamente, con particolare riferimento a un identificativo come il nome, un numero di identificazione, dati relativi all'ubicazione, un identificativo online o a uno o più elementi caratteristici della sua identità fisica, fisiologica, genetica, psichica, economica, culturale o sociale [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "gdpr",
+          "page": 33,
+          "passage": "Ai fini del presente regolamento s'intende per:\n\n1) «dato personale»: qualsiasi informazione riguardante una persona fisica identificata o identificabile («interessato»); si considera identificabile la persona fisica che può essere identificata, direttamente o indirettamente, con particolare riferimento a un identificativo come il nome, un numero di identificazione, dati relativi all'ubicazione, un identificativo online o a uno o più elementi caratteristici della sua identità fisica, fisiologica, genetica, psichica, economica, culturale o sociale;",
+          "claim": "Ai fini del regolamento, si intende per «dato personale» qualsiasi informazione riguardante una persona fisica identificata o identificabile."
+        },
+        {
+          "doc": "gdpr",
+          "page": 33,
+          "passage": "1) «dato personale»: qualsiasi informazione riguardante una persona fisica identificata o identificabile («interessato»); si considera identificabile la persona fisica che può essere identificata, direttamente o indirettamente, con particolare riferimento a un identificativo come il nome, un numero di identificazione, dati relativi all'ubicazione, un identificativo online o a uno o più elementi caratteristici della sua identità fisica, fisiologica, genetica, psichica, economica, culturale o sociale;",
+          "claim": "Si considera identificabile la persona fisica che può essere identificata, direttamente o indirettamente, con particolare riferimento a un identificativo come il nome, un numero di identificazione, dati relativi all'ubicazione, un identificativo online o a uno o più elementi caratteristici della sua identità fisica, fisiologica, genetica, psichica, economica, culturale o sociale."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.589
+    },
+    {
+      "id": "gdpr-02",
+      "question": "Secondo il GDPR, a partire da quale età un minore può dare da solo il consenso al trattamento dei dati per i servizi online?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.212,
+      "top_score": 0.9601,
+      "answer": "Il trattamento dei dati personali di un minore per l'offerta diretta di servizi della società dell'informazione è lecito se il minore ha almeno 16 anni [1]. Se il minore ha un'età inferiore ai 16 anni, il trattamento è lecito solo se il consenso è prestato o autorizzato dal titolare della responsabilità genitoriale [1]. Gli Stati membri possono stabilire per legge un'età inferiore a tale soglia, purché non inferiore ai 13 anni [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "gdpr",
+          "page": 37,
+          "passage": "1. Qualora si applichi l'articolo 6, paragrafo 1, lettera a), per quanto riguarda l'offerta diretta di servizi della società dell'informazione ai minori, il trattamento di dati personali del minore è lecito ove il minore abbia almeno 16 anni.",
+          "claim": "Il trattamento dei dati personali di un minore per l'offerta diretta di servizi della società dell'informazione è lecito se il minore ha almeno 16 anni."
+        },
+        {
+          "doc": "gdpr",
+          "page": 37,
+          "passage": "Ove il minore abbia un'età inferiore ai 16 anni, tale trattamento è lecito soltanto se e nella misura in cui tale consenso è prestato o autorizzato dal titolare della responsabilità genitoriale.",
+          "claim": "Se il minore ha un'età inferiore ai 16 anni, il trattamento è lecito solo se il consenso è prestato o autorizzato dal titolare della responsabilità genitoriale."
+        },
+        {
+          "doc": "gdpr",
+          "page": 37,
+          "passage": "Gli Stati membri possono stabilire per legge un'età inferiore a tali fini purché non inferiore ai 13 anni.",
+          "claim": "Gli Stati membri possono stabilire per legge un'età inferiore a tale soglia, purché non inferiore ai 13 anni."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.471
+    },
+    {
+      "id": "gdpr-03",
+      "question": "Entro quanto tempo il titolare deve notificare una violazione dei dati personali all'autorità di controllo?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        2
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.217,
+      "top_score": 0.9998,
+      "answer": "Il titolare del trattamento deve notificare la violazione dei dati personali all'autorità di controllo competente senza ingiustificato ritardo e, ove possibile, entro 72 ore dal momento in cui ne è venuto a conoscenza [1][2]. \n\nTale notifica non è necessaria se il titolare è in grado di dimostrare che è improbabile che la violazione presenti un rischio per i diritti e le libertà delle persone fisiche [1][2]. Qualora la notifica non venga effettuata entro le 72 ore, essa deve essere corredata dai motivi del ritardo [1][2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "gdpr",
+          "page": 17,
+          "passage": "Pertanto, non appena viene a conoscenza di un'avvenuta violazione dei dati personali, il titolare del trattamento dovrebbe notificare la violazione dei dati personali all'autorità di controllo competente, senza ingiustificato ritardo e, ove possibile, entro 72 ore dal momento in cui ne è venuto a conoscenza, a meno che il titolare del trattamento non sia in grado di dimostrare che, conformemente al principio di responsabilizzazione, è improbabile che la violazione dei dati personali presenti un rischio per i diritti e le libertà delle persone fisiche.",
+          "claim": "Il titolare del trattamento deve notificare la violazione dei dati personali all'autorità di controllo competente senza ingiustificato ritardo e, ove possibile, entro 72 ore dal momento in cui ne è venuto a conoscenza."
+        },
+        {
+          "doc": "gdpr",
+          "page": 17,
+          "passage": "Oltre il termine di 72 ore, tale notifica dovrebbe essere corredata delle ragioni del ritardo e le informazioni potrebbero essere fornite in fasi successive senza ulteriore ingiustificato ritardo.",
+          "claim": "Qualora la notifica non venga effettuata entro le 72 ore, essa deve essere corredata dai motivi del ritardo."
+        },
+        {
+          "doc": "gdpr",
+          "page": 52,
+          "passage": "1. In caso di violazione dei dati personali, il titolare del trattamento notifica la violazione all'autorità di controllo competente a norma dell'articolo 55 senza ingiustificato ritardo e, ove possibile, entro 72 ore dal momento in cui ne è venuto a conoscenza, a meno che sia improbabile che la violazione dei dati personali presenti un rischio per i diritti e le libertà delle persone fisiche.",
+          "claim": "Il titolare del trattamento deve notificare la violazione dei dati personali all'autorità di controllo competente senza ingiustificato ritardo e, ove possibile, entro 72 ore dal momento in cui ne è venuto a conoscenza."
+        },
+        {
+          "doc": "gdpr",
+          "page": 52,
+          "passage": "Qualora la notifica all'autorità di controllo non sia effettuata entro 72 ore, è corredata dei motivi del ritardo.",
+          "claim": "Qualora la notifica non venga effettuata entro le 72 ore, essa deve essere corredata dai motivi del ritardo."
+        }
+      ],
+      "page_precision": 0.5,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.631
+    },
+    {
+      "id": "gdpr-04",
+      "question": "Come si chiama il diritto di ottenere la cancellazione dei propri dati personali?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.224,
+      "top_score": 0.9938,
+      "answer": "Il diritto di ottenere la cancellazione dei propri dati personali si chiama \"diritto all'oblio\" [1][2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "gdpr",
+          "page": 43,
+          "passage": "1. L'interessato ha il diritto di ottenere dal titolare del trattamento la cancellazione dei dati personali che lo riguardano senza ingiustificato ritardo e il titolare del trattamento ha l'obbligo di cancellare senza ingiustificato ritardo i dati personali, se sussiste uno dei motivi seguenti:",
+          "claim": "Il diritto di ottenere la cancellazione dei propri dati personali si chiama \"diritto all'oblio\"."
+        },
+        {
+          "doc": "gdpr",
+          "page": 44,
+          "passage": "2. Il titolare del trattamento, se ha reso pubblici dati personali ed è obbligato, ai sensi del paragrafo 1, a cancellarli, tenendo conto della tecnologia disponibile e dei costi di attuazione adotta le misure ragionevoli, anche tecniche, per informare i titolari del trattamento che stanno trattando i dati personali della richiesta dell'interessato di cancellare qualsiasi link, copia o riproduzione dei suoi dati personali.",
+          "claim": "Il diritto di ottenere la cancellazione dei propri dati personali si chiama \"diritto all'oblio\"."
+        }
+      ],
+      "page_precision": 0.5,
+      "cites_evidence": false,
+      "grounded": 0.0,
+      "correct": 1.0,
+      "generation_s": 1.722
+    },
+    {
+      "id": "gdpr-05",
+      "question": "In che formato l'interessato ha diritto di ricevere i propri dati per la portabilità?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        1
+      ],
+      "retrieval_s": 0.218,
+      "top_score": 0.9989,
+      "answer": "L'interessato ha il diritto di ricevere i dati personali che lo riguardano in un formato strutturato, di uso comune e leggibile da dispositivo automatico [1]. Nelle considerazioni del regolamento, si specifica inoltre che tale formato dovrebbe essere interoperabile [2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "gdpr",
+          "page": 45,
+          "passage": "1. L'interessato ha il diritto di ricevere in un formato strutturato, di uso comune e leggibile da dispositivo automatico i dati personali che lo riguardano forniti a un titolare del trattamento e ha il diritto di trasmettere tali dati a un altro titolare del trattamento senza impedimenti da parte del titolare del trattamento cui li ha forniti qualora:",
+          "claim": "L'interessato ha il diritto di ricevere i dati personali che lo riguardano in un formato strutturato, di uso comune e leggibile da dispositivo automatico."
+        },
+        {
+          "doc": "gdpr",
+          "page": 13,
+          "passage": "È opportuno incoraggiare i titolari del trattamento a sviluppare formati interoperabili che consentano la portabilità dei dati. Tale diritto dovrebbe applicarsi qualora l'interessato abbia fornito i dati personali sulla base del proprio consenso o se il trattamento è necessario per l'esecuzione di un contratto.",
+          "claim": "Nelle considerazioni del regolamento, si specifica inoltre che tale formato dovrebbe essere interoperabile."
+        }
+      ],
+      "page_precision": 0.5,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.136
+    },
+    {
+      "id": "gdpr-06",
+      "question": "Quando un'autorità pubblica deve designare un responsabile della protezione dei dati?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        1
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.219,
+      "top_score": 0.9988,
+      "answer": "Un'autorità pubblica deve sistematicamente designare un responsabile della protezione dei dati quando il trattamento è effettuato da essa, con l'eccezione delle autorità giurisdizionali quando esercitano le loro funzioni giurisdizionali [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "gdpr",
+          "page": 55,
+          "passage": "3. Qualora il titolare del trattamento o il responsabile del trattamento sia un'autorità pubblica o un organismo pubblico, un unico responsabile della protezione dei dati può essere designato per più autorità pubbliche o organismi pubblici, tenuto conto della loro struttura organizzativa e dimensione.",
+          "claim": "Un'autorità pubblica deve sistematicamente designare un responsabile della protezione dei dati quando il trattamento è effettuato da essa, con l'eccezione delle autorità giurisdizionali quando esercitano le loro funzioni giurisdizionali."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": false,
+      "grounded": 0.0,
+      "correct": 1.0,
+      "generation_s": 1.967
+    },
+    {
+      "id": "gdpr-07",
+      "question": "Qual è la sanzione massima prevista dal GDPR per le violazioni più gravi?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        4
+      ],
+      "candidate_ranks": [
+        4
+      ],
+      "retrieval_s": 0.223,
+      "top_score": 0.495,
+      "answer": "La sanzione amministrativa pecuniaria massima prevista dal GDPR per le violazioni più gravi (come i principi di base del trattamento, i diritti degli interessati o i trasferimenti di dati a paesi terzi) è di 20.000.000 EUR, oppure fino al 4% del fatturato mondiale totale annuo dell'esercizio precedente, se tale importo risultasse superiore [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "gdpr",
+          "page": 83,
+          "passage": "5. In conformità del paragrafo 2, la violazione delle disposizioni seguenti è soggetta a sanzioni amministrative pecuniarie fino a 20 000 000 EUR, o per le imprese, fino al 4 % del fatturato mondiale totale annuo dell'esercizio precedente, se superiore:",
+          "claim": "La sanzione amministrativa pecuniaria massima prevista dal GDPR per le violazioni più gravi (come i principi di base del trattamento, i diritti degli interessati o i trasferimenti di dati a paesi terzi) è di 20.000.000 EUR, oppure fino al 4% del fatturato mondiale totale annuo dell'esercizio precedente, se tale importo risultasse superiore."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 0.5,
+      "correct": 1.0,
+      "generation_s": 2.592
+    },
+    {
+      "id": "aiact-01",
+      "question": "Come definisce un sistema di IA il regolamento sull'intelligenza artificiale?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        2
+      ],
+      "candidate_ranks": [
+        11
+      ],
+      "retrieval_s": 0.233,
+      "top_score": 0.9946,
+      "answer": "Il regolamento definisce un sistema di IA come un sistema automatizzato progettato per funzionare con livelli di autonomia variabili e che può presentare adattabilità dopo la diffusione [2]. Tale sistema, per obiettivi espliciti o impliciti, deduce dall'input che riceve come generare output quali previsioni, contenuti, raccomandazioni o decisioni che possono influenzare ambienti fisici o virtuali [2].\n\nInoltre, la definizione di sistema di IA si basa sulle seguenti caratteristiche:\n*   **Capacità inferenziale:** È una caratteristica fondamentale che si riferisce al processo di ottenimento degli output e alla capacità del sistema di ricavare modelli o algoritmi (o entrambi) da input o dati [1]. Questa capacità trascende l'elaborazione di base dei dati consentendo l'apprendimento, il ragionamento o la modellizzazione [3].\n*   **Tecniche di inferenza:** Comprendono approcci di apprendimento automatico che imparano dai dati come conseguire determinati obiettivi e approcci basati sulla logica e sulla conoscenza che traggono inferenze dalla conoscenza codificata o dalla rappresentazione simbolica del compito da risolvere [3].\n*   **Autonomia:** I sistemi sono progettati per funzionare con livelli di autonomia variabili, il che significa che dispongono di un certo grado di autonomia di azione rispetto al coinvolgimento umano e di capacità di funzionare senza l'intervento umano [3].\n*   **Esclusioni:** La definizione non dovrebbe riguardare i sistemi basati sulle regole definite unicamente da persone fisiche per eseguire operazioni in modo automatico [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "ai-act",
+          "page": 4,
+          "passage": "Inoltre, la definizione dovrebbe essere basata sulle principali caratteristiche dei sistemi di IA, che la distinguono dai tradizionali sistemi software o dagli approcci di programmazione più semplici, e non dovrebbe riguardare i sistemi basati sulle regole definite unicamente da persone fisiche per eseguire operazioni in modo automatico.",
+          "claim": "*   **Esclusioni:** La definizione non dovrebbe riguardare i sistemi basati sulle regole definite unicamente da persone fisiche per eseguire operazioni in modo automatico."
+        },
+        {
+          "doc": "ai-act",
+          "page": 4,
+          "passage": "Tale capacità inferenziale si riferisce al processo di ottenimento degli output, quali previsioni, contenuti, raccomandazioni o decisioni, che possono influenzare gli ambienti fisici e virtuali e alla capacità dei sistemi di IA di ricavare modelli o algoritmi, o entrambi, da input o dati.",
+          "claim": "*   **Capacità inferenziale:** È una caratteristica fondamentale che si riferisce al processo di ottenimento degli output e alla capacità del sistema di ricavare modelli o algoritmi (o entrambi) da input o dati."
+        },
+        {
+          "doc": "ai-act",
+          "page": 46,
+          "passage": "1) «sistema di IA»: un sistema automatizzato progettato per funzionare con livelli di autonomia variabili e che può presentare adattabilità dopo la diffusione e che, per obiettivi espliciti o impliciti, deduce dall'input che riceve come generare output quali previsioni, contenuti, raccomandazioni o decisioni che possono influenzare ambienti fisici o virtuali;",
+          "claim": "Tale sistema, per obiettivi espliciti o impliciti, deduce dall'input che riceve come generare output quali previsioni, contenuti, raccomandazioni o decisioni che possono influenzare ambienti fisici o virtuali."
+        },
+        {
+          "doc": "ai-act",
+          "page": 4,
+          "passage": "Le tecniche che consentono l'inferenza nella costruzione di un sistema di IA comprendono approcci di apprendimento automatico che imparano dai dati come conseguire determinati obiettivi e approcci basati sulla logica e sulla conoscenza che traggono inferenze dalla conoscenza codificata o dalla rappresentazione simbolica del compito da risolvere.",
+          "claim": "*   **Tecniche di inferenza:** Comprendono approcci di apprendimento automatico che imparano dai dati come conseguire determinati obiettivi e approcci basati sulla logica e sulla conoscenza che traggono inferenze dalla conoscenza codificata o dalla rappresentazione simbolica del compito da risolvere."
+        },
+        {
+          "doc": "ai-act",
+          "page": 4,
+          "passage": "La capacità inferenziale di un sistema di IA trascende l'elaborazione di base dei dati consentendo l'apprendimento, il ragionamento o la modellizzazione.",
+          "claim": "Questa capacità trascende l'elaborazione di base dei dati consentendo l'apprendimento, il ragionamento o la modellizzazione."
+        },
+        {
+          "doc": "ai-act",
+          "page": 4,
+          "passage": "I sistemi di IA sono progettati per funzionare con livelli di autonomia variabili, il che significa che dispongono di un certo grado di autonomia di azione rispetto al coinvolgimento umano e di capacità di funzionare senza l'intervento umano.",
+          "claim": "*   **Autonomia:** I sistemi sono progettati per funzionare con livelli di autonomia variabili, il che significa che dispongono di un certo grado di autonomia di azione rispetto al coinvolgimento umano e di capacità di funzionare senza l'intervento umano."
+        }
+      ],
+      "page_precision": 0.16666666666666666,
+      "cites_evidence": true,
+      "grounded": 0.875,
+      "correct": 1.0,
+      "generation_s": 4.988
+    },
+    {
+      "id": "aiact-02",
+      "question": "Che obbligo hanno fornitori e deployer di sistemi di IA verso il proprio personale?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        3
+      ],
+      "candidate_ranks": [
+        22
+      ],
+      "retrieval_s": 0.225,
+      "top_score": 0.9966,
+      "answer": "I fornitori e i deployer dei sistemi di IA devono adottare misure per garantire, nella misura del possibile, un livello sufficiente di alfabetizzazione in materia di IA del proprio personale [1]. Questa misura deve tenere conto delle conoscenze tecniche, dell'esperienza, dell'istruzione e della formazione del personale, nonché del contesto in cui i sistemi di IA devono essere utilizzati e delle persone o dei gruppi di persone su cui i sistemi devono essere impiegati [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "ai-act",
+          "page": 51,
+          "passage": "I fornitori e i deployer dei sistemi di IA adottano misure per garantire nella misura del possibile un livello sufficiente di alfabetizzazione in materia di IA del loro personale nonché di qualsiasi altra persona che si occupa del funzionamento e dell'utilizzo dei sistemi di IA per loro conto, prendendo in considerazione le loro conoscenze tecniche, la loro esperienza, istruzione e formazione, nonché il contesto in cui i sistemi di IA devono essere utilizzati, e tenendo conto delle persone o dei gruppi di persone su cui i sistemi di IA devono essere utilizzati.",
+          "claim": "Questa misura deve tenere conto delle conoscenze tecniche, dell'esperienza, dell'istruzione e della formazione del personale, nonché del contesto in cui i sistemi di IA devono essere utilizzati e delle persone o dei gruppi di persone su cui i sistemi devono essere impiegati."
+        }
+      ],
+      "page_precision": 1.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 2.414
+    },
+    {
+      "id": "aiact-03",
+      "question": "Il punteggio sociale delle persone tramite IA è consentito?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        2
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.236,
+      "top_score": 0.9989,
+      "answer": "I sistemi di IA che permettono di attribuire un punteggio sociale alle persone fisiche sono vietati [1]. Tale divieto si applica specificamente all'immissione sul mercato, alla messa in servizio o all'uso di sistemi di IA per la valutazione o la classificazione delle persone fisiche o di gruppi di persone sulla base del loro comportamento sociale o di caratteristiche personali o della personalità, nei casi in cui il punteggio ottenuto comporti:\n\ni) un trattamento pregiudizievole o sfavorevole in contesti sociali non collegati a quelli in cui i dati sono stati originariamente generati o raccolti [2].\nii) un trattamento pregiudizievole o sfavorevole che sia ingiustificato o sproporzionato rispetto al comportamento sociale o alla sua gravità [2].\n\nIl divieto non pregiudica le pratiche lecite di valutazione delle persone fisiche effettuate per uno scopo specifico in conformità con il diritto dell'Unione e nazionale [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "ai-act",
+          "page": 9,
+          "passage": "(31) I sistemi di IA che permettono ad attori pubblici o privati di attribuire un punteggio sociale alle persone fisiche possono portare a risultati discriminatori e all'esclusione di determinati gruppi.",
+          "claim": "I sistemi di IA che permettono di attribuire un punteggio sociale alle persone fisiche sono vietati."
+        },
+        {
+          "doc": "ai-act",
+          "page": 9,
+          "passage": "Tale divieto non dovrebbe pregiudicare le pratiche lecite di valutazione delle persone fisiche effettuate per uno scopo specifico in conformità del diritto dell'Unione e nazionale.",
+          "claim": "Il divieto non pregiudica le pratiche lecite di valutazione delle persone fisiche effettuate per uno scopo specifico in conformità con il diritto dell'Unione e nazionale."
+        },
+        {
+          "doc": "ai-act",
+          "page": 51,
+          "passage": "i) un trattamento pregiudizievole o sfavorevole di determinate persone fisiche o di gruppi di persone in contesti sociali che non sono collegati ai contesti in cui i dati sono stati originariamente generati o raccolti;",
+          "claim": "i) un trattamento pregiudizievole o sfavorevole in contesti sociali non collegati a quelli in cui i dati sono stati originariamente generati o raccolti."
+        },
+        {
+          "doc": "ai-act",
+          "page": 51,
+          "passage": "ii) un trattamento pregiudizievole o sfavorevole di determinate persone fisiche o di gruppi di persone che sia ingiustificato o sproporzionato rispetto al loro comportamento sociale o alla sua gravità;",
+          "claim": "ii) un trattamento pregiudizievole o sfavorevole che sia ingiustificato o sproporzionato rispetto al comportamento sociale o alla sua gravità."
+        }
+      ],
+      "page_precision": 0.5,
+      "cites_evidence": true,
+      "grounded": 0.7,
+      "correct": 1.0,
+      "generation_s": 3.501
+    },
+    {
+      "id": "aiact-04",
+      "question": "Chi usa un chatbot deve sapere di parlare con un'IA?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        8
+      ],
+      "candidate_ranks": [
+        27
+      ],
+      "retrieval_s": 0.22,
+      "top_score": 0.0624,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "aiact-05",
+      "question": "Cosa deve fare chi pubblica un deep fake generato con l'IA?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        2
+      ],
+      "candidate_ranks": [
+        2
+      ],
+      "retrieval_s": 0.233,
+      "top_score": 0.9342,
+      "answer": "I deployer di un sistema di IA che genera o manipola immagini, contenuti audio o video che costituiscono un «deep fake» devono rendere noto che il contenuto è stato generato o manipolato artificialmente [2][3].\n\nEsistono tuttavia delle eccezioni e delle specifiche modalità di adempimento:\n*   **Eccezioni legali:** L'obbligo non si applica se l'uso è autorizzato dalla legge per accertare, prevenire, indagare o perseguire reati [2].\n*   **Opere creative:** Se il contenuto fa parte di un'opera o di un programma manifestamente artistico, creativo, satirico o fittizio, l'obbligo si limita a rivelare l'esistenza di tali contenuti in modo adeguato, senza ostacolare l'esposizione, il godimento, il normale sfruttamento e l'utilizzo dell'opera, mantenendo la sua utilità e qualità [1][2].\n*   **Modalità di comunicazione:** Le informazioni devono essere fornite alle persone fisiche interessate in maniera chiara e distinguibile al più tardi al momento della prima interazione o esposizione, e devono essere conformi ai requisiti di accessibilità applicabili [4].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "ai-act",
+          "page": 34,
+          "passage": "L'adempimento di tale obbligo di trasparenza non dovrebbe essere interpretato nel senso che l'uso del sistema di IA o dei suoi output ostacola il diritto alla libertà di espressione e il diritto alla libertà delle arti e delle scienze garantito dalla Carta, in particolare quando il contenuto fa parte di un'opera o di un programma manifestamente creativo, satirico, artistico, fittizio, o analogo fatte salve le tutele adeguate per i diritti e le libertà dei terzi. In tali casi, l'obbligo di trasparenza per i deep fake di cui al presente regolamento si limita alla rivelazione dell'esistenza di tali contenuti generati o manipolati in modo adeguato che non ostacoli l'esposizione o il godimento dell'opera, compresi il suo normale sfruttamento e utilizzo, mantenendo nel contempo l'utilità e la qualità dell'opera.",
+          "claim": "*   **Opere creative:** Se il contenuto fa parte di un'opera o di un programma manifestamente artistico, creativo, satirico o fittizio, l'obbligo si limita a rivelare l'esistenza di tali contenuti in modo adeguato, senza ostacolare l'esposizione, il godimento, il normale sfruttamento e l'utilizzo dell'opera, mantenendo la sua utilità e qualità."
+        },
+        {
+          "doc": "ai-act",
+          "page": 82,
+          "passage": "4. I deployer di un sistema di IA che genera o manipola immagini o contenuti audio o video che costituiscono un «deep fake» rendono noto che il contenuto è stato generato o manipolato artificialmente.",
+          "claim": "I deployer di un sistema di IA che genera o manipola immagini, contenuti audio o video che costituiscono un «deep fake» devono rendere noto che il contenuto è stato generato o manipolato artificialmente."
+        },
+        {
+          "doc": "ai-act",
+          "page": 82,
+          "passage": "Tale obbligo non si applica se l'uso è autorizzato dalla legge per accertare, prevenire, indagare o perseguire reati.",
+          "claim": "*   **Eccezioni legali:** L'obbligo non si applica se l'uso è autorizzato dalla legge per accertare, prevenire, indagare o perseguire reati."
+        },
+        {
+          "doc": "ai-act",
+          "page": 82,
+          "passage": "Qualora il contenuto faccia parte di un'analoga opera o di un programma manifestamente artistici, creativi, satirici o fittizi, gli obblighi di trasparenza di cui al presente paragrafo si limitano all'obbligo di rivelare l'esistenza di tali contenuti generati o manipolati in modo adeguato, senza ostacolare l'esposizione o il godimento dell'opera.",
+          "claim": "*   **Opere creative:** Se il contenuto fa parte di un'opera o di un programma manifestamente artistico, creativo, satirico o fittizio, l'obbligo si limita a rivelare l'esistenza di tali contenuti in modo adeguato, senza ostacolare l'esposizione, il godimento, il normale sfruttamento e l'utilizzo dell'opera, mantenendo la sua utilità e qualità."
+        },
+        {
+          "doc": "ai-act",
+          "page": 34,
+          "passage": "(134) Oltre alle soluzioni tecniche utilizzate dai fornitori del sistema di IA, i deployer che utilizzano un sistema di IA per generare o manipolare immagini o contenuti audio o video che assomigliano notevolmente a persone, oggetti, luoghi, entità o eventi esistenti e che potrebbero apparire falsamente autentici o veritieri a una persona (deep fake), dovrebbero anche rendere noto in modo chiaro e distinto che il contenuto è stato creato o manipolato artificialmente etichettando di conseguenza gli output dell’IA e rivelandone l'origine artificiale.",
+          "claim": "I deployer di un sistema di IA che genera o manipola immagini, contenuti audio o video che costituiscono un «deep fake» devono rendere noto che il contenuto è stato generato o manipolato artificialmente."
+        },
+        {
+          "doc": "ai-act",
+          "page": 83,
+          "passage": "5. Le informazioni di cui ai paragrafi da 1 a 4 sono fornite alle persone fisiche interessate in maniera chiara e distinguibile al più tardi al momento della prima interazione o esposizione. Le informazioni devono essere conformi ai requisiti di accessibilità applicabili.",
+          "claim": "*   **Modalità di comunicazione:** Le informazioni devono essere fornite alle persone fisiche interessate in maniera chiara e distinguibile al più tardi al momento della prima interazione o esposizione, e devono essere conformi ai requisiti di accessibilità applicabili."
+        }
+      ],
+      "page_precision": 0.5,
+      "cites_evidence": true,
+      "grounded": 0.8,
+      "correct": 1.0,
+      "generation_s": 4.314
+    },
+    {
+      "id": "aiact-06",
+      "question": "Qual è la sanzione massima per chi usa pratiche di IA vietate?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        2
+      ],
+      "candidate_ranks": [
+        10
+      ],
+      "retrieval_s": 0.232,
+      "top_score": 0.9893,
+      "answer": "La sanzione massima per la non conformità al divieto delle pratiche di IA di cui all'articolo 5 è di 35 000 000 EUR o, se l'autore del reato è un'impresa, fino al 7% del fatturato mondiale totale annuo dell'esercizio precedente, se superiore [1].\n\nInoltre, per le istituzioni, gli organi o gli organismi dell'Unione, la non conformità al divieto delle pratiche di IA di cui all'articolo 5 è soggetta a sanzioni amministrative pecuniarie fino a 1 500 000 EUR [2].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "ai-act",
+          "page": 115,
+          "passage": "3. La non conformità al divieto delle pratiche di IA di cui all'articolo 5 è soggetta a sanzioni amministrative pecuniarie fino a 35 000 000 EUR o, se l'autore del reato è un'impresa, fino al 7 % del fatturato mondiale totale annuo dell'esercizio precedente, se superiore.",
+          "claim": "La sanzione massima per la non conformità al divieto delle pratiche di IA di cui all'articolo 5 è di 35 000 000 EUR o, se l'autore del reato è un'impresa, fino al 7% del fatturato mondiale totale annuo dell'esercizio precedente, se superiore."
+        },
+        {
+          "doc": "ai-act",
+          "page": 117,
+          "passage": "2. La non conformità al divieto delle pratiche di IA di cui all'articolo 5 è soggetta a sanzioni amministrative pecuniarie fino a 1 500 000 EUR.",
+          "claim": "Inoltre, per le istituzioni, gli organi o gli organismi dell'Unione, la non conformità al divieto delle pratiche di IA di cui all'articolo 5 è soggetta a sanzioni amministrative pecuniarie fino a 1 500 000 EUR."
+        }
+      ],
+      "page_precision": 0.5,
+      "cites_evidence": true,
+      "grounded": 0.75,
+      "correct": 1.0,
+      "generation_s": 2.925
+    },
+    {
+      "id": "aiact-07",
+      "question": "Da quando si applica il regolamento sull'intelligenza artificiale?",
+      "answerable": true,
+      "tags": [
+        "normativa"
+      ],
+      "ranks": [
+        null
+      ],
+      "candidate_ranks": [
+        null
+      ],
+      "retrieval_s": 0.229,
+      "top_score": 0.9935,
+      "answer": "Il regolamento si dovrebbe applicare a decorrere dal 2 agosto 2026 [1]. Tuttavia, i divieti e le disposizioni generali del regolamento dovrebbero applicarsi già dal 2 febbraio 2025 per tenere conto dei rischi inaccettabili associati all'uso dell'IA in determinati modi [1]. Inoltre, le disposizioni sugli organismi notificati e sulla struttura di governance dovrebbero applicarsi a decorrere dal 2 agosto 2025 [1]. Anche gli obblighi per i fornitori di modelli di IA per finalità generali e i codici di buone pratiche dovrebbero essere applicabili a decorrere dal 2 agosto 2025 [1].",
+      "abstained": false,
+      "citations": [
+        {
+          "doc": "ai-act",
+          "page": 44,
+          "passage": "(179) Il presente regolamento si dovrebbe applicare a decorrere dal 2 agosto 2026.",
+          "claim": "Il regolamento si dovrebbe applicare a decorrere dal 2 agosto 2026."
+        },
+        {
+          "doc": "ai-act",
+          "page": 44,
+          "passage": "Tuttavia, tenuto conto del rischio inaccettabile associato all'uso dell'IA in determinati modi, i divieti nonché le disposizioni generali del presente regolamento dovrebbero applicarsi già a decorrere dal 2 febbraio 2025.",
+          "claim": "Tuttavia, i divieti e le disposizioni generali del regolamento dovrebbero applicarsi già dal 2 febbraio 2025 per tenere conto dei rischi inaccettabili associati all'uso dell'IA in determinati modi."
+        },
+        {
+          "doc": "ai-act",
+          "page": 44,
+          "passage": "È inoltre opportuno che l'infrastruttura relativa alla governance e al sistema di valutazione della conformità sia operativa prima del 2 agosto 2026, pertanto le disposizioni sugli organismi notificati e sulla struttura di governance dovrebbero applicarsi a decorrere dal 2 agosto 2025.",
+          "claim": "Inoltre, le disposizioni sugli organismi notificati e sulla struttura di governance dovrebbero applicarsi a decorrere dal 2 agosto 2025."
+        },
+        {
+          "doc": "ai-act",
+          "page": 44,
+          "passage": "In considerazione del rapido ritmo dello sviluppo tecnologico e dell'adozione di modelli di IA per finalità generali, gli obblighi per i fornitori di modelli di IA per finalità generali dovrebbero applicarsi a decorrere dal 2 agosto 2025. I codici di buone pratiche dovrebbero essere pronti entro 2 agosto 2025 al fine d consentire ai fornitori di dimostrare la conformità «in tempo utile».",
+          "claim": "Anche gli obblighi per i fornitori di modelli di IA per finalità generali e i codici di buone pratiche dovrebbero essere applicabili a decorrere dal 2 agosto 2025."
+        }
+      ],
+      "page_precision": 0.0,
+      "cites_evidence": true,
+      "grounded": 1.0,
+      "correct": 1.0,
+      "generation_s": 3.211
+    },
+    {
+      "id": "nr-01",
+      "question": "Quanto dura il mandato del Presidente del Consiglio dei ministri?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.157,
+      "top_score": 0.1641,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.841
+    },
+    {
+      "id": "nr-02",
+      "question": "Qual è l'importo annuale del canone RAI?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.162,
+      "top_score": 0.1196,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.901
+    },
+    {
+      "id": "nr-03",
+      "question": "Il contratto di locazione include un posto auto o un garage?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.166,
+      "top_score": 0.0152,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-04",
+      "question": "Qual era il tasso di disoccupazione in Germania a luglio 2026?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.199,
+      "top_score": 0.9603,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 1.554
+    },
+    {
+      "id": "nr-05",
+      "question": "Come si chiama l'amministratore del condominio di via dei Tigli 12?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.164,
+      "top_score": 0.991,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 1.516
+    },
+    {
+      "id": "nr-06",
+      "question": "Quale codice di errore indica il surriscaldamento dei fumi nella caldaia Aurora T24?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.237,
+      "top_score": 0.9433,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.819
+    },
+    {
+      "id": "nr-07",
+      "question": "Qual è la sanzione per chi non va a votare?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.196,
+      "top_score": 0.032,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-08",
+      "question": "Quali requisiti servono per diventare giudice di pace?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.174,
+      "top_score": 0.0142,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-09",
+      "question": "Quanto costa la caldaia Aurora T24?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.134,
+      "top_score": 0.1074,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.689
+    },
+    {
+      "id": "nr-10",
+      "question": "Entro quando il conduttore deve pagare le spese condominiali straordinarie?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.158,
+      "top_score": 0.0986,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-11",
+      "question": "Chi ha vinto il campionato di calcio di Serie A nel 2025?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.17,
+      "top_score": 0.0009,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 0.0
+    },
+    {
+      "id": "nr-12",
+      "question": "Quanti sono i dipendenti pubblici in Italia?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.214,
+      "top_score": 0.487,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 1.094
+    },
+    {
+      "id": "nr-13",
+      "question": "Chi è l'attuale presidente del Garante per la protezione dei dati personali?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.184,
+      "top_score": 0.1182,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 1.348
+    },
+    {
+      "id": "nr-14",
+      "question": "Quale autorità italiana vigila sull'applicazione del regolamento sull'intelligenza artificiale?",
+      "answerable": false,
+      "tags": [
+        "non-rispondibile"
+      ],
+      "ranks": [],
+      "candidate_ranks": [],
+      "retrieval_s": 0.232,
+      "top_score": 0.941,
+      "answer": "Non lo so: nei documenti indicizzati non trovo fonti sufficienti per rispondere.",
+      "abstained": true,
+      "citations": [],
+      "page_precision": null,
+      "cites_evidence": null,
+      "grounded": null,
+      "correct": null,
+      "generation_s": 1.503
+    }
+  ]
+}
