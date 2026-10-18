@@ -68,6 +68,7 @@ the baseline:
 | + stemming, reranker, gate, generation fixes | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.96 | 0.92 |
 | defaults: granite R2 embedder, gemma4:12b answering model | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.97 | 0.90 |
 | defaults, 75 questions (+ GDPR and AI Act) | 0.844 | 0.967 | 0.903 | 1.00 | 0.03 | 0.89 | 0.84 |
+| 0.1.1: stricter evidence matching, groundedness fix | 0.795 | 0.934 | 0.865 | 1.00 | 0.03 | 0.89 | 0.90 |
 
 Scans (Docling + EasyOCR, 42 questions): correctness 0.98, cited pages 0.97, recall@5 0.84
 (OCR noise lowers quote matching), ingest 1.8 s/page; see docs/evaluation.md for Tesseract. qwen2.5:14b answers cost-08 with the historical text of
@@ -115,6 +116,9 @@ Art. 56 quoted in the notes instead of the current one; gemma4:12b answers it co
 
 - EU regulations: prefer articles over recitals in retrieval and citations (see
   docs/evaluation.md)
+- OCR: Tesseract for text regions with EasyOCR for table cells; letter/digit confusions in
+  codes ("E1O" for "E10")
+- Grounding judge: give it the question as context (it is strict on restated context)
 
 - Multiple collections and conversation memory (follow-up questions)
 - ANN backend (e.g. LanceDB) for corpora beyond ~200k chunks

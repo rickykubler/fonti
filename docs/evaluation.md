@@ -72,6 +72,12 @@ The judge is an LLM and can be wrong: keep it fixed when comparing runs
 (`--judge-model qwen2.5:14b`) and check a sample of its verdicts by hand. With 61 answerable
 questions each one is worth about 1.6 points of recall: differences below 5 points are noise.
 
+An independent review of 20 judge verdicts (13 of them below full marks) agreed with the
+judge's correctness on 18 of 20 (the two errors went one each way) and on 25 of 33 sentence
+groundedness verdicts (strict on paraphrases of the question's context, lenient on missing
+qualifiers). The same review found that groundedness under-counted sentences sharing a
+passage with another sentence; that was fixed in 0.1.1 (see Results).
+
 ## Running
 
 ```
@@ -96,16 +102,31 @@ Main dataset, judge qwen2.5:14b; answering model qwen2.5:14b except in the rows 
 | + reranker, gate 0.1, refusal and citation fixes | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.96 | 0.92 | 0.96 |
 | **Defaults**: granite R2, gemma4:12b (thinking off), parser `auto` | 0.947 | 0.979 | 0.966 | 1.00 | 0.02 | 0.97 | 0.90 | 0.98 |
 | Defaults, 75 questions (+ GDPR and AI Act) | 0.844 | 0.967 | 0.903 | 1.00 | 0.03 | 0.89 | 0.84 | 0.98 |
+| **0.1.1**, 75 questions, stricter measurement | 0.795 | 0.934 | 0.865 | 1.00 | 0.03 | 0.89 | 0.90 | 0.97 |
 
-Rows above the last one use the first 59 questions. Adding the two EU regulations
-(232 pages, 16 questions) leaves the original 47 answerable questions where they were (same
+Rows above the last two use the first 59 questions. Adding the two EU regulations
+(232 pages, 16 questions) left the original 47 answerable questions where they were (same
 ranks; groundedness 0.89, correctness 0.98, cited pages 0.97), but the 14 new answerable
-ones score recall@1 0.50, cited pages 0.61 and groundedness 0.69, with correctness 0.96. The
+ones scored recall@1 0.50, cited pages 0.61 and groundedness 0.69, with correctness 0.96. The
 cause is the recitals: an EU regulation restates most articles in its recitals («(179) Il
 presente regolamento si dovrebbe applicare a decorrere dal 2 agosto 2026»), retrieval often
 ranks the recital first and the answer cites it instead of the article. The gold evidence
 stays on the articles, which are the binding text; preferring articles over recitals is on
 the backlog.
+
+The 0.1.1 row (report `2026-10-18_default_main`) is not directly comparable with the rows
+above: an independent review led to three measurement fixes and five golden-answer
+corrections. Retrieved evidence now counts only on the page of its quote (a recital no longer
+counts as its article) and only with the same numbers (a table row with 5,2 no longer
+matches a quote with 5,8); this lowers recall@1 by about 5 points, mostly on the EU
+regulations (recall@1 0.36, recall@5 0.86) and on istat-06, whose answer is still correct.
+Groundedness now judges every sentence on the passages of the sources it cites; before, a
+sentence whose passage had been merged into another sentence's citation scored 0, which
+under-counted groundedness by about 6 points. The same release drops the citation markers of
+sources that do not support their sentence, renumbers citations without gaps, and removes the
+Official Journal running header that the GDPR's pages carried into their sections. On the
+documents other than the EU regulations, groundedness is 0.95, correctness 0.97 and cited
+pages 0.97.
 
 Answering models, with the same retrieval (bge-m3, reranker, gate), thinking off and the same
 judge (qwen2.5:14b):
@@ -163,7 +184,9 @@ original text layer, accents = share of accented words of the original found in 
 | Tesseract 5.4 `ita+eng`, tessdata | 0.027 | 0.39 | 0.004 | 0.70 | 0.25 | 1.3-2.7 |
 | Tesseract 5.4 `ita+eng`, tessdata_best | **0.019** | **0.84** | **0.000** | **1.00** | **1.00** | 1.5-3.0 |
 
-Full runs on the `scans` dataset (judge qwen2.5:14b, reports `2026-10-12_ocr-*_scans`):
+Full runs on the `scans` dataset (judge qwen2.5:14b, reports `2026-10-12_ocr-*_scans`,
+measured before the 0.1.1 fixes; with them EasyOCR scores recall@5 0.86, groundedness 0.92,
+correctness 0.98 and cited pages 0.97, report `2026-10-18_default_scans`):
 
 | OCR | Recall@1 | Recall@5 | MRR@10 | False refusals | Cited pages | Groundedness | Correctness | Ingest s/page |
 |---|---|---|---|---|---|---|---|---|
