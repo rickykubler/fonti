@@ -1,0 +1,22 @@
+# The public demo (deploy/huggingface): CPU only, so a 4B answering model and half the
+# reranker candidates. Compare with default.toml to see what the demo gives up.
+[parser]
+mode = "auto"
+ocr_engine = "easyocr"
+
+[retrieval]
+keyword_terms = "stemmed"
+fused_k = 15
+
+[rerank]
+enabled = true
+model = "BAAI/bge-reranker-v2-m3"
+min_score = 0.1
+
+[embedding]
+model = "ibm-granite/granite-embedding-311m-multilingual-r2"
+
+[llm]
+model = "qwen3.5:4b"
+think = false
+max_answer_tokens = 500

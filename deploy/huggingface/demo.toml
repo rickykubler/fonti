@@ -1,0 +1,28 @@
+# Configuration of the public demo (Hugging Face Space, CPU only). Only the differences from
+# the defaults; the answering model is set by FONTI_LLM__MODEL in the Dockerfile.
+offline = true
+data_dir = "/home/user/data"
+
+[parser]
+mode = "fast"                # the demo documents are digital PDFs: no OCR models needed
+
+[retrieval]
+fused_k = 15                 # half the reranker candidates: the reranker is slow on 2 CPUs
+
+[llm]
+max_answer_tokens = 500
+
+[web]
+host = "0.0.0.0"
+port = 7860
+public_demo = true
+allowed_hosts = ["*.hf.space"]
+answer_cache = "/home/user/answers.json"   # written at build time by precompute.py
+example_questions = [
+    "Chi usa un chatbot deve sapere di parlare con un'IA?",
+    "Entro quanto tempo il titolare deve notificare una violazione dei dati personali all'autorità di controllo?",
+    "Qual è la posizione dell'Italia nei confronti della guerra?",
+    "Chi paga la sostituzione della caldaia nell'appartamento in affitto?",
+    "Cosa significa il codice di errore E04 della caldaia e cosa bisogna fare?",
+    "Chi ha vinto il campionato di calcio di Serie A nel 2025?",
+]

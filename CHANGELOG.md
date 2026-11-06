@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Public read-only demo on a Hugging Face Space (`deploy/huggingface/`): eight public and
+  synthetic documents indexed at build time, a 4B model on CPU, example questions answered in
+  advance. Its settings are in `eval/configs/demo.toml`.
+- `web.public_demo`: listens on any address and refuses uploads and deletions;
+  `web.allowed_hosts` adds accepted Host headers; `web.example_questions` shows clickable
+  questions; `web.answer_cache` serves answers computed in advance.
+
 ## 0.1.1 (2026-10-18)
 
 Fixes from an independent review of the code, the golden set and a hands-on demo test.

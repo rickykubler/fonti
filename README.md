@@ -12,6 +12,10 @@
 **Status: alpha (0.1.1).** Progress and results are tracked in
 [docs/ROADMAP.md](docs/ROADMAP.md).
 
+**[Try the online demo](https://huggingface.co/spaces/rickykubler/fonti)**: read-only, eight
+public and synthetic documents, a small model on a free CPU (example questions answer instantly,
+your own take a couple of minutes). The real thing runs on your machine: see Getting started.
+
 ## Why
 
 - **Italian first.** Italian stemming and stopwords, legal headings (Parte, Titolo, Capo, Art.)
