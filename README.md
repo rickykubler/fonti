@@ -12,9 +12,10 @@
 **Status: alpha (0.1.1).** Progress and results are tracked in
 [docs/ROADMAP.md](docs/ROADMAP.md).
 
-**[Try the online demo](https://huggingface.co/spaces/rickykubler/fonti)**: read-only, eight
-public and synthetic documents, a small model on a free CPU (example questions answer instantly,
-your own take a couple of minutes). The real thing runs on your machine: see Getting started.
+**[Online demo](https://huggingface.co/spaces/rickykubler/fonti)**: fourteen questions on
+seven public and synthetic documents, answered by fonti with its default settings and
+published as they came out, with the cited passages highlighted on their pages. To ask your
+own questions, run it on your machine: see Getting started.
 
 ## Why
 

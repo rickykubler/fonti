@@ -22,5 +22,6 @@ manual). The example questions were answered at build time and show up instantly
 questions run live on a free 2-CPU machine with a small model (qwen3.5:4b), so they take one or
 two minutes and are less accurate than the local setup (gemma4:12b on a GPU).
 
-This folder is the Space: `Dockerfile` builds fonti, downloads the models and documents,
+Docker Spaces need a Hugging Face PRO subscription, so the published demo is the static one
+in `deploy/static`. This folder is the live Space: `Dockerfile` builds fonti, downloads the models and documents,
 indexes them and precomputes the example answers; `start.sh` starts Ollama and the web UI.

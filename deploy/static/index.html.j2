@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>fonti · demo</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="app.css">
+  <style>
+    .question { border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 0.7rem; }
+    .question > summary { cursor: pointer; padding: 0.7rem 0.9rem; font-weight: 600; }
+    .question[open] > summary { border-bottom: 1px solid var(--line); }
+    .question > .body { padding: 0.2rem 0.9rem 0.9rem; }
+    .card details summary { cursor: pointer; color: var(--accent); font-size: 0.9rem; margin-top: 0.4rem; }
+    h2 { margin-top: 1.8rem; font-size: 1.1rem; }
+    .sources li { margin-bottom: 0.4rem; }
+    .answer .text { white-space: pre-line; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ repo }}">fonti</a>
+    <nav><a href="{{ repo }}">Codice su GitHub</a></nav>
+  </header>
+  <main>
+    <h1>Domande ai documenti, con fonti verificabili</h1>
+    <p>
+      <em>fonti</em> risponde in italiano a domande su contratti, normative, verbali e manuali.
+      Ogni frase della risposta cita documento, pagina e passaggio esatto, copiato dal testo e
+      verificato automaticamente; se i documenti non bastano risponde «Non lo so».
+    </p>
+    <p class="notice">
+      Demo statica: le risposte qui sotto sono state generate da fonti {{ version }}, senza
+      ritocchi, sui {{ documents | length }} documenti elencati in fondo (modello <code>{{ model }}</code> su una
+      GPU locale). Apri una domanda per vedere la risposta, i passaggi citati e la pagina con il
+      passaggio evidenziato. Per fare domande tue sui tuoi documenti
+      <a href="{{ repo }}#getting-started">installa fonti</a>: gira interamente sul tuo computer.
+    </p>
+
+    {% for group in groups %}
+    <h2>{{ group.title }}</h2>
+    {% for item in group["items"] %}
+    <details class="question" id="{{ item.anchor }}">
+      <summary>{{ item.question }}</summary>
+      <div class="body answer">
+        {% if item.abstained %}
+        <p class="abstained">{{ item.text }}</p>
+        {% if item.nearest %}
+        <p class="muted">Passaggi più vicini trovati (non bastano per rispondere):</p>
+        <ol class="citations">
+          {% for hit in item.nearest[:3] %}
+          <li class="card nearest">
+            <h3>{{ hit.title }}</h3>
+            <p class="page">pagina {{ hit.page }}</p>
+            <blockquote>«{{ hit.text }}…»</blockquote>
+          </li>
+          {% endfor %}
+        </ol>
+        {% endif %}
+        {% else %}
+        <p class="text">{{ item.text }}</p>
+        <ol class="citations">
+          {% for citation in item.citations %}
+          <li class="card" id="{{ citation.anchor }}">
+            <h3>[{{ citation.number }}] {{ citation.title }}</h3>
+            {% if citation.section %}<p class="muted">{{ citation.section }}</p>{% endif %}
+            {% for passage in citation.passages %}
+            <p class="page">pagina {{ passage.page }}</p>
+            <blockquote>«{{ passage.text }}»</blockquote>
+            <div class="links">
+              <a href="{{ passage.source }}" target="_blank" rel="noopener">Documento originale</a>
+            </div>
+            <details>
+              <summary>Mostra la pagina</summary>
+              <img class="preview" loading="lazy" src="{{ passage.image }}"
+                   alt="Pagina {{ passage.page }} con il passaggio evidenziato">
+            </details>
+            {% endfor %}
+          </li>
+          {% endfor %}
+        </ol>
+        {% endif %}
+      </div>
+    </details>
+    {% endfor %}
+    {% endfor %}
+
+    <h2>Documenti indicizzati</h2>
+    <ul class="sources">
+      {% for document in documents %}
+      <li>
+        {% if document.url %}<a href="{{ document.url }}" target="_blank" rel="noopener">{{ document.title }}</a>
+        {% else %}{{ document.title }}{% endif %}
+        <div class="muted">{{ document.license }}</div>
+      </li>
+      {% endfor %}
+    </ul>
+  </main>
+  <footer>
+    Demo di <a href="{{ repo }}">fonti</a>, open source (Apache-2.0). Controlla sempre le fonti
+    citate: non è una consulenza legale.
+  </footer>
+</body>
+</html>

@@ -4,9 +4,11 @@
 
 ### Added
 
-- Public read-only demo on a Hugging Face Space (`deploy/huggingface/`): eight public and
-  synthetic documents indexed at build time, a 4B model on CPU, example questions answered in
-  advance. Its settings are in `eval/configs/demo.toml`.
+- Online demo (`deploy/static/`, a static Hugging Face Space): real answers to fourteen
+  questions computed in advance with the default settings, with highlighted page previews.
+- A live read-only demo as a Docker Space (`deploy/huggingface/`, needs Hugging Face PRO):
+  documents indexed at build time, a 4B model on CPU, example questions answered in advance;
+  its settings are measured in `eval/configs/demo.toml`.
 - `web.public_demo`: listens on any address and refuses uploads and deletions;
   `web.allowed_hosts` adds accepted Host headers; `web.example_questions` shows clickable
   questions; `web.answer_cache` serves answers computed in advance.
