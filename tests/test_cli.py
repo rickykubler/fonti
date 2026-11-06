@@ -100,3 +100,20 @@ def test_help_is_utf8_when_redirected(monkeypatch: pytest.MonkeyPatch) -> None:
     sys.stdout.flush()
 
     assert "più".encode() in buffer.getvalue()
+
+
+def test_serve_refuses_network_hosts_unless_public_demo(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    started: list[str] = []
+    monkeypatch.setattr("uvicorn.run", lambda app, host, port, **kwargs: started.append(host))
+    monkeypatch.setenv("FONTI_WEB__HOST", "0.0.0.0")
+
+    assert main(["serve"]) == 1
+    assert "esporrebbe documenti" in capsys.readouterr().err
+    assert started == []
+
+    monkeypatch.setenv("FONTI_WEB__PUBLIC_DEMO", "true")
+    assert main(["serve"]) == 0
+    assert "sola lettura" in capsys.readouterr().out
+    assert started == ["0.0.0.0"]

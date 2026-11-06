@@ -185,6 +185,13 @@ form.addEventListener("submit", (event) => {
     });
 });
 
+for (const example of document.querySelectorAll("button[data-question]")) {
+  example.addEventListener("click", () => {
+    question.value = example.dataset.question;
+    form.requestSubmit();
+  });
+}
+
 question.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && !event.shiftKey) {
     event.preventDefault();

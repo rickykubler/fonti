@@ -68,3 +68,9 @@ min_support = 0.3            # share of an answer sentence's words that its pass
 host = "127.0.0.1"           # the web UI refuses to listen on other addresses
 port = 8000
 max_upload_mb = 100
+# Public read-only demo only (see deploy/huggingface): allows any host, no uploads or deletions.
+# Never turn it on for private documents.
+public_demo = false
+allowed_hosts = []           # extra Host headers to accept, e.g. ["*.hf.space"]
+example_questions = []       # clickable questions on the question page
+# answer_cache = "answers.json"   # {question: answer} computed in advance, served instantly

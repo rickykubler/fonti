@@ -96,6 +96,14 @@ class WebSettings(_Section):
     host: str = "127.0.0.1"
     port: int = Field(default=8000, ge=1, le=65535)
     max_upload_mb: int = Field(default=100, ge=1)
+    # Public read-only demo (e.g. a Hugging Face Space): the server may listen on any address
+    # and refuses uploads and deletions. Never turn it on for private documents.
+    public_demo: bool = False
+    allowed_hosts: list[str] = Field(default_factory=list)  # extra Host headers, e.g. "*.hf.space"
+    example_questions: list[str] = Field(default_factory=list)  # shown on the question page
+    # JSON file of answers computed in advance ({question: answer}), served without the models.
+    # The demo fills it at build time with the example questions, so they answer instantly.
+    answer_cache: Path | None = None
 
 
 class CitationSettings(_Section):

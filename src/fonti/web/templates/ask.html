@@ -12,6 +12,18 @@
             placeholder="Es. Quanto dura il contratto di locazione?"></textarea>
   <button type="submit">Chiedi</button>
 </form>
+{% if example_questions %}
+<div class="examples">
+  <p class="muted">Prova con una di queste domande{% if public_demo %} (risposte già pronte): le
+    domande scritte da te girano su un server gratuito senza GPU e richiedono un paio di
+    minuti{% endif %}:</p>
+  <ul>
+    {% for example in example_questions %}
+    <li><button type="button" class="link" data-question="{{ example }}">{{ example }}</button></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
 <section id="result" aria-live="polite">
   <p id="status" class="status"></p>
   <p id="draft" class="draft"></p>

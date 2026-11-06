@@ -168,7 +168,7 @@ def _serve(settings: Settings, args: argparse.Namespace) -> int:
     from fonti.web.app import create_app
 
     host, port = settings.web.host, args.port or settings.web.port
-    if not is_loopback(host):
+    if not is_loopback(host) and not settings.web.public_demo:
         print(
             f"Errore: web.host = {host} esporrebbe documenti e domande sulla rete. "
             "L'interfaccia ascolta solo su questo computer (127.0.0.1).",
@@ -176,6 +176,8 @@ def _serve(settings: Settings, args: argparse.Namespace) -> int:
         )
         return 1
     url = f"http://{host}:{port}/"
+    if settings.web.public_demo:
+        print("Demo pubblica in sola lettura: upload e rimozione dei documenti disattivati.")
     print(f"fonti è in ascolto su {url} (Ctrl+C per fermarlo)", flush=True)
     if args.open:
         threading.Timer(1.5, webbrowser.open, args=(url,)).start()

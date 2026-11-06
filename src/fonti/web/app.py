@@ -1,7 +1,8 @@
 """Web UI and JSON API (FastAPI + Jinja2 + HTMX).
 
 Local by design: the server listens on 127.0.0.1 and rejects requests addressed to other
-hosts (DNS rebinding) or coming from other origins (CSRF from a web page).
+hosts (DNS rebinding) or coming from other origins (CSRF from a web page). A public demo
+(`web.public_demo`) serves an index prepared in advance and refuses uploads and deletions.
 """
 
 import json
@@ -38,6 +39,8 @@ logger = logging.getLogger(__name__)
 _HERE = Path(__file__).parent
 _DOC_ID = re.compile(r"[0-9a-f]{64}")
 _UNSAFE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
+_LOOPBACK_HOSTS = ["127.0.0.1", "localhost", "[::1]", "::1"]
+_READ_ONLY = "Demo pubblica in sola lettura: non si possono aggiungere o rimuovere documenti."
 _MEDIA_TYPES = {
     ".pdf": "application/pdf",
     ".txt": "text/plain; charset=utf-8",
@@ -56,6 +59,9 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
     jobs = IngestJobs(service, lock)
     templates = Jinja2Templates(directory=_HERE / "templates")
     templates.env.globals["version"] = __version__
+    templates.env.globals["public_demo"] = settings.web.public_demo
+    read_only = settings.web.public_demo
+    cached_answers = _load_answer_cache(settings.web.answer_cache)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> Any:
@@ -65,7 +71,7 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
 
     app = FastAPI(title="fonti", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
     app.add_middleware(
-        TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]", "::1"]
+        TrustedHostMiddleware, allowed_hosts=_LOOPBACK_HOSTS + settings.web.allowed_hosts
     )
 
     @app.middleware("http")
@@ -88,7 +94,12 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
     @app.get("/", response_class=HTMLResponse)
     def ask_page(request: Request) -> Response:
         return templates.TemplateResponse(
-            request, "ask.html", {"documents": len(service.documents())}
+            request,
+            "ask.html",
+            {
+                "documents": len(service.documents()),
+                "example_questions": settings.web.example_questions,
+            },
         )
 
     @app.get("/documents", response_class=HTMLResponse)
@@ -119,6 +130,8 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
 
     @app.post("/documents", response_class=HTMLResponse)
     async def upload(request: Request, files: list[UploadFile]) -> Response:
+        if read_only:
+            raise HTTPException(403, _READ_ONLY)
         limit = settings.web.max_upload_mb * 1024 * 1024
         errors = []
         for file in files:
@@ -137,6 +150,8 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
 
     @app.delete("/documents/{doc_id}", response_class=HTMLResponse)
     def delete_document(request: Request, doc_id: str) -> Response:
+        if read_only:
+            raise HTTPException(403, _READ_ONLY)
         _check_id(doc_id)
         with lock:
             try:
@@ -187,6 +202,8 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
 
     @app.post("/api/ask")
     def api_ask(body: AskRequest) -> dict[str, Any]:
+        if (cached := cached_answers.get(body.question.strip())) is not None:
+            return cached
         with lock:
             try:
                 return asdict(service.ask(body.question))
@@ -201,6 +218,10 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
         The model runs in its own thread, which holds the lock only while it generates and
         stops when the client goes away. A generator holding the lock across its yields kept
         it after a disconnect until garbage collection, blocking every later request."""
+        if (cached := cached_answers.get(body.question.strip())) is not None:
+            return StreamingResponse(
+                iter([_event("answer", answer=cached)]), media_type="application/x-ndjson"
+            )
         events: queue.Queue[str | None] = queue.Queue()
         gone = threading.Event()
 
@@ -235,6 +256,16 @@ def create_app(settings: Settings, *, fonti: Fonti | None = None) -> FastAPI:
         return StreamingResponse(stream(), media_type="application/x-ndjson")
 
     return app
+
+
+def _load_answer_cache(path: Path | None) -> dict[str, dict[str, Any]]:
+    if path is None:
+        return {}
+    try:
+        answers: dict[str, dict[str, Any]] = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise FontiError(f"Cache delle risposte illeggibile: {path} ({exc})") from exc
+    return answers
 
 
 def _event(kind: str, **data: Any) -> str:

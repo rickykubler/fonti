@@ -2,6 +2,11 @@
 {% block title %}Documenti · fonti{% endblock %}
 {% block content %}
 <h1>Documenti</h1>
+{% if public_demo %}
+<p class="notice">Questa è una demo pubblica in sola lettura: i documenti qui sotto sono già
+  indicizzati. Per usare i tuoi documenti installa fonti sul tuo computer
+  (<a href="https://github.com/rickykubler/fonti" target="_blank" rel="noopener">istruzioni</a>).</p>
+{% else %}
 <form class="upload" hx-post="/documents" hx-encoding="multipart/form-data" hx-target="#jobs"
       hx-swap="outerHTML" hx-on::after-request="this.reset()">
   <label for="files">Aggiungi file ({{ suffixes }}, massimo {{ max_upload_mb }} MB ciascuno)</label>
@@ -9,6 +14,7 @@
   <button type="submit">Carica e indicizza</button>
 </form>
 {% include "_jobs.html" %}
+{% endif %}
 <div id="documents">
   {% include "_documents.html" %}
 </div>

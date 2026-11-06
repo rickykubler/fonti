@@ -20,8 +20,16 @@
     {% block content %}{% endblock %}
   </main>
   <footer>
+    {% if public_demo %}
+    Demo pubblica: le risposte sono generate su questo server da un modello piccolo, più lento e
+    meno preciso di quello usato in locale. Controlla sempre le fonti citate: non è una
+    consulenza legale. ·
+    <a href="https://github.com/rickykubler/fonti" target="_blank" rel="noopener">codice</a> ·
+    fonti {{ version }}
+    {% else %}
     Risposte generate sul tuo computer a partire dai tuoi documenti. Controlla sempre le fonti
     citate: non è una consulenza legale. · fonti {{ version }}
+    {% endif %}
   </footer>
 </body>
 </html>

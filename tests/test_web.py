@@ -12,7 +12,7 @@ import pytest
 from fastapi.routing import APIRoute
 from fastapi.testclient import TestClient
 
-from fonti.config import EmbeddingSettings, Settings
+from fonti.config import EmbeddingSettings, Settings, WebSettings
 from fonti.evaluation.synthetic import render_pdf
 from fonti.service import Fonti
 from fonti.web.app import AskRequest, create_app
@@ -257,3 +257,74 @@ def test_preview_explains_a_passage_it_cannot_highlight(contract: Path) -> None:
 
     assert plain.getpixel((5, 5)) == (255, 255, 255)
     assert noted.getpixel((5, 5)) != (255, 255, 255)  # the dark note band
+
+
+@pytest.fixture
+def demo(tmp_path: Path) -> Iterator[tuple[TestClient, Fonti]]:
+    settings = Settings(
+        data_dir=tmp_path / "data",
+        embedding=EmbeddingSettings(model="hashing"),
+        web=WebSettings(
+            public_demo=True,
+            allowed_hosts=["*.hf.space"],
+            example_questions=['Quanto costa l\'affitto "mensile"?'],
+        ),
+    )
+    service = Fonti(settings, chat=FakeChat(ANSWER))
+    app = create_app(settings, fonti=service)
+    with TestClient(app, base_url="https://someone-fonti.hf.space") as test_client:
+        yield test_client, service
+
+
+def test_public_demo_is_read_only(demo: tuple[TestClient, Fonti], contract: Path) -> None:
+    client, service = demo
+    doc_id = ingested_id(service, contract)
+
+    page = client.get("/documents")
+    upload = client.post("/documents", files={"files": ("x.txt", b"testo", "text/plain")})
+    delete = client.delete(f"/documents/{doc_id}")
+
+    assert page.status_code == 200
+    assert "sola lettura" in page.text
+    assert 'name="files"' not in page.text
+    assert "Rimuovi" not in page.text
+    assert upload.status_code == 403
+    assert delete.status_code == 403
+    assert [doc["id"] for doc in client.get("/api/documents").json()] == [doc_id]
+
+
+def test_public_demo_answers_and_shows_escaped_examples(
+    demo: tuple[TestClient, Fonti], contract: Path
+) -> None:
+    client, service = demo
+    ingested_id(service, contract)
+
+    page = client.get("/")
+    answer = client.post("/api/ask", json={"question": "Quanto costa l'affitto?"})
+
+    assert 'data-question="Quanto costa l&#39;affitto &#34;mensile&#34;?"' in page.text
+    assert "Demo pubblica" in page.text
+    assert answer.status_code == 200
+
+
+def test_cached_answers_are_served_without_the_models(tmp_path: Path) -> None:
+    cached = {"text": "Risposta calcolata in anticipo [1].", "citations": []}
+    cache = tmp_path / "answers.json"
+    cache.write_text(json.dumps({"Domanda di esempio?": cached}), encoding="utf-8")
+    chat = FakeChat(ANSWER)
+    settings = Settings(
+        data_dir=tmp_path / "data",
+        embedding=EmbeddingSettings(model="hashing"),
+        web=WebSettings(answer_cache=cache),
+    )
+    app = create_app(settings, fonti=Fonti(settings, chat=chat))
+
+    with TestClient(app, base_url="http://127.0.0.1") as client:
+        answer = client.post("/api/ask", json={"question": " Domanda di esempio? "})
+        stream = client.post("/api/ask/stream", json={"question": "Domanda di esempio?"})
+
+    assert answer.json() == cached
+    assert [json.loads(line) for line in stream.text.splitlines()] == [
+        {"type": "answer", "answer": cached}
+    ]
+    assert chat.calls == []
