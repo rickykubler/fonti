@@ -150,6 +150,11 @@ uv run mypy
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/evaluation.md](docs/evaluation.md).
 
+## How it was built
+
+fonti was developed with AI coding agents (Claude Code). I set the goals, made the design and
+model choices, and checked every change against the test suite and the evaluation set.
+
 ## License
 
 [Apache-2.0](LICENSE). Third-party components, models and corpus terms are listed in
